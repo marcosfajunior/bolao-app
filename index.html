@@ -759,6 +759,19 @@
                                             <label for="nomeParticipante" class="form-label">Selecione seu nome:</label>
                                             <select class="form-select" id="nomeParticipante" required>
                                                 <option value="">-- Selecione --</option>
+                                                <option value="DANIEL ALMEIDA">DANIEL ALMEIDA</option>
+                                                <option value="DANIEL PENA">DANIEL PENA</option>
+                                                <option value="GABRIEL CAMBRAIA">GABRIEL CAMBRAIA</option>
+                                                <option value="JOSÉ CARLOS">JOSÉ CARLOS</option>
+                                                <option value="JÚLIO CÉSAR">JÚLIO CÉSAR</option>
+                                                <option value="LUIZ GUSTAVO">LUIZ GUSTAVO</option>
+                                                <option value="MARCELO ASSIS">MARCELO ASSIS</option>
+                                                <option value="MARCOS FERREIRA">MARCOS FERREIRA</option>
+                                                <option value="NÉLIO MENIGHIN">NÉLIO MENIGHIN</option>
+                                                <option value="PAULO EDUARDO">PAULO EDUARDO</option>
+                                                <option value="PAULO SILVA">PAULO SILVA</option>
+                                                <option value="TIAGO SILVA">TIAGO SILVA</option>
+                                                <option value="VICTOR HUGO">VICTOR HUGO</option>
                                                 <option value="WESCLEY GALDINO">WESCLEY GALDINO</option>
                                             </select>
                                         </div>
@@ -973,28 +986,28 @@
         // ====================
         
         // ⚠️ ALTERE ESTE VALOR A CADA PUBLICAÇÃO NO GITHUB PAGES
-        const VERSAO_ATUAL = "20260129_1000_R01"; // Formato: AAAAMMDD_HHMM_RXX
+        const VERSAO_ATUAL = "20260130_0000_R02"; // Formato: AAAAMMDD_HHMM_RXX
         
         // 🔧 CONFIGURAÇÃO DA RODADA (EDITAR AQUI) - ÚNICO LOCAL PARA ALTERAÇÕES
         const configRodada = {
             nomeBolao: "⚽ Bolão Campeonato Brasileiro 2026",
-            numeroRodada: "Rodada 01",
-            dataInicio: "30/01/2026",
-            dataLimite: "29/01/2026"
+            numeroRodada: "Rodada 02",
+            dataInicio: "04/02/2026",
+            dataLimite: "03/02/2026" // Formato: DD/MM/AAAA
         };
 
         // 🔧 CONFIGURAÇÃO DOS JOGOS DA RODADA (EDITAR AQUI)
         const jogosRodada = [
-            { id: "1", timeA: "Fluminense RJ", timeB: "Grêmio RS" },
-            { id: "2", timeA: "Botafogo RJ", timeB: "Cruzeiro MG" },
-            { id: "3", timeA: "São Paulo SP", timeB: "Flamengo RJ" },
-            { id: "4", timeA: "Corinthians SP", timeB: "Bahia BA" },
-            { id: "5", timeA: "Mirassol SP", timeB: "Vasco RJ" },
-            { id: "6", timeA: "Atlético MG", timeB: "Palmeiras SP" },
-            { id: "7", timeA: "Internacional RS", timeB: "Athletico PR" },
-            { id: "8", timeA: "Coritiba PR", timeB: "Bragantino SP" },
-            { id: "9", timeA: "Vitória BA", timeB: "Remo PA" },
-            { id: "10", timeA: "Chapecoense SC", timeB: "Santos SP" }
+            { id: "1", timeA: "Flamengo RJ", timeB: "Internacional RS" },
+            { id: "2", timeA: "Vasco RJ", timeB: "Chapecoense SC" },
+            { id: "3", timeA: "Santos SP", timeB: "São Paulo SP" },
+            { id: "4", timeA: "Palmeiras SP", timeB: "Vitória BA" },
+            { id: "5", timeA: "Bragantino SP", timeB: "Atlético MG" },
+            { id: "6", timeA: "Cruzeiro MG", timeB: "Coritiba PR" },
+            { id: "7", timeA: "Grêmio RS", timeB: "Botafogo RJ" },
+            { id: "8", timeA: "Athletico PR", timeB: "Corinthians SP" },
+            { id: "9", timeA: "Bahia BA", timeB: "Fluminense RJ" },
+            { id: "10", timeA: "Remo PA", timeB: "Mirassol SP" }
         ];
 
         // 🔧 CONFIGURAÇÃO DO GOOGLE FORMS
