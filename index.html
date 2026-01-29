@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Bolão Campeonato Brasileiro</title>
     <style>
         * {
@@ -647,6 +650,14 @@
                 }
             }
         }
+        
+        /* 🆕 Estilo para alerta de prazo expirado */
+        .alert-prazo-expirado {
+            color: #856404;
+            background-color: #fff3cd;
+            border-color: #ffeaa7;
+            border-left: 4px solid #dc3545;
+        }
     </style>
 </head>
 <body>
@@ -719,7 +730,7 @@
                                     <span id="texto-dados-nao-enviados"></span>
                                     <div class="mt-2">
                                         <button class="btn btn-sm btn-outline-primary" onclick="verificarPalpites()">👀 Verificar Palpites</button>
-                                        <button class="btn btn-sm btn-success" onclick="irParaEnvioDireto()">🚀 Enviar Palpites</button>
+                                        <!-- 🆕 REMOVIDO: Botão "Enviar Palpites" daqui -->
                                         <button class="btn btn-sm btn-limpar-dados" onclick="limparDados()">🗑️ Limpar Dados</button>
                                     </div>
                                 </div>
@@ -731,6 +742,16 @@
                                     <button class="btn btn-sm btn-limpar-dados mt-2" onclick="limparDados()">Limpar Dados</button>
                                 </div>
                                 
+                                <!-- 🆕 ALERTA: Prazo expirado -->
+                                <div id="alert-prazo-expirado" class="alert alert-prazo-expirado d-none">
+                                    <strong>⏰ Prazo Expirado!</strong><br>
+                                    O prazo para envio dos palpites desta rodada já expirou.
+                                    <div class="mt-2">
+                                        <button class="btn btn-sm btn-outline-primary" onclick="visualizarPalpitesEnviados()">👀 Visualizar Palpites</button>
+                                        <button class="btn btn-sm btn-limpar-dados" onclick="limparDados()">🗑️ Limpar Dados</button>
+                                    </div>
+                                </div>
+                                
                                 <!-- 🆕 FORMULÁRIO INICIAL (só aparece se não tiver dados salvos) -->
                                 <div id="formulario-inicial" class="d-none">
                                     <form id="formParticipante">
@@ -738,19 +759,6 @@
                                             <label for="nomeParticipante" class="form-label">Selecione seu nome:</label>
                                             <select class="form-select" id="nomeParticipante" required>
                                                 <option value="">-- Selecione --</option>
-                                                <option value="DANIEL ALMEIDA">DANIEL ALMEIDA</option>
-                                                <option value="DANIEL PENA">DANIEL PENA</option>
-                                                <option value="GABRIEL CAMBRAIA">GABRIEL CAMBRAIA</option>
-                                                <option value="JOSÉ CARLOS">JOSÉ CARLOS</option>
-                                                <option value="JÚLIO CÉSAR">JÚLIO CÉSAR</option>
-                                                <option value="LUIZ GUSTAVO">LUIZ GUSTAVO</option>
-                                                <option value="MARCELO ASSIS">MARCELO ASSIS</option>
-                                                <option value="MARCOS FERREIRA">MARCOS FERREIRA</option>
-                                                <option value="NÉLIO MENIGHIN">NÉLIO MENIGHIN</option>
-                                                <option value="PAULO EDUARDO">PAULO EDUARDO</option>
-                                                <option value="PAULO SILVA">PAULO SILVA</option>
-                                                <option value="TIAGO SILVA">TIAGO SILVA</option>
-                                                <option value="VICTOR HUGO">VICTOR HUGO</option>
                                                 <option value="WESCLEY GALDINO">WESCLEY GALDINO</option>
                                             </select>
                                         </div>
@@ -786,7 +794,7 @@
                     <div class="card-footer">
                         <!-- 🆕 BOTÃO SALVAR (sempre visível na tela de palpites) -->
                         <button type="submit" form="formPalpites" class="btn btn-success btn-lg w-100" id="btn-salvar-palpites">
-                            💾 Salvar Palpites
+                            💾 Salvar e Ir para Envio
                         </button>
                         <!-- 🆕 BOTÃO VOLTAR -->
                         <button id="btn-voltar-visualizacao" class="btn btn-outline-secondary btn-voltar-visualizacao" onclick="voltarDaVisualizacao()">
@@ -807,6 +815,13 @@
                                 <h4 class="mb-0">✅ Palpites Salvos com Sucesso! - <span id="rodada-tela-conclusao"></span></h4>
                             </div>
                             <div class="card-body text-center">
+                                <!-- 🆕 ALERTA: Prazo expirado (aparece apenas se fora do prazo) -->
+                                <div id="alert-prazo-expirado-conclusao" class="alert alert-prazo-expirado d-none">
+                                    <strong>⏰ Prazo Expirado!</strong><br>
+                                    O prazo para envio dos palpites desta rodada já expirou em <span id="data-limite-exibida"></span>.<br>
+                                    Seus palpites foram salvos, mas não podem ser enviados.
+                                </div>
+                                
                                 <!-- 🆕 CONTEÚDO NORMAL (antes do envio) -->
                                 <div id="conteudo-normal-conclusao">
                                     <h5>Parabéns!</h5>
@@ -829,7 +844,7 @@
                                         </button>
                                         <!-- 🆕 ALTERADO: Visualizar/Editar Palpites (sempre visível) -->
                                         <button class="btn btn-outline-primary" onclick="visualizarPalpitesSalvos()">
-                                            👀 Visualizar/Editar Palpites
+                                            👀 Editar Palpites
                                         </button>
                                     </div>
                                 </div>
@@ -846,10 +861,10 @@
                                     <div class="botoes-coluna mb-4">
                                         <!-- 🆕 ALTERADO: Visualizar/Editar Palpites Enviados -->
                                         <button class="btn btn-outline-primary" onclick="visualizarPalpitesSalvos()">
-                                            👀 Visualizar/Editar Palpites
+                                            👀 Editar Palpites
                                         </button>
                                         <button id="btn-enviar-palpites-pos" class="btn btn-primary" onclick="iniciarEnvioGoogleForms()">
-                                            🚀 Enviar Palpites Novamente
+                                            🚀 Enviar Novamente
                                         </button>
                                         <button class="btn btn-info" id="btn-compartilhar-csv-pos" onclick="compartilharCSV()">
                                             📤 Compartilhar CSV
@@ -910,6 +925,13 @@
                                 <h4 class="mb-0">🚀 Enviando os Palpites - <span id="rodada-tela-envio"></span></h4>
                             </div>
                             <div class="card-body">
+                                <!-- 🆕 BOTÃO DE EDIÇÃO NA TELA DE ENVIO -->
+                                <div class="mb-3 text-center">
+                                    <button class="btn btn-outline-primary btn-sm" onclick="voltarParaEdicao()">
+                                        ✏️ Editar Palpites
+                                    </button>
+                                </div>
+                                
                                 <div id="progresso-envio">
                                     <div class="progress">
                                         <div class="progress-bar" id="barra-progresso-envio" style="width: 0%"></div>
@@ -930,17 +952,8 @@
         </div>
     </main>
 
-    <!-- Modal de Confirmação -->
-    <div id="modal-confirmacao" class="modal-overlay d-none">
-        <div class="modal-content">
-            <h4 class="mb-3">Confirmação</h4>
-            <p>Tem certeza que deseja salvar seus palpites?</p>
-            <div class="modal-buttons">
-                <button class="btn btn-outline-secondary" onclick="fecharModal()">Cancelar</button>
-                <button class="btn btn-success" onclick="confirmarSalvar()">Salvar</button>
-            </div>
-        </div>
-    </div>
+    <!-- Modal de Confirmação (REMOVIDO) -->
+    <!-- <div id="modal-confirmacao" class="modal-overlay d-none"> ... </div> -->
 
     <!-- Modal de Palpites Pendentes -->
     <div id="modal-palpites-pendentes" class="modal-overlay d-none">
@@ -955,12 +968,19 @@
     </div>
 
     <script>
+        // ====================
+        // 🔧 CONFIGURAÇÃO ÚNICA
+        // ====================
+        
+        // ⚠️ ALTERE ESTE VALOR A CADA PUBLICAÇÃO NO GITHUB PAGES
+        const VERSAO_ATUAL = "20260129_1000_R01"; // Formato: AAAAMMDD_HHMM_RXX
+        
         // 🔧 CONFIGURAÇÃO DA RODADA (EDITAR AQUI) - ÚNICO LOCAL PARA ALTERAÇÕES
         const configRodada = {
             nomeBolao: "⚽ Bolão Campeonato Brasileiro 2026",
             numeroRodada: "Rodada 01",
-            dataInicio: "28/01/2026",
-            dataLimite: "27/01/2026"
+            dataInicio: "30/01/2026",
+            dataLimite: "29/01/2026"
         };
 
         // 🔧 CONFIGURAÇÃO DOS JOGOS DA RODADA (EDITAR AQUI)
@@ -993,6 +1013,40 @@
             ]
         };
 
+        // ====================
+        // 🚀 SISTEMA DE ATUALIZAÇÃO
+        // ====================
+        
+        // 🔧 FUNÇÃO: Sistema de atualização automática
+        (function iniciarSistemaAtualizacao() {
+            // Verificar se já vimos esta versão
+            const versaoSalva = localStorage.getItem('bolao_versao_atual');
+            
+            // Se é uma versão nova
+            if (!versaoSalva || versaoSalva !== VERSAO_ATUAL) {
+                console.log(`🔄 Nova versão detectada: ${VERSAO_ATUAL} (anterior: ${versaoSalva || 'nenhuma'})`);
+                
+                // Salvar nova versão
+                localStorage.setItem('bolao_versao_atual', VERSAO_ATUAL);
+                
+                // Forçar recarregamento com cache-bust
+                const url = new URL(window.location);
+                url.searchParams.set('_v', VERSAO_ATUAL.replace(/[^a-zA-Z0-9]/g, ''));
+                
+                // Evitar loop infinito - só recarrega se URL mudou
+                if (window.location.href !== url.toString()) {
+                    console.log('📤 Redirecionando para versão atualizada...');
+                    window.location.replace(url.toString());
+                }
+            } else {
+                console.log(`✅ Versão atual: ${VERSAO_ATUAL}`);
+            }
+        })();
+
+        // ====================
+        // ⚽ LÓGICA DO BOLÃO (INALTERADA)
+        // ====================
+        
         // 🆕 DETECTAR iOS
         const isIOS = () => {
             return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -1004,11 +1058,12 @@
         // Dados da aplicação
         let dadosApp = {
             participante: '',
-            rodadaSalva: '', // NOVO: armazena qual rodada foi salva
+            rodadaSalva: '', // armazena qual rodada foi salva
             palpitesSalvos: [],
             enviosRealizados: {}, // { timestamp_palpite: true }
-            dadosEnviados: false, // Nova flag para controle de envio
-            dadosCompartilhados: false // Nova flag para controle de compartilhamento
+            dadosEnviados: false, // flag para controle de envio
+            dadosCompartilhados: false, // flag para controle de compartilhamento
+            tentativaForaPrazo: null // 🆕 Armazena a data da tentativa fora do prazo (timestamp)
         };
 
         // 🕒 FUNÇÃO PARA FORMATAR DATA/HORA NO FORMATO dd/mm/aaaa - hh:mm:ss
@@ -1033,6 +1088,40 @@
                 opcoes += `<option value="${i}" ${selecionado}>${i}</option>`;
             }
             return opcoes;
+        }
+
+        // 🆕 FUNÇÃO: Converter data DD/MM/AAAA para objeto Date
+        function converterDataStringParaDate(dataString) {
+            const partes = dataString.split('/');
+            // partes[0] = dia, partes[1] = mês, partes[2] = ano
+            return new Date(partes[2], partes[1] - 1, partes[0], 23, 59, 59);
+        }
+
+        // 🆕 FUNÇÃO: Verificar se está dentro do prazo (com verificação robusta)
+        function verificarPrazoValido() {
+            // Se já houve tentativa fora do prazo, bloqueia permanentemente
+            if (dadosApp.tentativaForaPrazo) {
+                return false;
+            }
+            
+            const hoje = new Date();
+            const dataLimiteObj = converterDataStringParaDate(configRodada.dataLimite);
+            
+            // Verificar se a data atual é posterior à data limite
+            if (hoje > dataLimiteObj) {
+                // 🆕 Registrar a tentativa fora do prazo (apenas na primeira vez)
+                if (!dadosApp.tentativaForaPrazo) {
+                    dadosApp.tentativaForaPrazo = {
+                        timestamp: new Date().toISOString(),
+                        dataHora: formatarDataHora(),
+                        rodada: configRodada.numeroRodada
+                    };
+                    salvarDados();
+                }
+                return false;
+            }
+            
+            return true;
         }
 
         // Inicialização
@@ -1070,9 +1159,10 @@
                 atualizarDashboardHeader();
             });
 
+            // 🆕 MODIFICAÇÃO: Remover modal de confirmação, ir direto para salvar e enviar
             document.getElementById('formPalpites').addEventListener('submit', function(e) {
                 e.preventDefault();
-                mostrarModalConfirmacao();
+                salvarPalpites(); // Agora salva e vai direto para tela de envio
             });
         }
 
@@ -1094,7 +1184,8 @@
                     palpitesSalvos: [],
                     enviosRealizados: {},
                     dadosEnviados: false,
-                    dadosCompartilhados: false
+                    dadosCompartilhados: false,
+                    tentativaForaPrazo: null
                 };
             }
         }
@@ -1110,7 +1201,7 @@
             }
         }
 
-        // 🆕 FUNÇÃO MODIFICADA: Verificar estado da aplicação
+        // 🆕 FUNÇÃO MODIFICADA: Verificar estado da aplicação (agora inclui verificação de prazo)
         function verificarEstadoAplicacao() {
             // ✅ VERIFICAÇÃO POR RODADA - NOVA LÓGICA
             const statusRodada = verificarRodadaSalva();
@@ -1120,6 +1211,7 @@
             document.getElementById('alert-dados-enviados').classList.add('d-none');
             document.getElementById('alert-dados-nao-enviados').classList.add('d-none');
             document.getElementById('alert-dados-salvos').classList.add('d-none');
+            document.getElementById('alert-prazo-expirado').classList.add('d-none');
             document.getElementById('formulario-inicial').classList.add('d-none');
             
             // Se não há dados salvos, mostrar formulário inicial
@@ -1128,12 +1220,14 @@
                 return;
             }
             
-            // LÓGICA DE VERIFICAÇÃO POR RODADA
+            // LÓGICA DE VERIFICAÇÃO POR RODADA (DEVE VIR PRIMEIRO!)
             if (statusRodada === 'rodada_diferente') {
                 // Dados de rodada diferente encontrados
                 document.getElementById('texto-rodada-diferente').textContent = 
-                    `Existem palpites salvos da ${dadosApp.rodadaSalva}. Limpe os dados para iniciar a ${configRodada.numeroRodada}.`;
+                    `📋 Existem palpites salvos da ${dadosApp.rodadaSalva} no seu dispositivo.\n\n` +
+                    `🔒 Para acessar a ${configRodada.numeroRodada}, limpe os dados salvos primeiro.`;
                 document.getElementById('alert-rodada-diferente').classList.remove('d-none');
+                return; // IMPORTANTE: Parar aqui, não mostrar outras mensagens
                 
             } else if (statusRodada === 'mesma_rodada') {
                 // Dados da mesma rodada
@@ -1153,6 +1247,21 @@
                 // Dados salvos sem informação de rodada (compatibilidade com versões antigas)
                 document.getElementById('alert-dados-salvos').classList.remove('d-none');
             }
+            
+            // 🆕 Verificar se o prazo já expirou (APENAS se for a MESMA rodada)
+            const prazoValido = verificarPrazoValido();
+            
+            // Se o prazo expirou E é a mesma rodada, mostrar alerta específico
+            if (!prazoValido && dadosApp.participante && statusRodada === 'mesma_rodada') {
+                document.getElementById('alert-prazo-expirado').classList.remove('d-none');
+            }
+        }
+
+        // 🆕 FUNÇÃO: Voltar para edição da tela de envio
+        function voltarParaEdicao() {
+            telaOrigemVisualizacao = 'tela-envio-google';
+            mostrarTela('tela-palpites');
+            carregarJogosComDadosSalvos();
         }
 
         // 🆕 FUNÇÃO MODIFICADA: Visualizar palpites já enviados (da tela inicial)
@@ -1176,22 +1285,39 @@
             } else if (telaOrigemVisualizacao === 'tela-conclusao') {
                 mostrarTela('tela-conclusao');
                 atualizarConteudoConclusao();
+            } else if (telaOrigemVisualizacao === 'tela-envio-google') {
+                mostrarTela('tela-envio-google');
             } else {
                 mostrarTela('tela-participante');
             }
         }
 
-        // 🆕 FUNÇÃO: Atualizar conteúdo da tela de conclusão
+        // 🆕 FUNÇÃO: Atualizar conteúdo da tela de conclusão (agora inclui verificação de prazo)
         function atualizarConteudoConclusao() {
             const conteudoNormal = document.getElementById('conteudo-normal-conclusao');
             const conteudoPosEnvio = document.getElementById('conteudo-pos-envio');
             const textoConclusao = document.getElementById('texto-conclusao-enviados');
+            const alertPrazoExpirado = document.getElementById('alert-prazo-expirado-conclusao');
+            const dataLimiteExibida = document.getElementById('data-limite-exibida');
             
-            if (dadosApp.dadosEnviados) {
+            // 🆕 Verificar se o prazo expirou
+            const prazoValido = verificarPrazoValido();
+            
+            if (!prazoValido) {
+                // Mostrar alerta de prazo expirado
+                alertPrazoExpirado.classList.remove('d-none');
+                conteudoNormal.classList.add('d-none');
+                conteudoPosEnvio.classList.add('d-none');
+                dataLimiteExibida.textContent = configRodada.dataLimite;
+            } else if (dadosApp.dadosEnviados) {
+                // Conteúdo normal (palpites já enviados)
+                alertPrazoExpirado.classList.add('d-none');
                 conteudoNormal.classList.add('d-none');
                 conteudoPosEnvio.classList.remove('d-none');
                 textoConclusao.textContent = `Seus palpites da ${configRodada.numeroRodada} já foram enviados anteriormente. Você pode visualizar, editar e enviar novamente.`;
             } else {
+                // Conteúdo normal (palpites não enviados)
+                alertPrazoExpirado.classList.add('d-none');
                 conteudoNormal.classList.remove('d-none');
                 conteudoPosEnvio.classList.add('d-none');
             }
@@ -1199,9 +1325,6 @@
 
         // 🆕 FUNÇÃO MODIFICADA: Atualizar botões na tela de conclusão
         function atualizarBotoesConclusao() {
-            const btnEnviar = document.getElementById('btn-enviar-palpites');
-            const btnEnviarPos = document.getElementById('btn-enviar-palpites-pos');
-            
             atualizarConteudoConclusao();
         }
 
@@ -1223,6 +1346,12 @@
         function irParaEnvioDireto() {
             if (dadosApp.palpitesSalvos.length === 0) {
                 alert('Nenhum palpite para enviar.');
+                return;
+            }
+            
+            // 🆕 Verificar prazo antes de permitir envio
+            if (!verificarPrazoValido()) {
+                alert('⏰ O prazo para envio dos palpites desta rodada já expirou.');
                 return;
             }
             
@@ -1448,8 +1577,10 @@
             });
         }
 
-        // 🆕 FUNÇÃO MODIFICADA: Mostrar modal de confirmação apenas se todos os jogos estiverem preenchidos
-        function mostrarModalConfirmacao() {
+        // 🆕 FUNÇÃO MODIFICADA: Salvar palpites (agora vai direto para tela de envio)
+        function salvarPalpites() {
+            console.log('💾 === INICIANDO SALVAMENTO DOS PALPITES ===');
+
             const verificacao = verificarTodosJogosPreenchidos();
             
             if (!verificacao.todosPreenchidos) {
@@ -1459,29 +1590,6 @@
                 });
                 mensagem += '\nÉ obrigatório preencher todos os jogos.';
                 alert(mensagem);
-                return;
-            }
-            
-            document.getElementById('modal-confirmacao').classList.remove('d-none');
-        }
-
-        function fecharModal() {
-            document.getElementById('modal-confirmacao').classList.add('d-none');
-        }
-
-        function confirmarSalvar() {
-            fecharModal();
-            salvarPalpites();
-        }
-
-        // 🆕 FUNÇÃO MODIFICADA: Salvar palpites
-        function salvarPalpites() {
-            console.log('💾 === INICIANDO SALVAMENTO DOS PALPITES ===');
-
-            const verificacao = verificarTodosJogosPreenchidos();
-            
-            if (!verificacao.todosPreenchidos) {
-                alert('Erro: Nem todos os jogos estão preenchidos. Preencha todos os 10 jogos.');
                 return;
             }
 
@@ -1531,8 +1639,25 @@
             
             salvarDados();
 
-            mostrarTela('tela-conclusao');
-            atualizarBotoesConclusao();
+            // 🆕 MODIFICAÇÃO: Ir direto para tela de envio, não para conclusão
+            mostrarTela('tela-envio-google');
+            document.getElementById('resultado-envio').classList.add('d-none');
+            document.getElementById('btn-fechar-envio').classList.add('d-none');
+            
+            // 🆕 Iniciar envio automaticamente (se dentro do prazo)
+            if (verificarPrazoValido()) {
+                enviarParaGoogleForms();
+            } else {
+                // Se fora do prazo, mostrar mensagem
+                document.getElementById('resultado-envio').classList.remove('d-none');
+                document.getElementById('resultado-envio').innerHTML = `<div class="alert alert-warning">
+                    ⏰ <strong>Prazo Expirado!</strong><br>
+                    O prazo para envio dos palpites desta rodada já expirou em ${configRodada.dataLimite}.<br>
+                    Seus palpites foram salvos, mas não podem ser enviados.
+                </div>`;
+                document.getElementById('btn-fechar-envio').classList.remove('d-none');
+            }
+            
             atualizarDashboardHeader();
         }
 
@@ -1541,6 +1666,7 @@
             dadosApp.palpitesSalvos = [];
             dadosApp.dadosEnviados = false;
             dadosApp.dadosCompartilhados = false;
+            dadosApp.tentativaForaPrazo = null; // 🆕 Limpar também a tentativa fora do prazo
             salvarDados();
             mostrarTela('tela-participante');
             verificarDadosSalvos();
@@ -1565,12 +1691,14 @@
                 dadosApp.enviosRealizados = {};
                 dadosApp.dadosEnviados = false;
                 dadosApp.dadosCompartilhados = false;
+                dadosApp.tentativaForaPrazo = null; // 🆕 Limpar também a tentativa fora do prazo
                 salvarDados();
                 
                 document.getElementById('alert-rodada-diferente').classList.add('d-none');
                 document.getElementById('alert-dados-enviados').classList.add('d-none');
                 document.getElementById('alert-dados-nao-enviados').classList.add('d-none');
                 document.getElementById('alert-dados-salvos').classList.add('d-none');
+                document.getElementById('alert-prazo-expirado').classList.add('d-none');
                 
                 alert('✅ Dados limpos com sucesso!');
                 
@@ -1620,10 +1748,16 @@
             }
         }
 
-        // 🆕 FUNÇÃO MODIFICADA: Iniciar envio SEMPRE permite envio
+        // 🆕 FUNÇÃO MODIFICADA: Iniciar envio SEMPRE permite envio (com verificação de prazo)
         function iniciarEnvioGoogleForms() {
             if (dadosApp.palpitesSalvos.length === 0) {
                 alert('⚠️ Nenhum palpite para enviar!');
+                return;
+            }
+            
+            // 🆕 Verificar prazo antes de permitir envio
+            if (!verificarPrazoValido()) {
+                alert('⏰ O prazo para envio dos palpites desta rodada já expirou.');
                 return;
             }
             
@@ -1784,6 +1918,18 @@
         async function enviarParaGoogleForms() {
             if (dadosApp.palpitesSalvos.length === 0) {
                 alert('Nenhum palpite para enviar.');
+                return;
+            }
+
+            // 🆕 Verificar prazo antes de iniciar envio
+            if (!verificarPrazoValido()) {
+                document.getElementById('resultado-envio').classList.remove('d-none');
+                document.getElementById('resultado-envio').innerHTML = `<div class="alert alert-warning">
+                    ⏰ <strong>Prazo Expirado!</strong><br>
+                    O prazo para envio dos palpites desta rodada já expirou em ${configRodada.dataLimite}.<br>
+                    Seus palpites foram salvos, mas não podem ser enviados.
+                </div>`;
+                document.getElementById('btn-fechar-envio').classList.remove('d-none');
                 return;
             }
 
