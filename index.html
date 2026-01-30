@@ -611,11 +611,6 @@
             background-color: #c82333;
             border-color: #bd2130;
         }
-
-        /* 🆕 Botão voltar na visualização */
-        .btn-voltar-visualizacao {
-            margin-top: 10px;
-        }
         
         /* 🆕 ESTILO PARA NÚMERO DA RODADA NO HEADER */
         .numero-rodada-header {
@@ -656,6 +651,14 @@
             color: #856404;
             background-color: #fff3cd;
             border-color: #ffeaa7;
+            border-left: 4px solid #dc3545;
+        }
+        
+        /* 🆕 Estilo para alerta de erro de envio */
+        .alert-erro-envio {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
             border-left: 4px solid #dc3545;
         }
     </style>
@@ -719,27 +722,19 @@
                                     <strong>✅ Palpites já enviados!</strong><br>
                                     <span id="texto-dados-enviados"></span>
                                     <p class="mb-2 mt-2"><strong>Você pode visualizar ou alterar seus palpites:</strong></p>
-                                    <!-- 🆕 ALTERADO: Botão para visualizar/editar -->
                                     <button class="btn btn-sm btn-outline-primary mt-2" onclick="visualizarPalpitesEnviados()">👀 Visualizar/Editar Palpites</button>
                                     <button class="btn btn-sm btn-limpar-dados mt-2" onclick="limparDados()">🗑️ Limpar Dados</button>
                                 </div>
                                 
-                                <!-- ALERTA: Dados não enviados da mesma rodada -->
-                                <div id="alert-dados-nao-enviados" class="alert alert-warning d-none">
-                                    <strong>📋 Palpites pendentes!</strong><br>
-                                    <span id="texto-dados-nao-enviados"></span>
+                                <!-- 🆕 ALERTA: Erro no envio anterior -->
+                                <div id="alert-erro-envio" class="alert alert-erro-envio d-none">
+                                    <strong>❌ Erro no envio anterior!</strong><br>
+                                    <span id="texto-erro-envio"></span>
                                     <div class="mt-2">
-                                        <button class="btn btn-sm btn-outline-primary" onclick="verificarPalpites()">👀 Verificar Palpites</button>
-                                        <!-- 🆕 REMOVIDO: Botão "Enviar Palpites" daqui -->
+                                        <button class="btn btn-sm btn-primary" onclick="reenviarPalpites()">🔄 Tentar Enviar Novamente</button>
+                                        <button class="btn btn-sm btn-outline-primary" onclick="visualizarPalpitesSalvos()">👀 Verificar Palpites</button>
                                         <button class="btn btn-sm btn-limpar-dados" onclick="limparDados()">🗑️ Limpar Dados</button>
                                     </div>
-                                </div>
-                                
-                                <!-- ALERTA: Dados salvos genérico -->
-                                <div id="alert-dados-salvos" class="alert alert-warning d-none">
-                                    <strong>⚠️ Dados salvos encontrados!</strong><br>
-                                    Existem palpites salvos no dispositivo. É recomendado limpar os dados antes de iniciar um novo preenchimento.
-                                    <button class="btn btn-sm btn-limpar-dados mt-2" onclick="limparDados()">Limpar Dados</button>
                                 </div>
                                 
                                 <!-- 🆕 ALERTA: Prazo expirado -->
@@ -747,7 +742,7 @@
                                     <strong>⏰ Prazo Expirado!</strong><br>
                                     O prazo para envio dos palpites desta rodada já expirou.
                                     <div class="mt-2">
-                                        <button class="btn btn-sm btn-outline-primary" onclick="visualizarPalpitesEnviados()">👀 Visualizar Palpites</button>
+                                        <button class="btn btn-sm btn-outline-primary" onclick="visualizarPalpitesSalvos()">👀 Visualizar Palpites</button>
                                         <button class="btn btn-sm btn-limpar-dados" onclick="limparDados()">🗑️ Limpar Dados</button>
                                     </div>
                                 </div>
@@ -807,11 +802,7 @@
                     <div class="card-footer">
                         <!-- 🆕 BOTÃO SALVAR (sempre visível na tela de palpites) -->
                         <button type="submit" form="formPalpites" class="btn btn-success btn-lg w-100" id="btn-salvar-palpites">
-                            💾 Salvar e Ir para Envio
-                        </button>
-                        <!-- 🆕 BOTÃO VOLTAR -->
-                        <button id="btn-voltar-visualizacao" class="btn btn-outline-secondary btn-voltar-visualizacao" onclick="voltarDaVisualizacao()">
-                            ↩️ Voltar
+                            💾 Salvar e Enviar
                         </button>
                     </div>
                 </div>
@@ -965,21 +956,6 @@
         </div>
     </main>
 
-    <!-- Modal de Confirmação (REMOVIDO) -->
-    <!-- <div id="modal-confirmacao" class="modal-overlay d-none"> ... </div> -->
-
-    <!-- Modal de Palpites Pendentes -->
-    <div id="modal-palpites-pendentes" class="modal-overlay d-none">
-        <div class="modal-content">
-            <h4 class="mb-3">📋 Palpites Pendentes</h4>
-            <p id="texto-palpites-pendentes"></p>
-            <div class="modal-buttons">
-                <button class="btn btn-outline-primary" onclick="verificarPalpites()">👀 Verificar Palpites</button>
-                <button class="btn btn-outline-danger" onclick="limparEPreencherNovamente()">🗑️ Excluir e Preencher Novamente</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         // ====================
         // 🔧 CONFIGURAÇÃO ÚNICA
@@ -1057,7 +1033,7 @@
         })();
 
         // ====================
-        // ⚽ LÓGICA DO BOLÃO (INALTERADA)
+        // ⚽ LÓGICA DO BOLÃO - FLUXO SIMPLIFICADO
         // ====================
         
         // 🆕 DETECTAR iOS
@@ -1065,18 +1041,15 @@
             return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         };
 
-        // 🆕 Variável para controlar de onde veio a visualização
-        let telaOrigemVisualizacao = '';
-
         // Dados da aplicação
         let dadosApp = {
             participante: '',
             rodadaSalva: '', // armazena qual rodada foi salva
             palpitesSalvos: [],
-            enviosRealizados: {}, // { timestamp_palpite: true }
             dadosEnviados: false, // flag para controle de envio
             dadosCompartilhados: false, // flag para controle de compartilhamento
-            tentativaForaPrazo: null // 🆕 Armazena a data da tentativa fora do prazo (timestamp)
+            tentativaForaPrazo: null, // 🆕 Armazena a data da tentativa fora do prazo (timestamp)
+            ultimoErroEnvio: null // 🆕 Armazena informações do último erro de envio
         };
 
         // 🕒 FUNÇÃO PARA FORMATAR DATA/HORA NO FORMATO dd/mm/aaaa - hh:mm:ss
@@ -1195,10 +1168,10 @@
                     participante: '',
                     rodadaSalva: '',
                     palpitesSalvos: [],
-                    enviosRealizados: {},
                     dadosEnviados: false,
                     dadosCompartilhados: false,
-                    tentativaForaPrazo: null
+                    tentativaForaPrazo: null,
+                    ultimoErroEnvio: null
                 };
             }
         }
@@ -1214,7 +1187,7 @@
             }
         }
 
-        // 🆕 FUNÇÃO MODIFICADA: Verificar estado da aplicação (agora inclui verificação de prazo)
+        // 🆕 FUNÇÃO MODIFICADA: Verificar estado da aplicação (agora inclui verificação de erro de envio)
         function verificarEstadoAplicacao() {
             // ✅ VERIFICAÇÃO POR RODADA - NOVA LÓGICA
             const statusRodada = verificarRodadaSalva();
@@ -1222,8 +1195,7 @@
             // Esconder todos os alertas primeiro
             document.getElementById('alert-rodada-diferente').classList.add('d-none');
             document.getElementById('alert-dados-enviados').classList.add('d-none');
-            document.getElementById('alert-dados-nao-enviados').classList.add('d-none');
-            document.getElementById('alert-dados-salvos').classList.add('d-none');
+            document.getElementById('alert-erro-envio').classList.add('d-none');
             document.getElementById('alert-prazo-expirado').classList.add('d-none');
             document.getElementById('formulario-inicial').classList.add('d-none');
             
@@ -1245,20 +1217,27 @@
             } else if (statusRodada === 'mesma_rodada') {
                 // Dados da mesma rodada
                 if (dadosApp.dadosEnviados) {
-                    // Já foram enviados
+                    // Já foram enviados com sucesso
                     document.getElementById('texto-dados-enviados').textContent = 
-                        `Seus palpites da ${configRodada.numeroRodada} já foram enviados anteriormente.`;
+                        `Seus palpites da ${configRodada.numeroRodada} já foram enviados com sucesso.`;
                     document.getElementById('alert-dados-enviados').classList.remove('d-none');
                 } else {
-                    // Ainda não foram enviados
-                    document.getElementById('texto-dados-nao-enviados').textContent = 
-                        `Você tem palpites salvos da ${configRodada.numeroRodada} que ainda não foram enviados.`;
-                    document.getElementById('alert-dados-nao-enviados').classList.remove('d-none');
+                    // Envio falhou ou ainda não foi tentado
+                    if (dadosApp.ultimoErroEnvio) {
+                        // Houve erro no envio anterior
+                        const erroMsg = dadosApp.ultimoErroEnvio.mensagem || 'Erro desconhecido';
+                        document.getElementById('texto-erro-envio').textContent = 
+                            `O envio dos palpites da ${configRodada.numeroRodada} falhou anteriormente.\n\n` +
+                            `Erro: ${erroMsg}\n\n` +
+                            `Tente enviar novamente quando tiver conexão com internet.`;
+                        document.getElementById('alert-erro-envio').classList.remove('d-none');
+                    } else {
+                        // Ainda não tentou enviar (caso incomum, mas possível)
+                        document.getElementById('texto-dados-enviados').textContent = 
+                            `Seus palpites da ${configRodada.numeroRodada} foram salvos, mas ainda não foram enviados.`;
+                        document.getElementById('alert-dados-enviados').classList.remove('d-none');
+                    }
                 }
-                
-            } else {
-                // Dados salvos sem informação de rodada (compatibilidade com versões antigas)
-                document.getElementById('alert-dados-salvos').classList.remove('d-none');
             }
             
             // 🆕 Verificar se o prazo já expirou (APENAS se for a MESMA rodada)
@@ -1270,39 +1249,46 @@
             }
         }
 
-        // 🆕 FUNÇÃO: Voltar para edição da tela de envio
-        function voltarParaEdicao() {
-            telaOrigemVisualizacao = 'tela-envio-google';
-            mostrarTela('tela-palpites');
-            carregarJogosComDadosSalvos();
+        // 🆕 FUNÇÃO: Reenviar palpites (da tela de erro)
+        function reenviarPalpites() {
+            if (dadosApp.palpitesSalvos.length === 0) {
+                alert('Nenhum palpite para enviar.');
+                return;
+            }
+            
+            // 🆕 Verificar prazo antes de permitir envio
+            if (!verificarPrazoValido()) {
+                alert('⏰ O prazo para envio dos palpites desta rodada já expirou.');
+                return;
+            }
+            
+            if (!navigator.onLine) {
+                alert('📡 Sem conexão com internet! Conecte-se para enviar os palpites.');
+                return;
+            }
+            
+            mostrarTela('tela-envio-google');
+            document.getElementById('resultado-envio').classList.add('d-none');
+            document.getElementById('btn-fechar-envio').classList.add('d-none');
+            enviarParaGoogleForms();
         }
 
         // 🆕 FUNÇÃO MODIFICADA: Visualizar palpites já enviados (da tela inicial)
         function visualizarPalpitesEnviados() {
-            telaOrigemVisualizacao = 'tela-participante';
             mostrarTela('tela-palpites');
             carregarJogosComDadosSalvos();
         }
 
         // 🆕 FUNÇÃO MODIFICADA: Visualizar palpites salvos (da tela de conclusão)
         function visualizarPalpitesSalvos() {
-            telaOrigemVisualizacao = 'tela-conclusao';
             mostrarTela('tela-palpites');
             carregarJogosComDadosSalvos();
         }
 
-        // 🆕 FUNÇÃO: Voltar da visualização para a tela de origem
-        function voltarDaVisualizacao() {
-            if (telaOrigemVisualizacao === 'tela-participante') {
-                mostrarTela('tela-participante');
-            } else if (telaOrigemVisualizacao === 'tela-conclusao') {
-                mostrarTela('tela-conclusao');
-                atualizarConteudoConclusao();
-            } else if (telaOrigemVisualizacao === 'tela-envio-google') {
-                mostrarTela('tela-envio-google');
-            } else {
-                mostrarTela('tela-participante');
-            }
+        // 🆕 FUNÇÃO: Voltar para edição da tela de envio
+        function voltarParaEdicao() {
+            mostrarTela('tela-palpites');
+            carregarJogosComDadosSalvos();
         }
 
         // 🆕 FUNÇÃO: Atualizar conteúdo da tela de conclusão (agora inclui verificação de prazo)
@@ -1327,9 +1313,9 @@
                 alertPrazoExpirado.classList.add('d-none');
                 conteudoNormal.classList.add('d-none');
                 conteudoPosEnvio.classList.remove('d-none');
-                textoConclusao.textContent = `Seus palpites da ${configRodada.numeroRodada} já foram enviados anteriormente. Você pode visualizar, editar e enviar novamente.`;
+                textoConclusao.textContent = `Seus palpites da ${configRodada.numeroRodada} já foram enviados. Você pode visualizar, editar e enviar novamente.`;
             } else {
-                // Conteúdo normal (palpites não enviados)
+                // Conteúdo normal (palpites não enviados ou erro)
                 alertPrazoExpirado.classList.add('d-none');
                 conteudoNormal.classList.remove('d-none');
                 conteudoPosEnvio.classList.add('d-none');
@@ -1339,58 +1325,6 @@
         // 🆕 FUNÇÃO MODIFICADA: Atualizar botões na tela de conclusão
         function atualizarBotoesConclusao() {
             atualizarConteudoConclusao();
-        }
-
-        function mostrarModalPalpitesPendentes() {
-            const modal = document.getElementById('modal-palpites-pendentes');
-            const texto = document.getElementById('texto-palpites-pendentes');
-            
-            texto.textContent = `Você tem palpites salvos da ${configRodada.numeroRodada} que ainda não foram enviados. O que deseja fazer?`;
-            
-            modal.classList.remove('d-none');
-        }
-
-        // ✅ NOVA FUNÇÃO: Ver palpites já enviados
-        function verificarPalpitesEnviados() {
-            visualizarPalpitesEnviados();
-        }
-
-        // 🆕 FUNÇÃO MODIFICADA: Ir direto para envio (inicia envio direto)
-        function irParaEnvioDireto() {
-            if (dadosApp.palpitesSalvos.length === 0) {
-                alert('Nenhum palpite para enviar.');
-                return;
-            }
-            
-            // 🆕 Verificar prazo antes de permitir envio
-            if (!verificarPrazoValido()) {
-                alert('⏰ O prazo para envio dos palpites desta rodada já expirou.');
-                return;
-            }
-            
-            iniciarEnvioGoogleForms();
-        }
-
-        // ✅ FUNÇÃO ANTIGA: Mantida para compatibilidade
-        function irParaEnvio() {
-            mostrarTela('tela-conclusao');
-            atualizarBotoesConclusao();
-        }
-
-        function verificarPalpites() {
-            fecharModalPalpitesPendentes();
-            mostrarTela('tela-palpites');
-            carregarJogosComDadosSalvos();
-        }
-
-        function limparEPreencherNovamente() {
-            fecharModalPalpitesPendentes();
-            limparDados();
-            mostrarTela('tela-participante');
-        }
-
-        function fecharModalPalpitesPendentes() {
-            document.getElementById('modal-palpites-pendentes').classList.add('d-none');
         }
 
         // 🆕 FUNÇÃO MODIFICADA: Carregar jogos com dados salvos
@@ -1444,11 +1378,9 @@
             });
 
             const btnSalvar = document.getElementById('btn-salvar-palpites');
-            const btnVoltar = document.getElementById('btn-voltar-visualizacao');
             const titulo = document.getElementById('titulo-tela-palpites');
             
             btnSalvar.classList.remove('d-none');
-            btnVoltar.classList.remove('d-none');
             
             if (dadosApp.dadosEnviados) {
                 titulo.textContent = '👀 Visualizar/Editar Palpites - ' + configRodada.numeroRodada;
@@ -1457,14 +1389,6 @@
             }
 
             atualizarDashboardHeader();
-        }
-
-        function verificarDadosSalvos() {
-            if (dadosApp.participante || dadosApp.palpitesSalvos.length > 0) {
-                document.getElementById('alert-dados-salvos').classList.remove('d-none');
-            } else {
-                document.getElementById('alert-dados-salvos').classList.add('d-none');
-            }
         }
 
         function salvarDados() {
@@ -1643,6 +1567,7 @@
 
             // 🆕 RESETAR FLAG DE ENVIO AO SALVAR NOVOS PALPITES
             dadosApp.dadosEnviados = false;
+            dadosApp.ultimoErroEnvio = null; // Limpar erro anterior
             
             if (dadosApp.palpitesSalvos.length > 0) {
                 dadosApp.palpitesSalvos[dadosApp.palpitesSalvos.length - 1] = palpiteRodada;
@@ -1676,13 +1601,15 @@
 
         function voltarInicio() {
             dadosApp.participante = '';
+            dadosApp.rodadaSalva = '';
             dadosApp.palpitesSalvos = [];
             dadosApp.dadosEnviados = false;
             dadosApp.dadosCompartilhados = false;
-            dadosApp.tentativaForaPrazo = null; // 🆕 Limpar também a tentativa fora do prazo
+            dadosApp.tentativaForaPrazo = null;
+            dadosApp.ultimoErroEnvio = null;
             salvarDados();
             mostrarTela('tela-participante');
-            verificarDadosSalvos();
+            verificarEstadoAplicacao();
         }
 
         function voltarConclusao() {
@@ -1701,16 +1628,15 @@
                 dadosApp.participante = '';
                 dadosApp.rodadaSalva = '';
                 dadosApp.palpitesSalvos = [];
-                dadosApp.enviosRealizados = {};
                 dadosApp.dadosEnviados = false;
                 dadosApp.dadosCompartilhados = false;
-                dadosApp.tentativaForaPrazo = null; // 🆕 Limpar também a tentativa fora do prazo
+                dadosApp.tentativaForaPrazo = null;
+                dadosApp.ultimoErroEnvio = null;
                 salvarDados();
                 
                 document.getElementById('alert-rodada-diferente').classList.add('d-none');
                 document.getElementById('alert-dados-enviados').classList.add('d-none');
-                document.getElementById('alert-dados-nao-enviados').classList.add('d-none');
-                document.getElementById('alert-dados-salvos').classList.add('d-none');
+                document.getElementById('alert-erro-envio').classList.add('d-none');
                 document.getElementById('alert-prazo-expirado').classList.add('d-none');
                 
                 alert('✅ Dados limpos com sucesso!');
@@ -1927,7 +1853,7 @@
             }
         }
 
-        // 🚀 FUNÇÃO ATUALIZADA: ENVIAR PARA GOOGLE FORMS com melhor tratamento para iOS
+        // 🚀 FUNÇÃO ATUALIZADA: ENVIAR PARA GOOGLE FORMS com tratamento de erro melhorado
         async function enviarParaGoogleForms() {
             if (dadosApp.palpitesSalvos.length === 0) {
                 alert('Nenhum palpite para enviar.');
@@ -2019,6 +1945,7 @@
                         ${enviados} palpites enviados!
                     </div>`;
                     dadosApp.dadosEnviados = true;
+                    dadosApp.ultimoErroEnvio = null; // Limpar erro
                     salvarDados();
                     
                 } else {
@@ -2027,7 +1954,8 @@
                         ${enviados} enviados com sucesso<br>
                         ${erros.length} com erro
                     </div>`;
-                    dadosApp.dadosEnviados = true;
+                    dadosApp.dadosEnviados = true; // Considera como enviado mesmo com erros parciais
+                    dadosApp.ultimoErroEnvio = null;
                     salvarDados();
                 }
                 
@@ -2035,6 +1963,16 @@
                 
             } catch (error) {
                 console.error('❌ Erro ao enviar palpites:', error);
+                
+                // 🆕 SALVAR INFORMAÇÃO DO ERRO
+                dadosApp.ultimoErroEnvio = {
+                    timestamp: new Date().toISOString(),
+                    dataHora: formatarDataHora(),
+                    mensagem: error.message,
+                    rodada: configRodada.numeroRodada
+                };
+                salvarDados();
+                
                 document.getElementById('resultado-envio').classList.remove('d-none');
                 document.getElementById('resultado-envio').innerHTML = `<div class="alert alert-danger">
                     ❌ <strong>Erro ao enviar palpites!</strong><br>
