@@ -661,6 +661,14 @@
             border-color: #f5c6cb;
             border-left: 4px solid #dc3545;
         }
+        
+        /* 🆕 Estilo para alerta sem internet */
+        .alert-sem-internet {
+            color: #0c5460;
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+            border-left: 4px solid #17a2b8;
+        }
     </style>
 </head>
 <body>
@@ -816,7 +824,7 @@
                         <div class="card shadow">
                             <!-- 🆕 CABEÇALHO COM RODADA DINÂMICA -->
                             <div class="card-header bg-success text-white text-center">
-                                <h4 class="mb-0">✅ Palpites Salvos com Sucesso! - <span id="rodada-tela-conclusao"></span></h4>
+                                <h4 class="mb-0">📋 Seus Palpites - <span id="rodada-tela-conclusao"></span></h4>
                             </div>
                             <div class="card-body text-center">
                                 <!-- 🆕 ALERTA: Prazo expirado (aparece apenas se fora do prazo) -->
@@ -826,51 +834,33 @@
                                     Seus palpites foram salvos, mas não podem ser enviados.
                                 </div>
                                 
-                                <!-- 🆕 CONTEÚDO NORMAL (antes do envio) -->
+                                <!-- 🆕 CONTEÚDO NORMAL (antes do envio ou após erro) -->
                                 <div id="conteudo-normal-conclusao">
-                                    <h5>Parabéns!</h5>
-                                    <p class="mb-4">Seus palpites foram salvos com sucesso.</p>
-                                    
-                                    <div class="alert alert-info mb-4">
-                                        <h6>📋 Próximos Passos:</h6>
-                                        <p class="mb-2">1. Envie seus palpites para nosso servidor</p>
-                                        <p class="mb-2">2. Ou compartilhe o CSV com o organizador</p>
+                                    <!-- 🆕 ALERTA: Erro de internet (aparece se falhou por falta de conexão) -->
+                                    <div id="alert-sem-internet-conclusao" class="alert alert-sem-internet d-none mb-4">
+                                        <strong>📡 Sem conexão com internet!</strong><br>
+                                        Seus palpites foram salvos, mas não foi possível enviá-los devido à falta de conexão.<br>
+                                        <button class="btn btn-primary mt-2" onclick="iniciarEnvioGoogleForms()">
+                                            🔄 Tentar Enviar Novamente
+                                        </button>
                                     </div>
+                                    
+                                    <!-- 🆕 ALERTA: Envio bem-sucedido (aparece se já foram enviados) -->
+                                    <div id="alert-envio-sucesso-conclusao" class="alert alert-success d-none mb-4">
+                                        <strong>✅ Palpites enviados com sucesso!</strong><br>
+                                        Seus palpites da ${configRodada.numeroRodada} já foram enviados.
+                                    </div>
+                                    
+                                    <h5>Seus palpites estão prontos!</h5>
+                                    <p class="mb-4">Aqui você pode visualizar, editar ou compartilhar seus palpites.</p>
 
                                     <!-- Botões em coluna -->
                                     <div class="botoes-coluna mb-4">
-                                        <!-- 🆕 BOTÃO DE ENVIO (sempre visível) -->
-                                        <button id="btn-enviar-palpites" class="btn btn-primary" onclick="iniciarEnvioGoogleForms()">
-                                            🚀 Enviar Palpites
-                                        </button>
-                                        <button class="btn btn-info" id="btn-compartilhar-csv" onclick="compartilharCSV()">
-                                            📤 Compartilhar CSV
-                                        </button>
                                         <!-- 🆕 ALTERADO: Visualizar/Editar Palpites (sempre visível) -->
                                         <button class="btn btn-outline-primary" onclick="visualizarPalpitesSalvos()">
                                             👀 Editar Palpites
                                         </button>
-                                    </div>
-                                </div>
-                                
-                                <!-- 🆕 CONTEÚDO APÓS ENVIO (aparece após envio bem-sucedido) -->
-                                <div id="conteudo-pos-envio" class="d-none">
-                                    <div class="alert alert-info mb-4">
-                                        <strong>✅ Palpites já enviados!</strong><br>
-                                        <span id="texto-conclusao-enviados"></span>
-                                        <p class="mb-2 mt-2"><strong>Você pode visualizar ou alterar seus palpites:</strong></p>
-                                    </div>
-                                    
-                                    <!-- Botões em coluna -->
-                                    <div class="botoes-coluna mb-4">
-                                        <!-- 🆕 ALTERADO: Visualizar/Editar Palpites Enviados -->
-                                        <button class="btn btn-outline-primary" onclick="visualizarPalpitesSalvos()">
-                                            👀 Editar Palpites
-                                        </button>
-                                        <button id="btn-enviar-palpites-pos" class="btn btn-primary" onclick="iniciarEnvioGoogleForms()">
-                                            🚀 Enviar Novamente
-                                        </button>
-                                        <button class="btn btn-info" id="btn-compartilhar-csv-pos" onclick="compartilharCSV()">
+                                        <button class="btn btn-info" id="btn-compartilhar-csv" onclick="compartilharCSV()">
                                             📤 Compartilhar CSV
                                         </button>
                                     </div>
@@ -945,7 +935,13 @@
                                 
                                 <div id="resultado-envio" class="d-none"></div>
                                 
-                                <button id="btn-fechar-envio" class="btn btn-success w-100 d-none" onclick="voltarConclusaoPosEnvio()">
+                                <!-- 🆕 BOTÃO FECHAR (para erro de internet) -->
+                                <button id="btn-fechar-envio-internet" class="btn btn-success w-100 d-none" onclick="irParaConclusaoComErroInternet()">
+                                    ✅ Fechar e Ir para Conclusão
+                                </button>
+                                
+                                <!-- 🆕 BOTÃO FECHAR (para envio bem-sucedido) -->
+                                <button id="btn-fechar-envio-sucesso" class="btn btn-success w-100 d-none" onclick="irParaConclusaoComSucesso()">
                                     ✅ Fechar
                                 </button>
                             </div>
@@ -962,12 +958,12 @@
         // ====================
         
         // ⚠️ ALTERE ESTE VALOR A CADA PUBLICAÇÃO NO GITHUB PAGES
-        const VERSAO_ATUAL = "20260130_0000_R02"; // Formato: AAAAMMDD_HHMM_RXX
+        const VERSAO_ATUAL = "20260130_1400_R03"; // Formato: AAAAMMDD_HHMM_RXX
         
         // 🔧 CONFIGURAÇÃO DA RODADA (EDITAR AQUI) - ÚNICO LOCAL PARA ALTERAÇÕES
         const configRodada = {
             nomeBolao: "⚽ Bolão Campeonato Brasileiro 2026",
-            numeroRodada: "Rodada 02",
+            numeroRodada: "Rodada 03",
             dataInicio: "04/02/2026",
             dataLimite: "03/02/2026" // Formato: DD/MM/AAAA
         };
@@ -1049,7 +1045,8 @@
             dadosEnviados: false, // flag para controle de envio
             dadosCompartilhados: false, // flag para controle de compartilhamento
             tentativaForaPrazo: null, // 🆕 Armazena a data da tentativa fora do prazo (timestamp)
-            ultimoErroEnvio: null // 🆕 Armazena informações do último erro de envio
+            ultimoErroEnvio: null, // 🆕 Armazena informações do último erro de envio
+            erroInternet: false // 🆕 Flag específica para erro de internet
         };
 
         // 🕒 FUNÇÃO PARA FORMATAR DATA/HORA NO FORMATO dd/mm/aaaa - hh:mm:ss
@@ -1171,7 +1168,8 @@
                     dadosEnviados: false,
                     dadosCompartilhados: false,
                     tentativaForaPrazo: null,
-                    ultimoErroEnvio: null
+                    ultimoErroEnvio: null,
+                    erroInternet: false
                 };
             }
         }
@@ -1187,7 +1185,7 @@
             }
         }
 
-        // 🆕 FUNÇÃO MODIFICADA: Verificar estado da aplicação (agora inclui verificação de erro de envio)
+        // 🆕 FUNÇÃO MODIFICADA: Verificar estado da aplicação
         function verificarEstadoAplicacao() {
             // ✅ VERIFICAÇÃO POR RODADA - NOVA LÓGICA
             const statusRodada = verificarRodadaSalva();
@@ -1226,10 +1224,20 @@
                     if (dadosApp.ultimoErroEnvio) {
                         // Houve erro no envio anterior
                         const erroMsg = dadosApp.ultimoErroEnvio.mensagem || 'Erro desconhecido';
-                        document.getElementById('texto-erro-envio').textContent = 
-                            `O envio dos palpites da ${configRodada.numeroRodada} falhou anteriormente.\n\n` +
-                            `Erro: ${erroMsg}\n\n` +
-                            `Tente enviar novamente quando tiver conexão com internet.`;
+                        
+                        // Verificar se foi erro de internet
+                        if (dadosApp.erroInternet || erroMsg.includes('internet') || erroMsg.includes('network') || erroMsg.includes('conexão')) {
+                            document.getElementById('texto-erro-envio').textContent = 
+                                `❌ Falta de conexão com a internet!\n\n` +
+                                `Seus palpites da ${configRodada.numeroRodada} foram salvos, mas não foi possível enviá-los.\n\n` +
+                                `Tente enviar novamente quando estiver conectado à internet.`;
+                        } else {
+                            document.getElementById('texto-erro-envio').textContent = 
+                                `O envio dos palpites da ${configRodada.numeroRodada} falhou anteriormente.\n\n` +
+                                `Erro: ${erroMsg}\n\n` +
+                                `Tente enviar novamente.`;
+                        }
+                        
                         document.getElementById('alert-erro-envio').classList.remove('d-none');
                     } else {
                         // Ainda não tentou enviar (caso incomum, mas possível)
@@ -1269,7 +1277,8 @@
             
             mostrarTela('tela-envio-google');
             document.getElementById('resultado-envio').classList.add('d-none');
-            document.getElementById('btn-fechar-envio').classList.add('d-none');
+            document.getElementById('btn-fechar-envio-internet').classList.add('d-none');
+            document.getElementById('btn-fechar-envio-sucesso').classList.add('d-none');
             enviarParaGoogleForms();
         }
 
@@ -1291,40 +1300,49 @@
             carregarJogosComDadosSalvos();
         }
 
-        // 🆕 FUNÇÃO: Atualizar conteúdo da tela de conclusão (agora inclui verificação de prazo)
-        function atualizarConteudoConclusao() {
-            const conteudoNormal = document.getElementById('conteudo-normal-conclusao');
-            const conteudoPosEnvio = document.getElementById('conteudo-pos-envio');
-            const textoConclusao = document.getElementById('texto-conclusao-enviados');
-            const alertPrazoExpirado = document.getElementById('alert-prazo-expirado-conclusao');
+        // 🆕 FUNÇÃO: Ir para conclusão após erro de internet
+        function irParaConclusaoComErroInternet() {
+            dadosApp.erroInternet = true;
+            salvarDados();
+            mostrarTela('tela-conclusao');
+            atualizarBotoesConclusao();
+        }
+
+        // 🆕 FUNÇÃO: Ir para conclusão após envio bem-sucedido
+        function irParaConclusaoComSucesso() {
+            dadosApp.dadosEnviados = true;
+            dadosApp.erroInternet = false;
+            salvarDados();
+            mostrarTela('tela-conclusao');
+            atualizarBotoesConclusao();
+        }
+
+        // 🆕 FUNÇÃO MODIFICADA: Atualizar botões na tela de conclusão
+        function atualizarBotoesConclusao() {
+            const alertInternet = document.getElementById('alert-sem-internet-conclusao');
+            const alertSucesso = document.getElementById('alert-envio-sucesso-conclusao');
+            const alertPrazo = document.getElementById('alert-prazo-expirado-conclusao');
             const dataLimiteExibida = document.getElementById('data-limite-exibida');
+            
+            // Esconder todos primeiro
+            alertInternet.classList.add('d-none');
+            alertSucesso.classList.add('d-none');
+            alertPrazo.classList.add('d-none');
             
             // 🆕 Verificar se o prazo expirou
             const prazoValido = verificarPrazoValido();
             
             if (!prazoValido) {
                 // Mostrar alerta de prazo expirado
-                alertPrazoExpirado.classList.remove('d-none');
-                conteudoNormal.classList.add('d-none');
-                conteudoPosEnvio.classList.add('d-none');
+                alertPrazo.classList.remove('d-none');
                 dataLimiteExibida.textContent = configRodada.dataLimite;
             } else if (dadosApp.dadosEnviados) {
                 // Conteúdo normal (palpites já enviados)
-                alertPrazoExpirado.classList.add('d-none');
-                conteudoNormal.classList.add('d-none');
-                conteudoPosEnvio.classList.remove('d-none');
-                textoConclusao.textContent = `Seus palpites da ${configRodada.numeroRodada} já foram enviados. Você pode visualizar, editar e enviar novamente.`;
-            } else {
-                // Conteúdo normal (palpites não enviados ou erro)
-                alertPrazoExpirado.classList.add('d-none');
-                conteudoNormal.classList.remove('d-none');
-                conteudoPosEnvio.classList.add('d-none');
+                alertSucesso.classList.remove('d-none');
+            } else if (dadosApp.erroInternet) {
+                // Erro de internet
+                alertInternet.classList.remove('d-none');
             }
-        }
-
-        // 🆕 FUNÇÃO MODIFICADA: Atualizar botões na tela de conclusão
-        function atualizarBotoesConclusao() {
-            atualizarConteudoConclusao();
         }
 
         // 🆕 FUNÇÃO MODIFICADA: Carregar jogos com dados salvos
@@ -1565,9 +1583,10 @@
 
             console.log('💾 Palpite da rodada salvo:', palpiteRodada);
 
-            // 🆕 RESETAR FLAG DE ENVIO AO SALVAR NOVOS PALPITES
+            // 🆕 RESETAR FLAGS AO SALVAR NOVOS PALPITES
             dadosApp.dadosEnviados = false;
-            dadosApp.ultimoErroEnvio = null; // Limpar erro anterior
+            dadosApp.ultimoErroEnvio = null;
+            dadosApp.erroInternet = false;
             
             if (dadosApp.palpitesSalvos.length > 0) {
                 dadosApp.palpitesSalvos[dadosApp.palpitesSalvos.length - 1] = palpiteRodada;
@@ -1580,7 +1599,8 @@
             // 🆕 MODIFICAÇÃO: Ir direto para tela de envio, não para conclusão
             mostrarTela('tela-envio-google');
             document.getElementById('resultado-envio').classList.add('d-none');
-            document.getElementById('btn-fechar-envio').classList.add('d-none');
+            document.getElementById('btn-fechar-envio-internet').classList.add('d-none');
+            document.getElementById('btn-fechar-envio-sucesso').classList.add('d-none');
             
             // 🆕 Iniciar envio automaticamente (se dentro do prazo)
             if (verificarPrazoValido()) {
@@ -1593,7 +1613,7 @@
                     O prazo para envio dos palpites desta rodada já expirou em ${configRodada.dataLimite}.<br>
                     Seus palpites foram salvos, mas não podem ser enviados.
                 </div>`;
-                document.getElementById('btn-fechar-envio').classList.remove('d-none');
+                document.getElementById('btn-fechar-envio-sucesso').classList.remove('d-none');
             }
             
             atualizarDashboardHeader();
@@ -1607,18 +1627,13 @@
             dadosApp.dadosCompartilhados = false;
             dadosApp.tentativaForaPrazo = null;
             dadosApp.ultimoErroEnvio = null;
+            dadosApp.erroInternet = false;
             salvarDados();
             mostrarTela('tela-participante');
             verificarEstadoAplicacao();
         }
 
         function voltarConclusao() {
-            mostrarTela('tela-conclusao');
-            atualizarBotoesConclusao();
-        }
-        
-        // 🆕 FUNÇÃO: Voltar para conclusão após envio
-        function voltarConclusaoPosEnvio() {
             mostrarTela('tela-conclusao');
             atualizarBotoesConclusao();
         }
@@ -1632,6 +1647,7 @@
                 dadosApp.dadosCompartilhados = false;
                 dadosApp.tentativaForaPrazo = null;
                 dadosApp.ultimoErroEnvio = null;
+                dadosApp.erroInternet = false;
                 salvarDados();
                 
                 document.getElementById('alert-rodada-diferente').classList.add('d-none');
@@ -1707,7 +1723,8 @@
             
             mostrarTela('tela-envio-google');
             document.getElementById('resultado-envio').classList.add('d-none');
-            document.getElementById('btn-fechar-envio').classList.add('d-none');
+            document.getElementById('btn-fechar-envio-internet').classList.add('d-none');
+            document.getElementById('btn-fechar-envio-sucesso').classList.add('d-none');
             enviarParaGoogleForms();
         }
 
@@ -1853,7 +1870,7 @@
             }
         }
 
-        // 🚀 FUNÇÃO ATUALIZADA: ENVIAR PARA GOOGLE FORMS com tratamento de erro melhorado
+        // 🚀 FUNÇÃO ATUALIZADA: ENVIAR PARA GOOGLE FORMS com tratamento de erro de internet específico
         async function enviarParaGoogleForms() {
             if (dadosApp.palpitesSalvos.length === 0) {
                 alert('Nenhum palpite para enviar.');
@@ -1868,7 +1885,19 @@
                     O prazo para envio dos palpites desta rodada já expirou em ${configRodada.dataLimite}.<br>
                     Seus palpites foram salvos, mas não podem ser enviados.
                 </div>`;
-                document.getElementById('btn-fechar-envio').classList.remove('d-none');
+                document.getElementById('btn-fechar-envio-sucesso').classList.remove('d-none');
+                return;
+            }
+
+            // 🆕 Verificar conexão com internet ANTES de tentar enviar
+            if (!navigator.onLine) {
+                document.getElementById('resultado-envio').classList.remove('d-none');
+                document.getElementById('resultado-envio').innerHTML = `<div class="alert alert-sem-internet">
+                    📡 <strong>Sem conexão com internet!</strong><br>
+                    Não foi possível enviar os palpites porque você está offline.<br>
+                    Conecte-se à internet e tente novamente.
+                </div>`;
+                document.getElementById('btn-fechar-envio-internet').classList.remove('d-none');
                 return;
             }
 
@@ -1944,9 +1973,7 @@
                         ✅ <strong>Sucesso!</strong><br>
                         ${enviados} palpites enviados!
                     </div>`;
-                    dadosApp.dadosEnviados = true;
-                    dadosApp.ultimoErroEnvio = null; // Limpar erro
-                    salvarDados();
+                    document.getElementById('btn-fechar-envio-sucesso').classList.remove('d-none');
                     
                 } else {
                     resultadoDiv.innerHTML = `<div class="alert alert-warning">
@@ -1954,32 +1981,52 @@
                         ${enviados} enviados com sucesso<br>
                         ${erros.length} com erro
                     </div>`;
-                    dadosApp.dadosEnviados = true; // Considera como enviado mesmo com erros parciais
-                    dadosApp.ultimoErroEnvio = null;
-                    salvarDados();
+                    document.getElementById('btn-fechar-envio-sucesso').classList.remove('d-none');
                 }
-                
-                document.getElementById('btn-fechar-envio').classList.remove('d-none');
                 
             } catch (error) {
                 console.error('❌ Erro ao enviar palpites:', error);
                 
-                // 🆕 SALVAR INFORMAÇÃO DO ERRO
+                // 🆕 VERIFICAR SE É ERRO DE INTERNET
+                const isNetworkError = error.message.includes('network') || 
+                                      error.message.includes('internet') || 
+                                      error.message.includes('offline') ||
+                                      error.message.includes('Failed to fetch') ||
+                                      error.name === 'TypeError';
+                
+                document.getElementById('resultado-envio').classList.remove('d-none');
+                
+                if (isNetworkError) {
+                    // ERRO DE INTERNET
+                    document.getElementById('resultado-envio').innerHTML = `<div class="alert alert-sem-internet">
+                        📡 <strong>Sem conexão com internet!</strong><br>
+                        Não foi possível enviar os palpites porque você está offline.<br>
+                        Conecte-se à internet e tente novamente.
+                    </div>`;
+                    document.getElementById('btn-fechar-envio-internet').classList.remove('d-none');
+                    
+                    // Salvar flag de erro de internet
+                    dadosApp.erroInternet = true;
+                    
+                } else {
+                    // OUTRO TIPO DE ERRO
+                    document.getElementById('resultado-envio').innerHTML = `<div class="alert alert-danger">
+                        ❌ <strong>Erro ao enviar palpites!</strong><br>
+                        Tente novamente mais tarde.<br>
+                        <small>Erro: ${error.message}</small>
+                    </div>`;
+                    document.getElementById('btn-fechar-envio-sucesso').classList.remove('d-none');
+                }
+                
+                // SALVAR INFORMAÇÃO DO ERRO
                 dadosApp.ultimoErroEnvio = {
                     timestamp: new Date().toISOString(),
                     dataHora: formatarDataHora(),
                     mensagem: error.message,
-                    rodada: configRodada.numeroRodada
+                    rodada: configRodada.numeroRodada,
+                    isNetworkError: isNetworkError
                 };
                 salvarDados();
-                
-                document.getElementById('resultado-envio').classList.remove('d-none');
-                document.getElementById('resultado-envio').innerHTML = `<div class="alert alert-danger">
-                    ❌ <strong>Erro ao enviar palpites!</strong><br>
-                    Tente novamente mais tarde.<br>
-                    <small>Erro: ${error.message}</small>
-                </div>`;
-                document.getElementById('btn-fechar-envio').classList.remove('d-none');
             }
         }
         
