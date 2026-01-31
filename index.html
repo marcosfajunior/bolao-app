@@ -620,11 +620,6 @@
             font-size: 1.1rem;
         }
         
-        /* 🆕 ESTILO PARA CONTEÚDO DA TELA DE CONCLUSÃO APÓS ENVIO */
-        .conteudo-pos-envio {
-            display: none;
-        }
-        
         /* iOS Specific: Prevenir seleção de texto indesejada */
         .no-select {
             -webkit-user-select: none;
@@ -935,7 +930,7 @@
                                 
                                 <div id="resultado-envio" class="d-none"></div>
                                 
-                                <!-- 🆕 BOTÃO FECHAR (para erro de internet) -->
+                                <!-- 🆕 BOTÃO FECHAR (para erro de internet ANTES de começar) -->
                                 <button id="btn-fechar-envio-internet" class="btn btn-success w-100 d-none" onclick="irParaConclusaoComErroInternet()">
                                     ✅ Fechar e Ir para Conclusão
                                 </button>
@@ -943,6 +938,11 @@
                                 <!-- 🆕 BOTÃO FECHAR (para envio bem-sucedido) -->
                                 <button id="btn-fechar-envio-sucesso" class="btn btn-success w-100 d-none" onclick="irParaConclusaoComSucesso()">
                                     ✅ Fechar
+                                </button>
+                                
+                                <!-- 🆕 BOTÃO REINICIAR ENVIO (para falha durante envio) -->
+                                <button id="btn-reiniciar-envio" class="btn btn-warning w-100 d-none mt-2" onclick="reiniciarEnvio()">
+                                    🔄 Reiniciar Envio
                                 </button>
                             </div>
                         </div>
@@ -958,7 +958,7 @@
         // ====================
         
         // ⚠️ ALTERE ESTE VALOR A CADA PUBLICAÇÃO NO GITHUB PAGES
-        const VERSAO_ATUAL = "20260130_1500_R02"; // Formato: AAAAMMDD_HHMM_RXX
+        const VERSAO_ATUAL = "20260131_1100_R02"; // Formato: AAAAMMDD_HHMM_RXX
         
         // 🔧 CONFIGURAÇÃO DA RODADA (EDITAR AQUI) - ÚNICO LOCAL PARA ALTERAÇÕES
         const configRodada = {
@@ -1037,16 +1037,16 @@
             return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         };
 
-        // Dados da aplicação
+        // Dados da aplicação - SIMPLIFICADO
         let dadosApp = {
             participante: '',
-            rodadaSalva: '', // armazena qual rodada foi salva
+            rodadaSalva: '',
             palpitesSalvos: [],
-            dadosEnviados: false, // flag para controle de envio
-            dadosCompartilhados: false, // flag para controle de compartilhamento
-            tentativaForaPrazo: null, // 🆕 Armazena a data da tentativa fora do prazo (timestamp)
-            ultimoErroEnvio: null, // 🆕 Armazena informações do último erro de envio
-            erroInternet: false // 🆕 Flag específica para erro de internet
+            dadosEnviados: false,
+            dadosCompartilhados: false,
+            tentativaForaPrazo: null,
+            ultimoErroEnvio: null,
+            erroInternet: false
         };
 
         // 🕒 FUNÇÃO PARA FORMATAR DATA/HORA NO FORMATO dd/mm/aaaa - hh:mm:ss
@@ -1154,13 +1154,24 @@
                 const dados = localStorage.getItem('bolaoBrasileiro');
                 if (dados) {
                     const parsed = JSON.parse(dados);
-                    dadosApp = { ...dadosApp, ...parsed };
+                    dadosApp = { 
+                        participante: '',
+                        rodadaSalva: '',
+                        palpitesSalvos: [],
+                        dadosEnviados: false,
+                        dadosCompartilhados: false,
+                        tentativaForaPrazo: null,
+                        ultimoErroEnvio: null,
+                        erroInternet: false,
+                        // Sobrescreve com dados salvos
+                        ...parsed 
+                    };
                     console.log('📱 Dados carregados:', dadosApp);
                 }
             } catch (e) {
                 console.error('❌ Erro ao carregar dados:', e);
-                // 🆕 iOS FIX: Limpar localStorage corrompido
                 localStorage.removeItem('bolaoBrasileiro');
+                // 🆕 Inicializa com todas as propriedades
                 dadosApp = {
                     participante: '',
                     rodadaSalva: '',
@@ -1279,6 +1290,24 @@
             document.getElementById('resultado-envio').classList.add('d-none');
             document.getElementById('btn-fechar-envio-internet').classList.add('d-none');
             document.getElementById('btn-fechar-envio-sucesso').classList.add('d-none');
+            document.getElementById('btn-reiniciar-envio').classList.add('d-none');
+            enviarParaGoogleForms();
+        }
+
+        // 🆕 FUNÇÃO SIMPLIFICADA: Reiniciar envio completo
+        function reiniciarEnvio() {
+            if (!navigator.onLine) {
+                alert('📡 Sem conexão com internet! Conecte-se para reiniciar o envio.');
+                return;
+            }
+            
+            // 🆕 Resetar a interface de envio
+            document.getElementById('resultado-envio').classList.add('d-none');
+            document.getElementById('btn-reiniciar-envio').classList.add('d-none');
+            document.getElementById('btn-fechar-envio-internet').classList.add('d-none');
+            document.getElementById('btn-fechar-envio-sucesso').classList.add('d-none');
+            
+            // 🆕 Iniciar envio completo novamente
             enviarParaGoogleForms();
         }
 
@@ -1317,12 +1346,21 @@
             atualizarBotoesConclusao();
         }
 
-        // 🆕 FUNÇÃO MODIFICADA: Atualizar botões na tela de conclusão
+        // 🆕 FUNÇÃO ATUALIZADA: Atualizar botões na tela de conclusão
         function atualizarBotoesConclusao() {
             const alertInternet = document.getElementById('alert-sem-internet-conclusao');
             const alertSucesso = document.getElementById('alert-envio-sucesso-conclusao');
             const alertPrazo = document.getElementById('alert-prazo-expirado-conclusao');
             const dataLimiteExibida = document.getElementById('data-limite-exibida');
+            
+            // 🆕 CORREÇÃO: Atualizar o texto do alerta de sucesso
+            const alertSucessoElement = document.getElementById('alert-envio-sucesso-conclusao');
+            if (alertSucessoElement) {
+                alertSucessoElement.innerHTML = `
+                    <strong>✅ Palpites enviados com sucesso!</strong><br>
+                    Seus palpites da ${configRodada.numeroRodada} já foram enviados.
+                `;
+            }
             
             // Esconder todos primeiro
             alertInternet.classList.add('d-none');
@@ -1402,8 +1440,10 @@
             
             if (dadosApp.dadosEnviados) {
                 titulo.textContent = '👀 Visualizar/Editar Palpites - ' + configRodada.numeroRodada;
+                btnSalvar.innerHTML = '💾 Salvar Alterações e Enviar';
             } else {
                 titulo.textContent = '📝 Seus Palpites - ' + configRodada.numeroRodada;
+                btnSalvar.innerHTML = '💾 Salvar e Enviar';
             }
 
             atualizarDashboardHeader();
@@ -1583,7 +1623,7 @@
 
             console.log('💾 Palpite da rodada salvo:', palpiteRodada);
 
-            // 🆕 RESETAR FLAGS AO SALVAR NOVOS PALPITES
+            // 🆕 RESETAR FLAGS AO SALVAR NOVOS PALPITES (incluindo edições)
             dadosApp.dadosEnviados = false;
             dadosApp.ultimoErroEnvio = null;
             dadosApp.erroInternet = false;
@@ -1601,6 +1641,7 @@
             document.getElementById('resultado-envio').classList.add('d-none');
             document.getElementById('btn-fechar-envio-internet').classList.add('d-none');
             document.getElementById('btn-fechar-envio-sucesso').classList.add('d-none');
+            document.getElementById('btn-reiniciar-envio').classList.add('d-none');
             
             // 🆕 Iniciar envio automaticamente (se dentro do prazo)
             if (verificarPrazoValido()) {
@@ -1703,7 +1744,7 @@
             }
         }
 
-        // 🆕 FUNÇÃO MODIFICADA: Iniciar envio SEMPRE permite envio (com verificação de prazo)
+        // 🆕 FUNÇÃO MODIFICADA: Iniciar envio
         function iniciarEnvioGoogleForms() {
             if (dadosApp.palpitesSalvos.length === 0) {
                 alert('⚠️ Nenhum palpite para enviar!');
@@ -1725,6 +1766,9 @@
             document.getElementById('resultado-envio').classList.add('d-none');
             document.getElementById('btn-fechar-envio-internet').classList.add('d-none');
             document.getElementById('btn-fechar-envio-sucesso').classList.add('d-none');
+            document.getElementById('btn-reiniciar-envio').classList.add('d-none');
+            
+            // 🆕 Iniciar o envio
             enviarParaGoogleForms();
         }
 
@@ -1870,7 +1914,7 @@
             }
         }
 
-        // 🚀 FUNÇÃO ATUALIZADA: ENVIAR PARA GOOGLE FORMS com tratamento de erro de internet específico
+        // 🚀 FUNÇÃO SIMPLIFICADA: ENVIAR PARA GOOGLE FORMS (envio completo sempre)
         async function enviarParaGoogleForms() {
             if (dadosApp.palpitesSalvos.length === 0) {
                 alert('Nenhum palpite para enviar.');
@@ -1904,12 +1948,14 @@
             try {
                 const ultimoPalpite = dadosApp.palpitesSalvos[dadosApp.palpitesSalvos.length - 1];
                 const totalJogos = ultimoPalpite.palpites.length;
+                
                 let enviados = 0;
                 let erros = [];
 
                 document.getElementById('texto-progresso-envio').textContent = 
-                    `Enviando Palpite ${enviados} de ${totalJogos}`;
+                    `Enviando 0 de ${totalJogos}`;
 
+                // 🆕 INICIAR ENVIO COMPLETO (sempre todos os jogos)
                 for (let i = 0; i < totalJogos; i++) {
                     const jogo = ultimoPalpite.palpites[i];
                     
@@ -1924,15 +1970,7 @@
                         formData.append(CONFIG_GOOGLE_FORMS.entryIds[5], ultimoPalpite.participante);
                         formData.append(CONFIG_GOOGLE_FORMS.entryIds[6], ultimoPalpite.data_hora_palpite);
                         
-                        console.log('📤 Enviando os dados:', {
-                            'Rodada': ultimoPalpite.rodada,
-                            'Time A': jogo.timeA,
-                            'Placar A': jogo.placarA,
-                            'Placar B': jogo.placarB,
-                            'Time B': jogo.timeB,
-                            'Participante': ultimoPalpite.participante,
-                            'Data/Hora': ultimoPalpite.data_hora_palpite
-                        });
+                        console.log('📤 Enviando jogo:', jogo.jogoId);
                         
                         // 🆕 iOS FIX: Usar fetch com timeout
                         const controller = new AbortController();
@@ -1949,6 +1987,7 @@
                         
                         enviados++;
                         
+                        // 🆕 ATUALIZAR PROGRESSO
                         const porcentagem = (enviados / totalJogos) * 100;
                         document.getElementById('barra-progresso-envio').style.width = porcentagem + '%';
                         document.getElementById('texto-progresso-envio').textContent = 
@@ -1959,33 +1998,55 @@
                     } catch (error) {
                         console.error('❌ Erro ao enviar jogo:', error);
                         erros.push({ 
-                            jogo, 
+                            jogoId: jogo.jogoId,
                             error: error.message 
                         });
+                        
+                        // 🆕 PARAR SE HOUVER ERRO (provavelmente perda de conexão)
+                        break;
                     }
                 }
 
                 const resultadoDiv = document.getElementById('resultado-envio');
                 resultadoDiv.classList.remove('d-none');
                 
-                if (erros.length === 0) {
+                // 🆕 VERIFICAR SE TODOS FORAM ENVIADOS
+                if (enviados === totalJogos) {
+                    // ENVIO COMPLETO
+                    dadosApp.dadosEnviados = true;
+                    dadosApp.erroInternet = false;
+                    dadosApp.ultimoErroEnvio = null;
+                    
                     resultadoDiv.innerHTML = `<div class="alert alert-success">
-                        ✅ <strong>Sucesso!</strong><br>
-                        ${enviados} palpites enviados!
+                        ✅ <strong>Envio Concluído com Sucesso!</strong><br>
+                        Todos os ${enviados} palpites foram enviados!
                     </div>`;
                     document.getElementById('btn-fechar-envio-sucesso').classList.remove('d-none');
                     
                 } else {
+                    // FALHA NO ENVIO
+                    dadosApp.dadosEnviados = false;
+                    dadosApp.erroInternet = true;
+                    dadosApp.ultimoErroEnvio = {
+                        timestamp: new Date().toISOString(),
+                        dataHora: formatarDataHora(),
+                        mensagem: `Envio interrompido: ${enviados} de ${totalJogos} enviados`,
+                        rodada: configRodada.numeroRodada,
+                        isNetworkError: true
+                    };
+                    
                     resultadoDiv.innerHTML = `<div class="alert alert-warning">
-                        ⚠️ <strong>Envio com problemas:</strong><br>
-                        ${enviados} enviados com sucesso<br>
-                        ${erros.length} com erro
+                        ⚠️ <strong>Envio Interrompido!</strong><br>
+                        Apenas ${enviados} de ${totalJogos} palpites foram enviados.<br>
+                        <small>Possível perda de conexão durante o envio.</small>
                     </div>`;
-                    document.getElementById('btn-fechar-envio-sucesso').classList.remove('d-none');
+                    document.getElementById('btn-reiniciar-envio').classList.remove('d-none');
                 }
                 
+                salvarDados();
+                
             } catch (error) {
-                console.error('❌ Erro ao enviar palpites:', error);
+                console.error('❌ Erro geral ao enviar palpites:', error);
                 
                 // 🆕 VERIFICAR SE É ERRO DE INTERNET
                 const isNetworkError = error.message.includes('network') || 
@@ -1998,15 +2059,22 @@
                 
                 if (isNetworkError) {
                     // ERRO DE INTERNET
+                    dadosApp.dadosEnviados = false;
+                    dadosApp.erroInternet = true;
+                    dadosApp.ultimoErroEnvio = {
+                        timestamp: new Date().toISOString(),
+                        dataHora: formatarDataHora(),
+                        mensagem: error.message,
+                        rodada: configRodada.numeroRodada,
+                        isNetworkError: true
+                    };
+                    
                     document.getElementById('resultado-envio').innerHTML = `<div class="alert alert-sem-internet">
                         📡 <strong>Sem conexão com internet!</strong><br>
-                        Não foi possível enviar os palpites porque você está offline.<br>
-                        Conecte-se à internet e tente novamente.
+                        O envio foi interrompido.<br>
+                        Conecte-se à internet e clique em "Reiniciar Envio".
                     </div>`;
-                    document.getElementById('btn-fechar-envio-internet').classList.remove('d-none');
-                    
-                    // Salvar flag de erro de internet
-                    dadosApp.erroInternet = true;
+                    document.getElementById('btn-reiniciar-envio').classList.remove('d-none');
                     
                 } else {
                     // OUTRO TIPO DE ERRO
@@ -2016,16 +2084,16 @@
                         <small>Erro: ${error.message}</small>
                     </div>`;
                     document.getElementById('btn-fechar-envio-sucesso').classList.remove('d-none');
+                    
+                    dadosApp.ultimoErroEnvio = {
+                        timestamp: new Date().toISOString(),
+                        dataHora: formatarDataHora(),
+                        mensagem: error.message,
+                        rodada: configRodada.numeroRodada,
+                        isNetworkError: false
+                    };
                 }
                 
-                // SALVAR INFORMAÇÃO DO ERRO
-                dadosApp.ultimoErroEnvio = {
-                    timestamp: new Date().toISOString(),
-                    dataHora: formatarDataHora(),
-                    mensagem: error.message,
-                    rodada: configRodada.numeroRodada,
-                    isNetworkError: isNetworkError
-                };
                 salvarDados();
             }
         }
