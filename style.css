@@ -247,3 +247,8 @@ input[type="number"] {
         }
     }
 }
+
+/* Ajuste para tela de palpites */
+#tela-palpites .row {
+    margin-top: 0;
+}

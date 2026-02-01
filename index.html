@@ -206,30 +206,34 @@
 
             <!-- Tela 2: Palpites -->
             <div id="tela-palpites" class="tela d-none">
-                <div class="card shadow border-0">
-                    <div class="card-header bg-dark text-white">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h4 class="mb-0" id="titulo-tela-palpites">
-                                <i class="bi bi-pencil"></i> 
-                                Seus Palpites - <span id="rodada-tela-palpites"></span>
-                            </h4>
-                            <div>
-                                <span class="badge bg-secondary">
-                                    <i class="bi bi-person"></i> 
-                                    <span id="participante-atual"></span>
-                                </span>
+                <div class="row justify-content-center">
+                    <div class="col-12">
+                        <div class="card shadow border-0">
+                            <div class="card-header bg-dark text-white">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4 class="mb-0" id="titulo-tela-palpites">
+                                        <i class="bi bi-pencil"></i> 
+                                        Seus Palpites - <span id="rodada-tela-palpites"></span>
+                                    </h4>
+                                    <div>
+                                        <span class="badge bg-secondary">
+                                            <i class="bi bi-person"></i> 
+                                            <span id="participante-atual"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <form id="formPalpites">
+                                    <div id="jogos-container" class="row g-3"></div>
+                                </form>
+                            </div>
+                            <div class="card-footer bg-light">
+                                <button type="submit" form="formPalpites" class="btn btn-success btn-lg w-100" id="btn-salvar-palpites">
+                                    <i class="bi bi-save"></i> Salvar e Enviar
+                                </button>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <form id="formPalpites">
-                            <div id="jogos-container" class="row g-3"></div>
-                        </form>
-                    </div>
-                    <div class="card-footer bg-light">
-                        <button type="submit" form="formPalpites" class="btn btn-success btn-lg w-100" id="btn-salvar-palpites">
-                            <i class="bi bi-save"></i> Salvar e Enviar
-                        </button>
                     </div>
                 </div>
             </div>
