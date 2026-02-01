@@ -8,7 +8,7 @@ const VERSAO_ATUAL = "20260201_1300_R02";
 
 const configRodada = {
     nomeBolao: "⚽ Bolão Campeonato Brasileiro 2026",
-    numeroRodada: "Rodada 02",
+    numeroRodada: "RODADA 02",
     dataInicio: "04/02/2026",
     dataLimite: "03/02/2026"
 };
