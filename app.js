@@ -451,22 +451,74 @@ function atualizarInfoRodada() {
 function atualizarDashboardHeader() {
     const barra = document.getElementById('header-barra-progresso-palpites');
     const textoBarra = document.getElementById('header-texto-barra');
+    const bolaFutebol = document.getElementById('bola-futebol');
+    const bolaEmoji = bolaFutebol ? bolaFutebol.querySelector('.bola-emoji') : null;
     
     const preenchidos = contarJogosPreenchidos();
     const totalJogos = jogosRodada.length;
     const porcentagem = Math.round((preenchidos / totalJogos) * 100);
     
+    // Salva a posição anterior para calcular a distância percorrida
+    const posicaoAnterior = parseFloat(barra.style.width) || 0;
+    const distancia = Math.abs(porcentagem - posicaoAnterior);
+    
+    // Atualiza a barra de progresso
     barra.style.width = porcentagem + '%';
+    
+    // Atualiza o texto acima da barra
     textoBarra.textContent = `${preenchidos} de ${totalJogos} (${porcentagem}%)`;
     
-    barra.classList.remove('baixo', 'medio', 'alto');
+    // Move a bola de futebol
+    let posicaoBola = porcentagem;
+    if (posicaoBola > 100) posicaoBola = 100;
+    if (posicaoBola < 0) posicaoBola = 0;
+    
+    // Ajusta para que a bola não saia da barra
+    if (posicaoBola === 0) {
+        bolaFutebol.style.left = '0%';
+    } else if (posicaoBola === 100) {
+        bolaFutebol.style.left = '100%';
+    } else {
+        bolaFutebol.style.left = posicaoBola + '%';
+    }
+    
+    // Remove classes de cor anteriores
+    barra.classList.remove('baixo', 'medio', 'alto', 'completo');
+    bolaFutebol.classList.remove('baixo', 'medio', 'alto', 'animando', 'completo');
+    
+    // Adiciona classe de cor baseada na porcentagem
     if (porcentagem < 30) {
         barra.classList.add('baixo');
+        bolaFutebol.classList.add('baixo');
     } else if (porcentagem < 70) {
         barra.classList.add('medio');
+        bolaFutebol.classList.add('medio');
     } else {
         barra.classList.add('alto');
+        bolaFutebol.classList.add('alto');
     }
+    
+    // Adiciona efeito especial quando atinge 100%
+    if (porcentagem === 100) {
+        barra.classList.add('completo');
+        bolaFutebol.classList.add('completo');
+    }
+    
+    // Adiciona animação de rotação durante o movimento
+    if (distancia > 0 && porcentagem < 100) {
+        bolaFutebol.classList.add('animando');
+        
+        // Remove a classe de animação após a transição terminar
+        setTimeout(() => {
+            if (bolaFutebol) {
+                bolaFutebol.classList.remove('animando');
+            }
+        }, 800); // Tempo igual à duração da transição
+    }
+    
+    // Animação suave com easing
+    barra.style.transition = 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+    bolaFutebol.style.transition = 'left 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
 }
 
 function contarJogosPreenchidos() {

@@ -42,12 +42,47 @@
                     </div>
                 </div>
                 
-                <!-- Barra de Progresso -->
-                <div class="progresso-palpites-header d-none mt-2">
-                    <div class="mx-auto" style="max-width: 400px;">
-                        <div class="progress" style="height: 25px;">
-                            <div class="progress-bar" id="header-barra-progresso-palpites" style="width: 0%">
-                                <span class="position-absolute top-50 start-50 translate-middle text-white fw-semibold small" id="header-texto-barra">0 de 0 (0%)</span>
+                <!-- Barra de Progresso com bola de futebol rolante -->
+                <div class="progresso-palpites-header d-none mt-3">
+                    <div class="barra-progresso-com-bolinha mx-auto" style="max-width: 400px;">
+                        <!-- Container principal -->
+                        <div class="position-relative">
+                            <!-- Texto do progresso -->
+                            <div class="text-center mb-1">
+                                <span class="fw-bold text-dark" id="header-texto-barra">0 de 0 (0%)</span>
+                            </div>
+                            
+                            <!-- Barra de progresso com bola de futebol -->
+                            <div class="progress-container position-relative">
+                                <!-- Faixa da barra -->
+                                <div class="barra-faixa position-absolute top-50 start-0 end-0 translate-middle-y" 
+                                     style="height: 6px; background-color: #e9ecef; border-radius: 3px;">
+                                </div>
+                                
+                                <!-- Barra de progresso (parte colorida) -->
+                                <div class="barra-progresso position-absolute top-50 start-0 translate-middle-y" 
+                                     id="header-barra-progresso-palpites"
+                                     style="height: 6px; width: 0%; border-radius: 3px 0 0 3px;">
+                                </div>
+                                
+                                <!-- Bola de futebol que se move e roda -->
+                                <div class="bola-futebol position-absolute top-50 translate-middle-y d-flex align-items-center justify-content-center" 
+                                     id="bola-futebol"
+                                     style="left: 0%;">
+                                    <span class="bola-emoji">⚽</span>
+                                </div>
+                                
+                                <!-- Marcadores -->
+                                <div class="marcadores-bar position-absolute top-50 start-0 end-0 translate-middle-y d-flex justify-content-between">
+                                    <div class="marcador inicio" style="width: 1px; height: 10px; background-color: #adb5bd;"></div>
+                                    <div class="marcador fim" style="width: 1px; height: 10px; background-color: #adb5bd;"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Labels dos extremos -->
+                            <div class="d-flex justify-content-between mt-1 small text-muted">
+                                <span>0%</span>
+                                <span>100%</span>
                             </div>
                         </div>
                     </div>

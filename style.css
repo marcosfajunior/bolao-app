@@ -18,13 +18,13 @@ body {
 
 /* Ajuste de margem para header fixo */
 .conteudo-dinamico {
-    margin-top: 140px;
-    min-height: calc(100vh - 140px);
+    margin-top: 150px;
+    min-height: calc(100vh - 150px);
 }
 
 @supports (padding-top: env(safe-area-inset-top)) {
     .conteudo-dinamico {
-        margin-top: calc(140px + env(safe-area-inset-top));
+        margin-top: calc(150px + env(safe-area-inset-top));
     }
 }
 
@@ -56,17 +56,114 @@ body {
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
-/* Barra de progresso customizada */
-.progress-bar.baixo {
-    background-color: #dc3545 !important;
+/* ==================== */
+/* BARRA DE PROGRESSO COM BOLA DE FUTEBOL ROLANTE */
+/* ==================== */
+
+/* Animação de rotação da bola de futebol */
+@keyframes girarBola {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
 }
 
-.progress-bar.medio {
-    background-color: #ffc107 !important;
+@keyframes girarBolaSuave {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    50% {
+        transform: translate(-50%, -50%) rotate(180deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
 }
 
-.progress-bar.alto {
-    background-color: #198754 !important;
+@keyframes quicarBola {
+    0%, 100% {
+        transform: translate(-50%, -50%);
+    }
+    50% {
+        transform: translate(-50%, -55%);
+    }
+}
+
+/* Container da barra */
+.barra-progresso-com-bolinha .progress-container {
+    height: 30px;
+    margin: 0 10px;
+}
+
+/* Barra de progresso colorida */
+.barra-progresso {
+    background: linear-gradient(90deg, #3498db, #2ecc71);
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+}
+
+/* Bola de futebol que rola */
+.bola-futebol {
+    z-index: 2;
+    transition: left 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translate(-50%, -50%);
+    width: 32px !important;
+    height: 32px !important;
+    pointer-events: none;
+}
+
+.bola-emoji {
+    font-size: 1.8rem;
+    display: inline-block;
+    animation: girarBolaSuave 2s linear infinite;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Barra faixa (fundo) */
+.barra-faixa {
+    z-index: 0;
+}
+
+/* Marcadores da barra */
+.marcadores-bar {
+    z-index: 0;
+}
+
+/* Cores dinâmicas baseadas na porcentagem */
+.barra-progresso.baixo {
+    background: linear-gradient(90deg, #e74c3c, #ff7675);
+}
+
+.barra-progresso.medio {
+    background: linear-gradient(90deg, #f39c12, #fdcb6e);
+}
+
+.barra-progresso.alto {
+    background: linear-gradient(90deg, #2ecc71, #00b894);
+}
+
+/* Efeitos de cor na bola de futebol */
+.bola-futebol.animando .bola-emoji {
+    animation: girarBola 0.5s linear infinite;
+}
+
+.bola-futebol.baixo .bola-emoji {
+    filter: drop-shadow(0 2px 3px rgba(231, 76, 60, 0.4));
+}
+
+.bola-futebol.medio .bola-emoji {
+    filter: drop-shadow(0 2px 3px rgba(243, 156, 18, 0.4));
+}
+
+.bola-futebol.alto .bola-emoji {
+    filter: drop-shadow(0 2px 3px rgba(46, 204, 113, 0.4));
+}
+
+/* Efeito de quicar quando atinge 100% */
+.bola-futebol.completo .bola-emoji {
+    animation: girarBolaSuave 1s linear infinite, quicarBola 0.6s ease-in-out infinite;
 }
 
 /* Remover spinner em inputs number */
@@ -84,6 +181,37 @@ input[type="number"] {
 /* Ajustes para mobile */
 @media (max-width: 768px) {
     .conteudo-dinamico {
+        margin-top: 140px;
+    }
+    
+    @supports (padding-top: env(safe-area-inset-top)) {
+        .conteudo-dinamico {
+            margin-top: calc(140px + env(safe-area-inset-top));
+        }
+    }
+    
+    .header-fixo .container {
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+    
+    .barra-progresso-com-bolinha {
+        max-width: 100% !important;
+    }
+    
+    .bola-futebol {
+        width: 28px !important;
+        height: 28px !important;
+    }
+    
+    .bola-emoji {
+        font-size: 1.5rem;
+    }
+}
+
+/* Ajustes para telas muito pequenas */
+@media (max-width: 576px) {
+    .conteudo-dinamico {
         margin-top: 130px;
     }
     
@@ -93,14 +221,22 @@ input[type="number"] {
         }
     }
     
-    .header-fixo .container {
-        padding-top: 0.5rem !important;
-        padding-bottom: 0.5rem !important;
+    .progresso-palpites-header .small {
+        font-size: 0.75rem !important;
+    }
+    
+    .bola-futebol {
+        width: 24px !important;
+        height: 24px !important;
+    }
+    
+    .bola-emoji {
+        font-size: 1.3rem;
     }
 }
 
-/* Ajustes para telas muito pequenas */
-@media (max-width: 576px) {
+/* Ajuste para orientação paisagem em mobile */
+@media (max-height: 500px) and (orientation: landscape) {
     .conteudo-dinamico {
         margin-top: 120px;
     }
@@ -108,19 +244,6 @@ input[type="number"] {
     @supports (padding-top: env(safe-area-inset-top)) {
         .conteudo-dinamico {
             margin-top: calc(120px + env(safe-area-inset-top));
-        }
-    }
-}
-
-/* Ajuste para orientação paisagem em mobile */
-@media (max-height: 500px) and (orientation: landscape) {
-    .conteudo-dinamico {
-        margin-top: 110px;
-    }
-    
-    @supports (padding-top: env(safe-area-inset-top)) {
-        .conteudo-dinamico {
-            margin-top: calc(110px + env(safe-area-inset-top));
         }
     }
 }
