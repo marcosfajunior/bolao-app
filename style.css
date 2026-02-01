@@ -1,0 +1,126 @@
+/* style.css?v=2.0 */
+
+/* Reset mínimo */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    overscroll-behavior-y: none;
+    -webkit-overflow-scrolling: touch;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* Header fixo com safe area */
+.header-fixo {
+    padding-top: env(safe-area-inset-top) !important;
+}
+
+/* Ajuste de margem para header fixo */
+.conteudo-dinamico {
+    margin-top: 140px;
+    min-height: calc(100vh - 140px);
+}
+
+@supports (padding-top: env(safe-area-inset-top)) {
+    .conteudo-dinamico {
+        margin-top: calc(140px + env(safe-area-inset-top));
+    }
+}
+
+/* Cards de jogo */
+.jogo-card {
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.jogo-card:hover {
+    border-color: #0d6efd;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.cabecalho-jogo {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+}
+
+/* Inputs de placar */
+.input-placar {
+    font-size: 16px !important; /* Previne zoom iOS */
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.input-placar:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Barra de progresso customizada */
+.progress-bar.baixo {
+    background-color: #dc3545 !important;
+}
+
+.progress-bar.medio {
+    background-color: #ffc107 !important;
+}
+
+.progress-bar.alto {
+    background-color: #198754 !important;
+}
+
+/* Remover spinner em inputs number */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+/* Ajustes para mobile */
+@media (max-width: 768px) {
+    .conteudo-dinamico {
+        margin-top: 130px;
+    }
+    
+    @supports (padding-top: env(safe-area-inset-top)) {
+        .conteudo-dinamico {
+            margin-top: calc(130px + env(safe-area-inset-top));
+        }
+    }
+    
+    .header-fixo .container {
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+}
+
+/* Ajustes para telas muito pequenas */
+@media (max-width: 576px) {
+    .conteudo-dinamico {
+        margin-top: 120px;
+    }
+    
+    @supports (padding-top: env(safe-area-inset-top)) {
+        .conteudo-dinamico {
+            margin-top: calc(120px + env(safe-area-inset-top));
+        }
+    }
+}
+
+/* Ajuste para orientação paisagem em mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .conteudo-dinamico {
+        margin-top: 110px;
+    }
+    
+    @supports (padding-top: env(safe-area-inset-top)) {
+        .conteudo-dinamico {
+            margin-top: calc(110px + env(safe-area-inset-top));
+        }
+    }
+}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -9,688 +9,45 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Bolão Campeonato Brasileiro</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        body {
-            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-            background-color: #f8f9fa;
-            color: #212529;
-            line-height: 1.5;
-            overscroll-behavior-y: none;
-            -webkit-overflow-scrolling: touch;
-            -webkit-text-size-adjust: 100%;
-        }
-        
-        .container {
-            width: 100%;
-            padding: 0 15px;
-            margin: 0 auto;
-        }
-        
-        @media (min-width: 576px) {
-            .container {
-                max-width: 540px;
-            }
-        }
-        
-        @media (min-width: 768px) {
-            .container {
-                max-width: 720px;
-            }
-        }
-        
-        @media (min-width: 992px) {
-            .container {
-                max-width: 960px;
-            }
-        }
-        
-        @media (min-width: 1200px) {
-            .container {
-                max-width: 1140px;
-            }
-        }
-        
-        .card {
-            background: #fff;
-            border: 1px solid #e1e5e9;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-            margin-bottom: 1rem;
-            transition: all 0.2s ease;
-        }
-        
-        .card:hover {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-        }
-        
-        .card-header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 1rem 1.25rem;
-            border-bottom: 1px solid #dee2e6;
-            border-radius: 8px 8px 0 0;
-        }
-        
-        .card-body {
-            padding: 1.25rem;
-        }
-        
-        .card-footer {
-            background: #f8f9fa;
-            padding: 1rem 1.25rem;
-            border-top: 1px solid #e9ecef;
-            border-radius: 0 0 8px 8px;
-        }
-        
-        .btn {
-            display: inline-block;
-            font-weight: 400;
-            line-height: 1.5;
-            text-align: center;
-            text-decoration: none;
-            vertical-align: middle;
-            cursor: pointer;
-            user-select: none;
-            border: 1px solid transparent;
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            border-radius: 6px;
-            transition: all 0.15s ease-in-out;
-            width: 100%;
-            margin-bottom: 0.5rem;
-            min-height: 44px; /* iOS touch target */
-            touch-action: manipulation;
-        }
-        
-        .btn-primary {
-            color: #fff;
-            background-color: #2c3e50;
-            border-color: #2c3e50;
-        }
-        
-        .btn-primary:hover {
-            background-color: #1a252f;
-            border-color: #1a252f;
-        }
-        
-        .btn-success {
-            color: #fff;
-            background-color: #28a745;
-            border-color: #28a745;
-        }
-        
-        .btn-success:hover {
-            background-color: #218838;
-            border-color: #1e7e34;
-        }
-        
-        .btn-warning {
-            color: #212529;
-            background-color: #ffc107;
-            border-color: #ffc107;
-        }
-        
-        .btn-warning:hover {
-            background-color: #e0a800;
-            border-color: #d39e00;
-        }
-        
-        .btn-danger {
-            color: #fff;
-            background-color: #dc3545;
-            border-color: #dc3545;
-        }
-        
-        .btn-danger:hover {
-            background-color: #c82333;
-            border-color: #bd2130;
-        }
-        
-        .btn-outline-secondary {
-            color: #6c757d;
-            border-color: #6c757d;
-            background-color: transparent;
-        }
-        
-        .btn-outline-secondary:hover {
-            color: #fff;
-            background-color: #6c757d;
-            border-color: #6c757d;
-        }
-        
-        .btn-outline-primary {
-            color: #2c3e50;
-            border-color: #2c3e50;
-            background-color: transparent;
-        }
-        
-        .btn-outline-primary:hover {
-            color: #fff;
-            background-color: #2c3e50;
-            border-color: #2c3e50;
-        }
-        
-        .btn-outline-danger {
-            color: #dc3545;
-            border-color: #dc3545;
-            background-color: transparent;
-        }
-        
-        .btn-outline-danger:hover {
-            color: #fff;
-            background-color: #dc3545;
-            border-color: #dc3545;
-        }
-        
-        .btn-info {
-            color: #fff;
-            background-color: #17a2b8;
-            border-color: #17a2b8;
-        }
-        
-        .btn-info:hover {
-            background-color: #138496;
-            border-color: #117a8b;
-        }
-        
-        .form-label {
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            display: block;
-        }
-        
-        .form-control, .form-select {
-            display: block;
-            width: 100%;
-            padding: 0.75rem;
-            font-size: 1rem;
-            font-weight: 400;
-            line-height: 1.5;
-            color: #212529;
-            background-color: #fff;
-            background-clip: padding-box;
-            border: 1px solid #ced4da;
-            border-radius: 6px;
-            transition: border-color 0.15s ease-in-out;
-            margin-bottom: 1rem;
-            font-size: 16px !important; /* Previne zoom no iOS */
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-        }
-        
-        .form-control:focus, .form-select:focus {
-            border-color: #2c3e50;
-            outline: 0;
-        }
-        
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            margin: 0 -0.75rem;
-        }
-        
-        .col-12 { flex: 0 0 auto; width: 100%; padding: 0 0.75rem; }
-        .col-6 { flex: 0 0 auto; width: 50%; padding: 0 0.75rem; }
-        .col-4 { flex: 0 0 auto; width: 33.333%; padding: 0 0.75rem; }
-        
-        @media (min-width: 768px) {
-            .col-md-6 { flex: 0 0 auto; width: 50%; }
-        }
-        
-        .progress {
-            height: 1rem;
-            background-color: #e9ecef;
-            border-radius: 6px;
-            overflow: hidden;
-            margin-bottom: 1rem;
-        }
-        
-        .progress-bar {
-            height: 100%;
-            background-color: #28a745;
-            transition: width 0.3s ease;
-        }
-        
-        .alert {
-            padding: 1rem;
-            border: 1px solid transparent;
-            border-radius: 6px;
-            margin-bottom: 1rem;
-        }
-        
-        .alert-success {
-            color: #155724;
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-        }
-        
-        .alert-info {
-            color: #0c5460;
-            background-color: #d1ecf1;
-            border-color: #bee5eb;
-        }
-        
-        .alert-warning {
-            color: #856404;
-            background-color: #fff3cd;
-            border-color: #ffeaa7;
-        }
-        
-        .alert-danger {
-            color: #721c24;
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-        }
-        
-        .text-center { text-align: center; }
-        .text-muted { color: #6c757d !important; }
-        .mb-0 { margin-bottom: 0 !important; }
-        .mb-1 { margin-bottom: 0.25rem !important; }
-        .mb-2 { margin-bottom: 0.5rem !important; }
-        .mb-3 { margin-bottom: 1rem !important; }
-        .mb-4 { margin-bottom: 1.5rem !important; }
-        .mt-3 { margin-top: 1rem !important; }
-        .mt-4 { margin-top: 1.5rem !important; }
-        .pt-3 { padding-top: 1rem !important; }
-        .lead { font-size: 1.25rem; font-weight: 300; }
-        .d-none { display: none !important; }
-        .d-flex { display: flex !important; }
-        .d-block { display: block !important; }
-        .justify-content-between { justify-content: space-between !important; }
-        .align-items-center { align-items: center !important; }
-        .w-100 { width: 100% !important; }
-        .shadow { box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important; }
-        
-        .header-fixo {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 1000;
-            padding: 15px 0;
-            border-bottom: 1px solid #e0e0e0;
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: 15px;
-        }
-        
-        .conteudo-dinamico {
-            margin-top: 170px;
-            min-height: calc(100vh - 170px);
-            padding-bottom: 20px;
-        }
-        
-        @supports (padding-top: env(safe-area-inset-top)) {
-            .conteudo-dinamico {
-                margin-top: calc(170px + env(safe-area-inset-top));
-                padding-bottom: calc(20px + env(safe-area-inset-bottom));
-            }
-        }
-        
-        .border-top {
-            border-top: 1px solid #e9ecef !important;
-        }
-        
-        /* ESTILOS PARA OS JOGOS */
-        .jogo-card {
-            border: 2px solid #e1e5e9;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            background: white;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-
-        .jogo-card:hover {
-            border-color: #3498db;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-            transform: translateY(-2px);
-        }
-
-        .cabecalho-jogo {
-            background: linear-gradient(135deg, #2c3e50, #34495e);
-            padding: 18px 20px;
-            border-bottom: 2px solid #e9ecef;
-            font-weight: 700;
-            color: white;
-            font-size: 16px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        .placar-container {
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.7);
-        }
-
-        .input-placar {
-            transition: all 0.3s ease;
-            border: 1px solid #e1e5e9;
-            background: white;
-            padding: 14px 16px;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 10px;
-            width: 100%;
-            font-size: 15px;
-            font-weight: 500;
-        }
-
-        .input-placar:focus {
-            border-color: #3498db;
-            background-color: #e3f2fd;
-            outline: none;
-        }
-
-        .input-placar.selected {
-            border-color: #28a745;
-            background: linear-gradient(135deg, #e8f5e8, #d4edda);
-            color: #155724;
-            font-weight: 600;
-            box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
-        }
-
-        .nome-time {
-            font-weight: 600;
-            font-size: 16px;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .separador {
-            font-size: 20px;
-            font-weight: bold;
-            margin: 0 10px;
-            color: #2c3e50;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-        }
-
-        /* Barra de Progresso */
-        .barra-com-texto {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        
-        .progress {
-            background-color: #e9ecef;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-        }
-        
-        .progress-bar {
-            background: linear-gradient(90deg, #3498db, #2980b9);
-            transition: width 0.5s ease-in-out;
-            position: relative;
-            border-radius: 15px;
-        }
-        
-        .texto-barra {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-weight: 600;
-            font-size: 12px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-            white-space: nowrap;
-        }
-        
-        /* Cores dinâmicas da barra */
-        .progress-bar.baixo { background: linear-gradient(90deg, #e74c3c, #c0392b); }
-        .progress-bar.medio { background: linear-gradient(90deg, #f39c12, #e67e22); }
-        .progress-bar.alto { background: linear-gradient(90deg, #27ae60, #229954); }
-        
-        /* CENTRALIZAÇÃO ESPECÍFICA PARA TELAS MAIORES */
-        @media (min-width: 768px) {
-            .centralizar-telas-grandes {
-                display: flex;
-                justify-content: center;
-            }
-            
-            .largura-otimizada {
-                max-width: 500px;
-                width: 100%;
-            }
-
-            /* Tela Participante */
-            #tela-participante .card {
-                width: 100%;
-            }
-
-            /* Tela Conclusão */
-            #tela-conclusao .card {
-                width: 100%;
-            }
-
-            /* Tela Exportação */
-            #tela-exportacao .card {
-                width: 100%;
-            }
-
-            /* HEADER - Garantir centralização total */
-            .header-fixo .container {
-                display: flex;
-                justify-content: center;
-            }
-            
-            .header-fixo .info-bolao {
-                width: 100%;
-                max-width: 600px;
-            }
-        }
-
-        /* FORMULÁRIO DE PALPITES - Manter largura total */
-        #tela-palpites .card {
-            width: 100%;
-        }
-
-        /* MODAL DE CONFIRMAÇÃO */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            margin: env(safe-area-inset-top) auto env(safe-area-inset-bottom) auto;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .modal-buttons .btn {
-            flex: 1;
-        }
-
-        /* Espaço entre header e conteúdo */
-        .espaco-header {
-            margin-top: 40px;
-        }
-
-        /* Barra de progresso apenas na tela de palpites - CORRIGIDO */
-        .progresso-palpites-header {
-            display: none;
-        }
-
-        .tela-formulario .progresso-palpites-header {
-            display: block;
-        }
-
-        /* Progresso do envio para Google Forms */
-        #progresso-envio {
-            margin: 20px 0;
-        }
-
-        #texto-progresso-envio {
-            text-align: center;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        /* Centralização dos inputs nos jogos */
-        .jogo-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .time-col {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Botões em coluna na tela de conclusão */
-        .botoes-coluna {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        /* 🆕 NOVO ESTILO PARA AS DATAS NO HEADER - Igual ao segundo arquivo */
-        .datas-rodada {
-            margin-top: 8px;
-            font-size: 0.85rem;
-        }
-        
-        .datas-rodada div {
-            margin-bottom: 3px;
-        }
-        
-        .datas-rodada .data {
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        
-        /* 🆕 Área da rodada no header (aparece apenas na tela de palpites) */
-        .area-rodada-header {
-            margin-bottom: 8px;
-        }
-
-        /* 🆕 Botão vermelho para limpar dados */
-        .btn-limpar-dados {
-            color: #fff;
-            background-color: #dc3545;
-            border-color: #dc3545;
-        }
-
-        .btn-limpar-dados:hover {
-            background-color: #c82333;
-            border-color: #bd2130;
-        }
-        
-        /* 🆕 ESTILO PARA NÚMERO DA RODADA NO HEADER */
-        .numero-rodada-header {
-            font-weight: 600;
-            color: #2c3e50;
-            margin-top: 5px;
-            font-size: 1.1rem;
-        }
-        
-        /* iOS Specific: Prevenir seleção de texto indesejada */
-        .no-select {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-        
-        /* Ajustar para telas muito pequenas */
-        @media (max-height: 600px) {
-            .conteudo-dinamico {
-                margin-top: 140px;
-            }
-            
-            @supports (padding-top: env(safe-area-inset-top)) {
-                .conteudo-dinamico {
-                    margin-top: calc(140px + env(safe-area-inset-top));
-                }
-            }
-        }
-        
-        /* 🆕 Estilo para alerta de prazo expirado */
-        .alert-prazo-expirado {
-            color: #856404;
-            background-color: #fff3cd;
-            border-color: #ffeaa7;
-            border-left: 4px solid #dc3545;
-        }
-        
-        /* 🆕 Estilo para alerta de erro de envio */
-        .alert-erro-envio {
-            color: #721c24;
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-            border-left: 4px solid #dc3545;
-        }
-        
-        /* 🆕 Estilo para alerta sem internet */
-        .alert-sem-internet {
-            color: #0c5460;
-            background-color: #d1ecf1;
-            border-color: #bee5eb;
-            border-left: 4px solid #17a2b8;
-        }
-    </style>
+    
+    <!-- Bootstrap 5 CSS + Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <!-- CSS mínimo personalizado -->
+    <link rel="stylesheet" href="style.css?v=2.0">
 </head>
-<body>
-    <!-- Header Fixo com Informações do Bolão -->
-    <header class="header-fixo">
-        <div class="container">
-            <div class="info-bolao text-center">
-                <!-- 🆕 NOME DO BOLÃO (preenchido por JavaScript) -->
-                <h4 class="mb-1" id="nome-bolao"></h4>
+<body class="d-flex flex-column min-vh-100">
+    <!-- Header Fixo -->
+    <header class="header-fixo fixed-top bg-white shadow-sm border-bottom">
+        <div class="container py-2">
+            <div class="text-center">
+                <!-- NOME DO BOLÃO -->
+                <h5 class="mb-1 fw-bold text-dark" id="nome-bolao"></h5>
                 
-                <!-- 🆕 NÚMERO DA RODADA (sempre visível) -->
-                <div id="area-rodada-header" class="area-rodada-header">
-                    <p class="mb-1 numero-rodada-header" id="numero-rodada"></p>
+                <!-- NÚMERO DA RODADA -->
+                <div id="area-rodada-header" class="mb-1">
+                    <p class="mb-0 fw-bold text-primary" id="numero-rodada"></p>
                 </div>
                 
-                <!-- 🆕 DATAS DA RODADA (aparece em todas as telas EXCETO na tela de palpites) -->
-                <div id="datas-rodada-container" class="datas-rodada">
-                    <div>📅 Início Rodada: <span class="data" id="data-inicio"></span></div>
-                    <div>⏰ Limite Para Preenchimento: <span class="data" id="data-limite"></span></div>
+                <!-- DATAS DA RODADA -->
+                <div id="datas-rodada-container" class="small">
+                    <div class="mb-1">
+                        <i class="bi bi-calendar text-secondary"></i> 
+                        Início: <span class="fw-semibold text-dark" id="data-inicio"></span>
+                    </div>
+                    <div>
+                        <i class="bi bi-clock text-secondary"></i> 
+                        Limite: <span class="fw-semibold text-dark" id="data-limite"></span>
+                    </div>
                 </div>
                 
-                <!-- Barra de Progresso (visível apenas na tela de palpites) -->
-                <div class="progresso-palpites-header">
-                    <div class="barra-com-texto">
-                        <div class="progress" style="height: 30px; position: relative;">
+                <!-- Barra de Progresso -->
+                <div class="progresso-palpites-header d-none mt-2">
+                    <div class="mx-auto" style="max-width: 400px;">
+                        <div class="progress" style="height: 25px;">
                             <div class="progress-bar" id="header-barra-progresso-palpites" style="width: 0%">
-                                <span class="texto-barra" id="header-texto-barra">0 de 0 (0%)</span>
+                                <span class="position-absolute top-50 start-50 translate-middle text-white fw-semibold small" id="header-texto-barra">0 de 0 (0%)</span>
                             </div>
                         </div>
                     </div>
@@ -699,63 +56,91 @@
         </div>
     </header>
 
-    <!-- Conteúdo Dinâmico -->
-    <main class="conteudo-dinamico">
-        <div class="container">
-            <!-- Tela 1: Identificação do Participante -->
+    <!-- Conteúdo Principal -->
+    <main class="conteudo-dinamico flex-grow-1">
+        <div class="container py-4">
+            <!-- Tela 1: Identificação -->
             <div id="tela-participante" class="tela">
-                <div class="espaco-header"></div>
-                <div class="row justify-content-center centralizar-telas-grandes">
-                    <div class="col-12 col-md-6 largura-otimizada">
-                        <div class="card shadow">
-                            <div class="card-header">
-                                <!-- 🆕 TÍTULO COM RODADA DINÂMICA -->
-                                <h4 class="mb-0">👋 Identificação - <span id="rodada-tela-participante"></span></h4>
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-8 col-lg-6">
+                        <div class="card shadow border-0">
+                            <div class="card-header bg-dark text-white">
+                                <h4 class="mb-0">
+                                    <i class="bi bi-person-badge"></i> 
+                                    Identificação - <span id="rodada-tela-participante"></span>
+                                </h4>
                             </div>
                             <div class="card-body">
-                                <!-- ALERTA: Dados de rodada diferente -->
+                                <!-- Alertas -->
                                 <div id="alert-rodada-diferente" class="alert alert-warning d-none">
-                                    <strong>⚠️ Dados de rodada diferente encontrados!</strong><br>
-                                    <span id="texto-rodada-diferente"></span>
-                                    <button class="btn btn-sm btn-limpar-dados mt-2" onclick="limparDados()">Limpar Dados</button>
+                                    <h6 class="alert-heading">
+                                        <i class="bi bi-exclamation-triangle"></i> 
+                                        Dados de rodada diferente encontrados!
+                                    </h6>
+                                    <p id="texto-rodada-diferente" class="mb-2"></p>
+                                    <button class="btn btn-sm btn-danger mt-1" onclick="limparDados()">
+                                        <i class="bi bi-trash"></i> Limpar Dados
+                                    </button>
                                 </div>
                                 
-                                <!-- ALERTA: Dados já enviados da mesma rodada -->
                                 <div id="alert-dados-enviados" class="alert alert-info d-none">
-                                    <strong>✅ Palpites já enviados!</strong><br>
-                                    <span id="texto-dados-enviados"></span>
-                                    <p class="mb-2 mt-2"><strong>Você pode visualizar ou alterar seus palpites:</strong></p>
-                                    <button class="btn btn-sm btn-outline-primary mt-2" onclick="visualizarPalpitesEnviados()">👀 Visualizar/Editar Palpites</button>
-                                    <button class="btn btn-sm btn-limpar-dados mt-2" onclick="limparDados()">🗑️ Limpar Dados</button>
+                                    <h6 class="alert-heading">
+                                        <i class="bi bi-check-circle"></i> 
+                                        Palpites já enviados!
+                                    </h6>
+                                    <p id="texto-dados-enviados" class="mb-2"></p>
+                                    <p class="fw-semibold mb-2">Você pode visualizar ou alterar seus palpites:</p>
+                                    <button class="btn btn-sm btn-outline-primary me-2" onclick="visualizarPalpitesEnviados()">
+                                        <i class="bi bi-eye"></i> Visualizar/Editar
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="limparDados()">
+                                        <i class="bi bi-trash"></i> Limpar Dados
+                                    </button>
                                 </div>
                                 
-                                <!-- 🆕 ALERTA: Erro no envio anterior -->
-                                <div id="alert-erro-envio" class="alert alert-erro-envio d-none">
-                                    <strong>❌ Erro no envio anterior!</strong><br>
-                                    <span id="texto-erro-envio"></span>
-                                    <div class="mt-2">
-                                        <button class="btn btn-sm btn-primary" onclick="reenviarPalpites()">🔄 Tentar Enviar Novamente</button>
-                                        <button class="btn btn-sm btn-outline-primary" onclick="visualizarPalpitesSalvos()">👀 Verificar Palpites</button>
-                                        <button class="btn btn-sm btn-limpar-dados" onclick="limparDados()">🗑️ Limpar Dados</button>
+                                <div id="alert-erro-envio" class="alert alert-danger d-none">
+                                    <h6 class="alert-heading">
+                                        <i class="bi bi-x-circle"></i> 
+                                        Erro no envio anterior!
+                                    </h6>
+                                    <p id="texto-erro-envio" class="mb-2"></p>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-primary" onclick="reenviarPalpites()">
+                                            <i class="bi bi-arrow-clockwise"></i> Tentar Novamente
+                                        </button>
+                                        <button class="btn btn-outline-primary" onclick="visualizarPalpitesSalvos()">
+                                            <i class="bi bi-eye"></i> Verificar
+                                        </button>
+                                        <button class="btn btn-danger" onclick="limparDados()">
+                                            <i class="bi bi-trash"></i> Limpar
+                                        </button>
                                     </div>
                                 </div>
                                 
-                                <!-- 🆕 ALERTA: Prazo expirado -->
-                                <div id="alert-prazo-expirado" class="alert alert-prazo-expirado d-none">
-                                    <strong>⏰ Prazo Expirado!</strong><br>
-                                    O prazo para envio dos palpites desta rodada já expirou.
-                                    <div class="mt-2">
-                                        <button class="btn btn-sm btn-outline-primary" onclick="visualizarPalpitesSalvos()">👀 Visualizar Palpites</button>
-                                        <button class="btn btn-sm btn-limpar-dados" onclick="limparDados()">🗑️ Limpar Dados</button>
+                                <div id="alert-prazo-expirado" class="alert alert-warning d-none">
+                                    <h6 class="alert-heading">
+                                        <i class="bi bi-clock"></i> 
+                                        Prazo Expirado!
+                                    </h6>
+                                    <p class="mb-2">O prazo para envio dos palpites desta rodada já expirou.</p>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-outline-primary" onclick="visualizarPalpitesSalvos()">
+                                            <i class="bi bi-eye"></i> Visualizar
+                                        </button>
+                                        <button class="btn btn-danger" onclick="limparDados()">
+                                            <i class="bi bi-trash"></i> Limpar
+                                        </button>
                                     </div>
                                 </div>
                                 
-                                <!-- 🆕 FORMULÁRIO INICIAL (só aparece se não tiver dados salvos) -->
+                                <!-- Formulário -->
                                 <div id="formulario-inicial" class="d-none">
                                     <form id="formParticipante">
                                         <div class="mb-3">
-                                            <label for="nomeParticipante" class="form-label">Selecione seu nome:</label>
-                                            <select class="form-select" id="nomeParticipante" required>
+                                            <label for="nomeParticipante" class="form-label fw-bold">
+                                                <i class="bi bi-person"></i> Selecione seu nome:
+                                            </label>
+                                            <select class="form-select form-select-lg" id="nomeParticipante" required>
                                                 <option value="">-- Selecione --</option>
                                                 <option value="DANIEL ALMEIDA">DANIEL ALMEIDA</option>
                                                 <option value="DANIEL PENA">DANIEL PENA</option>
@@ -773,8 +158,8 @@
                                                 <option value="WESCLEY GALDINO">WESCLEY GALDINO</option>
                                             </select>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">
-                                            🎯 Inserir Palpites
+                                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                                            <i class="bi bi-target"></i> Inserir Palpites
                                         </button>
                                     </form>
                                 </div>
@@ -784,28 +169,31 @@
                 </div>
             </div>
 
-            <!-- Tela 2: Formulário de Palpites -->
+            <!-- Tela 2: Palpites -->
             <div id="tela-palpites" class="tela d-none">
-                <div class="espaco-header"></div>
-                <div class="card shadow">
-                    <div class="card-header">
+                <div class="card shadow border-0">
+                    <div class="card-header bg-dark text-white">
                         <div class="d-flex justify-content-between align-items-center">
-                            <!-- 🆕 TÍTULO DINÂMICO (muda entre visualização e edição) -->
-                            <h4 class="mb-0" id="titulo-tela-palpites">📝 Seus Palpites - <span id="rodada-tela-palpites"></span></h4>
-                            <div class="text-end">
-                                <small>Participante: <span id="participante-atual"></span></small>
+                            <h4 class="mb-0" id="titulo-tela-palpites">
+                                <i class="bi bi-pencil"></i> 
+                                Seus Palpites - <span id="rodada-tela-palpites"></span>
+                            </h4>
+                            <div>
+                                <span class="badge bg-secondary">
+                                    <i class="bi bi-person"></i> 
+                                    <span id="participante-atual"></span>
+                                </span>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
                         <form id="formPalpites">
-                            <div id="jogos-container"></div>
+                            <div id="jogos-container" class="row g-3"></div>
                         </form>
                     </div>
-                    <div class="card-footer">
-                        <!-- 🆕 BOTÃO SALVAR (sempre visível na tela de palpites) -->
+                    <div class="card-footer bg-light">
                         <button type="submit" form="formPalpites" class="btn btn-success btn-lg w-100" id="btn-salvar-palpites">
-                            💾 Salvar e Enviar
+                            <i class="bi bi-save"></i> Salvar e Enviar
                         </button>
                     </div>
                 </div>
@@ -813,65 +201,71 @@
 
             <!-- Tela 3: Conclusão -->
             <div id="tela-conclusao" class="tela d-none">
-                <div class="espaco-header"></div>
-                <div class="row justify-content-center centralizar-telas-grandes">
-                    <div class="col-12 col-md-6 largura-otimizada">
-                        <div class="card shadow">
-                            <!-- 🆕 CABEÇALHO COM RODADA DINÂMICA -->
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-8 col-lg-6">
+                        <div class="card shadow border-0">
                             <div class="card-header bg-success text-white text-center">
-                                <h4 class="mb-0">📋 Seus Palpites - <span id="rodada-tela-conclusao"></span></h4>
+                                <h4 class="mb-0">
+                                    <i class="bi bi-clipboard-check"></i> 
+                                    Seus Palpites - <span id="rodada-tela-conclusao"></span>
+                                </h4>
                             </div>
                             <div class="card-body text-center">
-                                <!-- 🆕 ALERTA: Prazo expirado (aparece apenas se fora do prazo) -->
-                                <div id="alert-prazo-expirado-conclusao" class="alert alert-prazo-expirado d-none">
-                                    <strong>⏰ Prazo Expirado!</strong><br>
-                                    O prazo para envio dos palpites desta rodada já expirou em <span id="data-limite-exibida"></span>.<br>
-                                    Seus palpites foram salvos, mas não podem ser enviados.
+                                <div id="alert-prazo-expirado-conclusao" class="alert alert-warning d-none">
+                                    <h6 class="alert-heading">
+                                        <i class="bi bi-clock"></i> Prazo Expirado!
+                                    </h6>
+                                    <p class="mb-0">
+                                        O prazo para envio dos palpites desta rodada já expirou em 
+                                        <span id="data-limite-exibida" class="fw-bold"></span>.
+                                    </p>
                                 </div>
                                 
-                                <!-- 🆕 CONTEÚDO NORMAL (antes do envio ou após erro) -->
                                 <div id="conteudo-normal-conclusao">
-                                    <!-- 🆕 ALERTA: Erro de internet (aparece se falhou por falta de conexão) -->
-                                    <div id="alert-sem-internet-conclusao" class="alert alert-sem-internet d-none mb-4">
-                                        <strong>📡 Sem conexão com internet!</strong><br>
-                                        Seus palpites foram salvos, mas não foi possível enviá-los devido à falta de conexão.<br>
-                                        <button class="btn btn-primary mt-2" onclick="iniciarEnvioGoogleForms()">
-                                            🔄 Tentar Enviar Novamente
+                                    <div id="alert-sem-internet-conclusao" class="alert alert-info d-none mb-3">
+                                        <h6 class="alert-heading">
+                                            <i class="bi bi-wifi-off"></i> Sem conexão com internet!
+                                        </h6>
+                                        <p class="mb-2">Seus palpites foram salvos, mas não foi possível enviá-los.</p>
+                                        <button class="btn btn-primary btn-sm" onclick="iniciarEnvioGoogleForms()">
+                                            <i class="bi bi-arrow-clockwise"></i> Tentar Novamente
                                         </button>
                                     </div>
                                     
-                                    <!-- 🆕 ALERTA: Envio bem-sucedido (aparece se já foram enviados) -->
-                                    <div id="alert-envio-sucesso-conclusao" class="alert alert-success d-none mb-4">
-                                        <strong>✅ Palpites enviados com sucesso!</strong><br>
-                                        Seus palpites da ${configRodada.numeroRodada} já foram enviados.
+                                    <div id="alert-envio-sucesso-conclusao" class="alert alert-success d-none mb-3">
+                                        <h6 class="alert-heading">
+                                            <i class="bi bi-check-circle"></i> Palpites enviados com sucesso!
+                                        </h6>
                                     </div>
                                     
-                                    <h5>Seus palpites estão prontos!</h5>
-                                    <p class="mb-4">Aqui você pode visualizar, editar ou compartilhar seus palpites.</p>
+                                    <h5 class="mb-3">
+                                        <i class="bi bi-check2-circle text-success"></i> 
+                                        Seus palpites estão prontos!
+                                    </h5>
+                                    <p class="text-muted mb-4">
+                                        Aqui você pode visualizar, editar ou compartilhar seus palpites.
+                                    </p>
 
-                                    <!-- Botões em coluna -->
-                                    <div class="botoes-coluna mb-4">
-                                        <!-- 🆕 ALTERADO: Visualizar/Editar Palpites (sempre visível) -->
+                                    <div class="d-grid gap-2 mb-4">
                                         <button class="btn btn-outline-primary" onclick="visualizarPalpitesSalvos()">
-                                            👀 Editar Palpites
+                                            <i class="bi bi-pencil"></i> Editar Palpites
                                         </button>
                                         <button class="btn btn-info" id="btn-compartilhar-csv" onclick="compartilharCSV()">
-                                            📤 Compartilhar CSV
+                                            <i class="bi bi-share"></i> Compartilhar CSV
                                         </button>
                                     </div>
                                 </div>
 
-                                <!-- Botão Limpar Dados (aparece após envio/exportação) -->
                                 <div id="container-limpar-conclusao" class="mt-4 pt-3 border-top">
-                                    <button class="btn btn-limpar-dados w-100" onclick="limparDados()">
-                                        🗑️ Limpar Dados do Dispositivo
+                                    <button class="btn btn-danger w-100 mb-2" onclick="limparDados()">
+                                        <i class="bi bi-trash"></i> Limpar Dados do Dispositivo
                                     </button>
-                                    <small class="text-muted d-block mt-2 text-center">
-                                        💡 Após limpar, os palpites não serão recuperados!
+                                    <small class="text-muted d-block">
+                                        <i class="bi bi-lightbulb"></i> Após limpar, os palpites não serão recuperados!
                                     </small>
-                                    <small class="text-muted d-block mt-2 text-center">
+                                    <small class="text-muted d-block mt-1">
                                         Está em dúvida se enviou os palpites, entre em contato com o organizador.
-                                    </small>                                    
+                                    </small>
                                 </div>
                             </div>
                         </div>
@@ -881,21 +275,24 @@
 
             <!-- Tela 4: Exportação -->
             <div id="tela-exportacao" class="tela d-none">
-                <div class="espaco-header"></div>
-                <div class="row justify-content-center centralizar-telas-grandes">
-                    <div class="col-12 col-md-6 largura-otimizada">
-                        <div class="card shadow">
-                            <!-- 🆕 CABEÇALHO COM RODADA DINÂMICA -->
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-8 col-lg-6">
+                        <div class="card shadow border-0">
                             <div class="card-header bg-success text-white text-center">
-                                <h4 class="mb-0">📊 Compartilhamento Concluído! - <span id="rodada-tela-exportacao"></span></h4>
+                                <h4 class="mb-0">
+                                    <i class="bi bi-graph-up"></i> 
+                                    Compartilhamento Concluído! - <span id="rodada-tela-exportacao"></span>
+                                </h4>
                             </div>
                             <div class="card-body text-center">
-                                <div class="mb-4" style="font-size: 4rem;">✅</div>
+                                <div class="mb-4 display-1 text-success">
+                                    <i class="bi bi-check-circle"></i>
+                                </div>
                                 <h5>Dados Compartilhados com Sucesso!</h5>
                                 <p class="text-muted mb-4">Arquivo CSV compartilhado no seu dispositivo</p>
                                 
                                 <button class="btn btn-success btn-lg w-100" onclick="voltarConclusao()">
-                                    ↩️ Voltar
+                                    <i class="bi bi-arrow-left"></i> Voltar
                                 </button>
                             </div>
                         </div>
@@ -905,44 +302,42 @@
 
             <!-- Tela 5: Envio Google Forms -->
             <div id="tela-envio-google" class="tela d-none">
-                <div class="espaco-header"></div>
-                <div class="row justify-content-center centralizar-telas-grandes">
-                    <div class="col-12 col-md-6 largura-otimizada">
-                        <div class="card shadow">
-                            <!-- 🆕 CABEÇALHO COM RODADA DINÂMICA -->
-                            <div class="card-header">
-                                <h4 class="mb-0">🚀 Enviando os Palpites - <span id="rodada-tela-envio"></span></h4>
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-8 col-lg-6">
+                        <div class="card shadow border-0">
+                            <div class="card-header bg-dark text-white">
+                                <h4 class="mb-0">
+                                    <i class="bi bi-send"></i> 
+                                    Enviando os Palpites - <span id="rodada-tela-envio"></span>
+                                </h4>
                             </div>
                             <div class="card-body">
-                                <!-- 🆕 BOTÃO DE EDIÇÃO NA TELA DE ENVIO -->
-                                <div class="mb-3 text-center">
+                                <div class="text-center mb-3">
                                     <button class="btn btn-outline-primary btn-sm" onclick="voltarParaEdicao()">
-                                        ✏️ Editar Palpites
+                                        <i class="bi bi-pencil"></i> Editar Palpites
                                     </button>
                                 </div>
                                 
                                 <div id="progresso-envio">
-                                    <div class="progress">
-                                        <div class="progress-bar" id="barra-progresso-envio" style="width: 0%"></div>
+                                    <div class="progress" style="height: 30px;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                             id="barra-progresso-envio" style="width: 0%"></div>
                                     </div>
-                                    <p class="text-center" id="texto-progresso-envio">Enviando 0 de 0</p>
+                                    <p class="text-center mt-2 fw-bold" id="texto-progresso-envio">Enviando 0 de 0</p>
                                 </div>
                                 
                                 <div id="resultado-envio" class="d-none"></div>
                                 
-                                <!-- 🆕 BOTÃO FECHAR (para erro de internet ANTES de começar) -->
-                                <button id="btn-fechar-envio-internet" class="btn btn-success w-100 d-none" onclick="irParaConclusaoComErroInternet()">
-                                    ✅ Fechar e Ir para Conclusão
+                                <button id="btn-fechar-envio-internet" class="btn btn-primary w-100 d-none mt-3" onclick="irParaConclusaoComErroInternet()">
+                                    <i class="bi bi-check-circle"></i> Fechar
                                 </button>
                                 
-                                <!-- 🆕 BOTÃO FECHAR (para envio bem-sucedido) -->
-                                <button id="btn-fechar-envio-sucesso" class="btn btn-success w-100 d-none" onclick="irParaConclusaoComSucesso()">
-                                    ✅ Fechar
+                                <button id="btn-fechar-envio-sucesso" class="btn btn-success w-100 d-none mt-3" onclick="irParaConclusaoComSucesso()">
+                                    <i class="bi bi-check-circle"></i> Fechar
                                 </button>
                                 
-                                <!-- 🆕 BOTÃO REINICIAR ENVIO (para falha durante envio) -->
                                 <button id="btn-reiniciar-envio" class="btn btn-warning w-100 d-none mt-2" onclick="reiniciarEnvio()">
-                                    🔄 Reiniciar Envio
+                                    <i class="bi bi-arrow-clockwise"></i> Reiniciar Envio
                                 </button>
                             </div>
                         </div>
@@ -952,1186 +347,10 @@
         </div>
     </main>
 
-    <script>
-        // ====================
-        // 🔧 CONFIGURAÇÃO ÚNICA
-        // ====================
-        
-        // ⚠️ ALTERE ESTE VALOR A CADA PUBLICAÇÃO NO GITHUB PAGES
-        const VERSAO_ATUAL = "20260131_1100_R02"; // Formato: AAAAMMDD_HHMM_RXX
-        
-        // 🔧 CONFIGURAÇÃO DA RODADA (EDITAR AQUI) - ÚNICO LOCAL PARA ALTERAÇÕES
-        const configRodada = {
-            nomeBolao: "⚽ Bolão Campeonato Brasileiro 2026",
-            numeroRodada: "Rodada 02",
-            dataInicio: "04/02/2026",
-            dataLimite: "03/02/2026" // Formato: DD/MM/AAAA
-        };
-
-        // 🔧 CONFIGURAÇÃO DOS JOGOS DA RODADA (EDITAR AQUI)
-        const jogosRodada = [
-            { id: "1", timeA: "Flamengo RJ", timeB: "Internacional RS" },
-            { id: "2", timeA: "Vasco RJ", timeB: "Chapecoense SC" },
-            { id: "3", timeA: "Santos SP", timeB: "São Paulo SP" },
-            { id: "4", timeA: "Palmeiras SP", timeB: "Vitória BA" },
-            { id: "5", timeA: "Bragantino SP", timeB: "Atlético MG" },
-            { id: "6", timeA: "Cruzeiro MG", timeB: "Coritiba PR" },
-            { id: "7", timeA: "Grêmio RS", timeB: "Botafogo RJ" },
-            { id: "8", timeA: "Athletico PR", timeB: "Corinthians SP" },
-            { id: "9", timeA: "Bahia BA", timeB: "Fluminense RJ" },
-            { id: "10", timeA: "Remo PA", timeB: "Mirassol SP" }
-        ];
-
-        // 🔧 CONFIGURAÇÃO DO GOOGLE FORMS
-        const CONFIG_GOOGLE_FORMS = {
-            url: 'https://docs.google.com/forms/d/1haBOnuTc65ZE9wcM9N64b7-hgVauhE0JptwIk1eUDWQ/formResponse',
-            
-            // 🎯 LISTA DE ENTRY IDs (7 campos)
-            entryIds: [
-                'entry.26241625', // Rodada
-                'entry.39347237', // Time A
-                'entry.654774410', // Palpite A
-                'entry.514438451', // Palpite B
-                'entry.1360858266', // Time B
-                'entry.1629904542', // Participante
-                'entry.1686925319'  // Data e Hora
-            ]
-        };
-
-        // ====================
-        // 🚀 SISTEMA DE ATUALIZAÇÃO
-        // ====================
-        
-        // 🔧 FUNÇÃO: Sistema de atualização automática
-        (function iniciarSistemaAtualizacao() {
-            // Verificar se já vimos esta versão
-            const versaoSalva = localStorage.getItem('bolao_versao_atual');
-            
-            // Se é uma versão nova
-            if (!versaoSalva || versaoSalva !== VERSAO_ATUAL) {
-                console.log(`🔄 Nova versão detectada: ${VERSAO_ATUAL} (anterior: ${versaoSalva || 'nenhuma'})`);
-                
-                // Salvar nova versão
-                localStorage.setItem('bolao_versao_atual', VERSAO_ATUAL);
-                
-                // Forçar recarregamento com cache-bust
-                const url = new URL(window.location);
-                url.searchParams.set('_v', VERSAO_ATUAL.replace(/[^a-zA-Z0-9]/g, ''));
-                
-                // Evitar loop infinito - só recarrega se URL mudou
-                if (window.location.href !== url.toString()) {
-                    console.log('📤 Redirecionando para versão atualizada...');
-                    window.location.replace(url.toString());
-                }
-            } else {
-                console.log(`✅ Versão atual: ${VERSAO_ATUAL}`);
-            }
-        })();
-
-        // ====================
-        // ⚽ LÓGICA DO BOLÃO - FLUXO SIMPLIFICADO
-        // ====================
-        
-        // 🆕 DETECTAR iOS
-        const isIOS = () => {
-            return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        };
-
-        // Dados da aplicação - SIMPLIFICADO
-        let dadosApp = {
-            participante: '',
-            rodadaSalva: '',
-            palpitesSalvos: [],
-            dadosEnviados: false,
-            dadosCompartilhados: false,
-            tentativaForaPrazo: null,
-            ultimoErroEnvio: null,
-            erroInternet: false
-        };
-
-        // 🕒 FUNÇÃO PARA FORMATAR DATA/HORA NO FORMATO dd/mm/aaaa - hh:mm:ss
-        function formatarDataHora() {
-            const agora = new Date();
-            
-            const dia = String(agora.getDate()).padStart(2, '0');
-            const mes = String(agora.getMonth() + 1).padStart(2, '0');
-            const ano = agora.getFullYear();
-            const horas = String(agora.getHours()).padStart(2, '0');
-            const minutos = String(agora.getMinutes()).padStart(2, '0');
-            const segundos = String(agora.getSeconds()).padStart(2, '0');
-            
-            return `${dia}/${mes}/${ano} - ${horas}:${minutos}:${segundos}`;
-        }
-
-        // ✅ FUNÇÃO PARA GERAR OPÇÕES DE SELECT (0 a 10)
-        function gerarOpcoesSelect(valorSelecionado = '') {
-            let opcoes = '<option value="">--</option>';
-            for (let i = 0; i <= 10; i++) {
-                const selecionado = valorSelecionado === i.toString() ? 'selected' : '';
-                opcoes += `<option value="${i}" ${selecionado}>${i}</option>`;
-            }
-            return opcoes;
-        }
-
-        // 🆕 FUNÇÃO: Converter data DD/MM/AAAA para objeto Date
-        function converterDataStringParaDate(dataString) {
-            const partes = dataString.split('/');
-            // partes[0] = dia, partes[1] = mês, partes[2] = ano
-            return new Date(partes[2], partes[1] - 1, partes[0], 23, 59, 59);
-        }
-
-        // 🆕 FUNÇÃO: Verificar se está dentro do prazo (com verificação robusta)
-        function verificarPrazoValido() {
-            // Se já houve tentativa fora do prazo, bloqueia permanentemente
-            if (dadosApp.tentativaForaPrazo) {
-                return false;
-            }
-            
-            const hoje = new Date();
-            const dataLimiteObj = converterDataStringParaDate(configRodada.dataLimite);
-            
-            // Verificar se a data atual é posterior à data limite
-            if (hoje > dataLimiteObj) {
-                // 🆕 Registrar a tentativa fora do prazo (apenas na primeira vez)
-                if (!dadosApp.tentativaForaPrazo) {
-                    dadosApp.tentativaForaPrazo = {
-                        timestamp: new Date().toISOString(),
-                        dataHora: formatarDataHora(),
-                        rodada: configRodada.numeroRodada
-                    };
-                    salvarDados();
-                }
-                return false;
-            }
-            
-            return true;
-        }
-
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', function() {
-            // 🆕 iOS FIX: Prevenir comportamentos padrão
-            document.addEventListener('touchmove', function(e) {
-                if (e.target.tagName === 'SELECT') {
-                    e.preventDefault();
-                }
-            }, { passive: false });
-            
-            document.addEventListener('touchstart', function() {}, { passive: true });
-            
-            carregarDadosSalvos();
-            configurarFormularios();
-            atualizarInfoRodada();
-            verificarEstadoAplicacao();
-            
-            // 🆕 iOS FIX: Forçar redimensionamento ao girar tela
-            window.addEventListener('orientationchange', function() {
-                setTimeout(function() {
-                    window.scrollTo(0, 0);
-                    atualizarDashboardHeader();
-                }, 100);
-            });
-        });
-
-        function configurarFormularios() {
-            document.getElementById('formParticipante').addEventListener('submit', function(e) {
-                e.preventDefault();
-                dadosApp.participante = document.getElementById('nomeParticipante').value;
-                salvarDados();
-                mostrarTela('tela-palpites');
-                carregarJogos();
-                atualizarDashboardHeader();
-            });
-
-            // 🆕 MODIFICAÇÃO: Remover modal de confirmação, ir direto para salvar e enviar
-            document.getElementById('formPalpites').addEventListener('submit', function(e) {
-                e.preventDefault();
-                salvarPalpites(); // Agora salva e vai direto para tela de envio
-            });
-        }
-
-        function carregarDadosSalvos() {
-            try {
-                const dados = localStorage.getItem('bolaoBrasileiro');
-                if (dados) {
-                    const parsed = JSON.parse(dados);
-                    dadosApp = { 
-                        participante: '',
-                        rodadaSalva: '',
-                        palpitesSalvos: [],
-                        dadosEnviados: false,
-                        dadosCompartilhados: false,
-                        tentativaForaPrazo: null,
-                        ultimoErroEnvio: null,
-                        erroInternet: false,
-                        // Sobrescreve com dados salvos
-                        ...parsed 
-                    };
-                    console.log('📱 Dados carregados:', dadosApp);
-                }
-            } catch (e) {
-                console.error('❌ Erro ao carregar dados:', e);
-                localStorage.removeItem('bolaoBrasileiro');
-                // 🆕 Inicializa com todas as propriedades
-                dadosApp = {
-                    participante: '',
-                    rodadaSalva: '',
-                    palpitesSalvos: [],
-                    dadosEnviados: false,
-                    dadosCompartilhados: false,
-                    tentativaForaPrazo: null,
-                    ultimoErroEnvio: null,
-                    erroInternet: false
-                };
-            }
-        }
-
-        // ✅ NOVA FUNÇÃO: VERIFICAR SE OS DADOS SALVOS SÃO DA MESMA RODADA
-        function verificarRodadaSalva() {
-            if (!dadosApp.rodadaSalva) return 'dados_invalidos';
-            
-            if (dadosApp.rodadaSalva === configRodada.numeroRodada) {
-                return 'mesma_rodada';
-            } else {
-                return 'rodada_diferente';
-            }
-        }
-
-        // 🆕 FUNÇÃO MODIFICADA: Verificar estado da aplicação
-        function verificarEstadoAplicacao() {
-            // ✅ VERIFICAÇÃO POR RODADA - NOVA LÓGICA
-            const statusRodada = verificarRodadaSalva();
-            
-            // Esconder todos os alertas primeiro
-            document.getElementById('alert-rodada-diferente').classList.add('d-none');
-            document.getElementById('alert-dados-enviados').classList.add('d-none');
-            document.getElementById('alert-erro-envio').classList.add('d-none');
-            document.getElementById('alert-prazo-expirado').classList.add('d-none');
-            document.getElementById('formulario-inicial').classList.add('d-none');
-            
-            // Se não há dados salvos, mostrar formulário inicial
-            if (!dadosApp.participante && dadosApp.palpitesSalvos.length === 0) {
-                document.getElementById('formulario-inicial').classList.remove('d-none');
-                return;
-            }
-            
-            // LÓGICA DE VERIFICAÇÃO POR RODADA (DEVE VIR PRIMEIRO!)
-            if (statusRodada === 'rodada_diferente') {
-                // Dados de rodada diferente encontrados
-                document.getElementById('texto-rodada-diferente').textContent = 
-                    `📋 Existem palpites salvos da ${dadosApp.rodadaSalva} no seu dispositivo.\n\n` +
-                    `🔒 Para acessar a ${configRodada.numeroRodada}, limpe os dados salvos primeiro.`;
-                document.getElementById('alert-rodada-diferente').classList.remove('d-none');
-                return; // IMPORTANTE: Parar aqui, não mostrar outras mensagens
-                
-            } else if (statusRodada === 'mesma_rodada') {
-                // Dados da mesma rodada
-                if (dadosApp.dadosEnviados) {
-                    // Já foram enviados com sucesso
-                    document.getElementById('texto-dados-enviados').textContent = 
-                        `Seus palpites da ${configRodada.numeroRodada} já foram enviados com sucesso.`;
-                    document.getElementById('alert-dados-enviados').classList.remove('d-none');
-                } else {
-                    // Envio falhou ou ainda não foi tentado
-                    if (dadosApp.ultimoErroEnvio) {
-                        // Houve erro no envio anterior
-                        const erroMsg = dadosApp.ultimoErroEnvio.mensagem || 'Erro desconhecido';
-                        
-                        // Verificar se foi erro de internet
-                        if (dadosApp.erroInternet || erroMsg.includes('internet') || erroMsg.includes('network') || erroMsg.includes('conexão')) {
-                            document.getElementById('texto-erro-envio').textContent = 
-                                `❌ Falta de conexão com a internet!\n\n` +
-                                `Seus palpites da ${configRodada.numeroRodada} foram salvos, mas não foi possível enviá-los.\n\n` +
-                                `Tente enviar novamente quando estiver conectado à internet.`;
-                        } else {
-                            document.getElementById('texto-erro-envio').textContent = 
-                                `O envio dos palpites da ${configRodada.numeroRodada} falhou anteriormente.\n\n` +
-                                `Erro: ${erroMsg}\n\n` +
-                                `Tente enviar novamente.`;
-                        }
-                        
-                        document.getElementById('alert-erro-envio').classList.remove('d-none');
-                    } else {
-                        // Ainda não tentou enviar (caso incomum, mas possível)
-                        document.getElementById('texto-dados-enviados').textContent = 
-                            `Seus palpites da ${configRodada.numeroRodada} foram salvos, mas ainda não foram enviados.`;
-                        document.getElementById('alert-dados-enviados').classList.remove('d-none');
-                    }
-                }
-            }
-            
-            // 🆕 Verificar se o prazo já expirou (APENAS se for a MESMA rodada)
-            const prazoValido = verificarPrazoValido();
-            
-            // Se o prazo expirou E é a mesma rodada, mostrar alerta específico
-            if (!prazoValido && dadosApp.participante && statusRodada === 'mesma_rodada') {
-                document.getElementById('alert-prazo-expirado').classList.remove('d-none');
-            }
-        }
-
-        // 🆕 FUNÇÃO: Reenviar palpites (da tela de erro)
-        function reenviarPalpites() {
-            if (dadosApp.palpitesSalvos.length === 0) {
-                alert('Nenhum palpite para enviar.');
-                return;
-            }
-            
-            // 🆕 Verificar prazo antes de permitir envio
-            if (!verificarPrazoValido()) {
-                alert('⏰ O prazo para envio dos palpites desta rodada já expirou.');
-                return;
-            }
-            
-            if (!navigator.onLine) {
-                alert('📡 Sem conexão com internet! Conecte-se para enviar os palpites.');
-                return;
-            }
-            
-            mostrarTela('tela-envio-google');
-            document.getElementById('resultado-envio').classList.add('d-none');
-            document.getElementById('btn-fechar-envio-internet').classList.add('d-none');
-            document.getElementById('btn-fechar-envio-sucesso').classList.add('d-none');
-            document.getElementById('btn-reiniciar-envio').classList.add('d-none');
-            enviarParaGoogleForms();
-        }
-
-        // 🆕 FUNÇÃO SIMPLIFICADA: Reiniciar envio completo
-        function reiniciarEnvio() {
-            if (!navigator.onLine) {
-                alert('📡 Sem conexão com internet! Conecte-se para reiniciar o envio.');
-                return;
-            }
-            
-            // 🆕 Resetar a interface de envio
-            document.getElementById('resultado-envio').classList.add('d-none');
-            document.getElementById('btn-reiniciar-envio').classList.add('d-none');
-            document.getElementById('btn-fechar-envio-internet').classList.add('d-none');
-            document.getElementById('btn-fechar-envio-sucesso').classList.add('d-none');
-            
-            // 🆕 Iniciar envio completo novamente
-            enviarParaGoogleForms();
-        }
-
-        // 🆕 FUNÇÃO MODIFICADA: Visualizar palpites já enviados (da tela inicial)
-        function visualizarPalpitesEnviados() {
-            mostrarTela('tela-palpites');
-            carregarJogosComDadosSalvos();
-        }
-
-        // 🆕 FUNÇÃO MODIFICADA: Visualizar palpites salvos (da tela de conclusão)
-        function visualizarPalpitesSalvos() {
-            mostrarTela('tela-palpites');
-            carregarJogosComDadosSalvos();
-        }
-
-        // 🆕 FUNÇÃO: Voltar para edição da tela de envio
-        function voltarParaEdicao() {
-            mostrarTela('tela-palpites');
-            carregarJogosComDadosSalvos();
-        }
-
-        // 🆕 FUNÇÃO: Ir para conclusão após erro de internet
-        function irParaConclusaoComErroInternet() {
-            dadosApp.erroInternet = true;
-            salvarDados();
-            mostrarTela('tela-conclusao');
-            atualizarBotoesConclusao();
-        }
-
-        // 🆕 FUNÇÃO: Ir para conclusão após envio bem-sucedido
-        function irParaConclusaoComSucesso() {
-            dadosApp.dadosEnviados = true;
-            dadosApp.erroInternet = false;
-            salvarDados();
-            mostrarTela('tela-conclusao');
-            atualizarBotoesConclusao();
-        }
-
-        // 🆕 FUNÇÃO ATUALIZADA: Atualizar botões na tela de conclusão
-        function atualizarBotoesConclusao() {
-            const alertInternet = document.getElementById('alert-sem-internet-conclusao');
-            const alertSucesso = document.getElementById('alert-envio-sucesso-conclusao');
-            const alertPrazo = document.getElementById('alert-prazo-expirado-conclusao');
-            const dataLimiteExibida = document.getElementById('data-limite-exibida');
-            
-            // 🆕 CORREÇÃO: Atualizar o texto do alerta de sucesso
-            const alertSucessoElement = document.getElementById('alert-envio-sucesso-conclusao');
-            if (alertSucessoElement) {
-                alertSucessoElement.innerHTML = `
-                    <strong>✅ Palpites enviados com sucesso!</strong><br>
-                    Seus palpites da ${configRodada.numeroRodada} já foram enviados.
-                `;
-            }
-            
-            // Esconder todos primeiro
-            alertInternet.classList.add('d-none');
-            alertSucesso.classList.add('d-none');
-            alertPrazo.classList.add('d-none');
-            
-            // 🆕 Verificar se o prazo expirou
-            const prazoValido = verificarPrazoValido();
-            
-            if (!prazoValido) {
-                // Mostrar alerta de prazo expirado
-                alertPrazo.classList.remove('d-none');
-                dataLimiteExibida.textContent = configRodada.dataLimite;
-            } else if (dadosApp.dadosEnviados) {
-                // Conteúdo normal (palpites já enviados)
-                alertSucesso.classList.remove('d-none');
-            } else if (dadosApp.erroInternet) {
-                // Erro de internet
-                alertInternet.classList.remove('d-none');
-            }
-        }
-
-        // 🆕 FUNÇÃO MODIFICADA: Carregar jogos com dados salvos
-        function carregarJogosComDadosSalvos() {
-            const container = document.getElementById('jogos-container');
-            container.innerHTML = '';
-            
-            document.getElementById('participante-atual').textContent = dadosApp.participante;
-
-            const ultimoPalpite = dadosApp.palpitesSalvos[dadosApp.palpitesSalvos.length - 1];
-            const palpitesSalvos = ultimoPalpite.palpites;
-
-            jogosRodada.forEach(jogo => {
-                const card = document.createElement('div');
-                card.className = 'jogo-card';
-                
-                const palpiteSalvo = palpitesSalvos.find(p => p.jogoId === jogo.id);
-                const placarA = palpiteSalvo ? palpiteSalvo.placarA : '';
-                const placarB = palpiteSalvo ? palpiteSalvo.placarB : '';
-                
-                card.innerHTML = `
-                    <div class="cabecalho-jogo">
-                        Jogo ${jogo.id}
-                    </div>
-                    <div class="placar-container">
-                        <div class="row align-items-center jogo-content">
-                            <div class="col-5 time-col">
-                                <div class="nome-time">${jogo.timeA}</div>
-                                <select class="form-control input-placar" 
-                                        name="placarA-${jogo.id}" 
-                                        onchange="atualizarDashboardHeader()">
-                                    ${gerarOpcoesSelect(placarA)}
-                                </select>
-                            </div>
-                            <div class="col-2 text-center">
-                                <div class="separador">X</div>
-                            </div>
-                            <div class="col-5 time-col">
-                                <div class="nome-time">${jogo.timeB}</div>
-                                <select class="form-control input-placar" 
-                                        name="placarB-${jogo.id}" 
-                                        onchange="atualizarDashboardHeader()">
-                                    ${gerarOpcoesSelect(placarB)}
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                container.appendChild(card);
-            });
-
-            const btnSalvar = document.getElementById('btn-salvar-palpites');
-            const titulo = document.getElementById('titulo-tela-palpites');
-            
-            btnSalvar.classList.remove('d-none');
-            
-            if (dadosApp.dadosEnviados) {
-                titulo.textContent = '👀 Visualizar/Editar Palpites - ' + configRodada.numeroRodada;
-                btnSalvar.innerHTML = '💾 Salvar Alterações e Enviar';
-            } else {
-                titulo.textContent = '📝 Seus Palpites - ' + configRodada.numeroRodada;
-                btnSalvar.innerHTML = '💾 Salvar e Enviar';
-            }
-
-            atualizarDashboardHeader();
-        }
-
-        function salvarDados() {
-            try {
-                dadosApp.rodadaSalva = configRodada.numeroRodada;
-                localStorage.setItem('bolaoBrasileiro', JSON.stringify(dadosApp));
-                atualizarDashboardHeader();
-            } catch (e) {
-                console.error('❌ Erro ao salvar dados:', e);
-                alert('⚠️ Erro ao salvar dados. Tente novamente.');
-            }
-        }
-
-        // 🆕 FUNÇÃO ATUALIZADA: Atualizar informações da rodada no header e telas
-        function atualizarInfoRodada() {
-            document.getElementById('nome-bolao').textContent = configRodada.nomeBolao;
-            document.getElementById('data-inicio').textContent = configRodada.dataInicio;
-            document.getElementById('data-limite').textContent = configRodada.dataLimite;
-            document.getElementById('numero-rodada').textContent = configRodada.numeroRodada;
-            
-            document.getElementById('rodada-tela-participante').textContent = configRodada.numeroRodada;
-            document.getElementById('rodada-tela-palpites').textContent = configRodada.numeroRodada;
-            document.getElementById('rodada-tela-conclusao').textContent = configRodada.numeroRodada;
-            document.getElementById('rodada-tela-exportacao').textContent = configRodada.numeroRodada;
-            document.getElementById('rodada-tela-envio').textContent = configRodada.numeroRodada;
-        }
-
-        function atualizarDashboardHeader() {
-            const barra = document.getElementById('header-barra-progresso-palpites');
-            const textoBarra = document.getElementById('header-texto-barra');
-            
-            const preenchidos = contarJogosPreenchidos();
-            const totalJogos = jogosRodada.length;
-            const porcentagem = Math.round((preenchidos / totalJogos) * 100);
-            
-            barra.style.width = porcentagem + '%';
-            textoBarra.textContent = `${preenchidos} de ${totalJogos} (${porcentagem}%)`;
-            
-            barra.classList.remove('baixo', 'medio', 'alto');
-            if (porcentagem < 30) {
-                barra.classList.add('baixo');
-            } else if (porcentagem < 70) {
-                barra.classList.add('medio');
-            } else {
-                barra.classList.add('alto');
-            }
-        }
-
-        function contarJogosPreenchidos() {
-            let preenchidos = 0;
-            jogosRodada.forEach(jogo => {
-                const placarA = document.querySelector(`select[name="placarA-${jogo.id}"]`);
-                const placarB = document.querySelector(`select[name="placarB-${jogo.id}"]`);
-                
-                if (placarA && placarA.value && placarB && placarB.value) {
-                    preenchidos++;
-                }
-            });
-            return preenchidos;
-        }
-
-        // 🆕 FUNÇÃO ADICIONADA: Verificar se todos os jogos estão preenchidos
-        function verificarTodosJogosPreenchidos() {
-            let todosPreenchidos = true;
-            let jogosNaoPreenchidos = [];
-            
-            jogosRodada.forEach(jogo => {
-                const placarA = document.querySelector(`select[name="placarA-${jogo.id}"]`);
-                const placarB = document.querySelector(`select[name="placarB-${jogo.id}"]`);
-                
-                if (!placarA.value || !placarB.value) {
-                    todosPreenchidos = false;
-                    jogosNaoPreenchidos.push(jogo.id);
-                }
-            });
-            
-            return {
-                todosPreenchidos,
-                jogosNaoPreenchidos
-            };
-        }
-
-        function carregarJogos() {
-            const container = document.getElementById('jogos-container');
-            container.innerHTML = '';
-            
-            document.getElementById('participante-atual').textContent = dadosApp.participante;
-
-            jogosRodada.forEach(jogo => {
-                const card = document.createElement('div');
-                card.className = 'jogo-card';
-                
-                card.innerHTML = `
-                    <div class="cabecalho-jogo">
-                        Jogo ${jogo.id}
-                    </div>
-                    <div class="placar-container">
-                        <div class="row align-items-center jogo-content">
-                            <div class="col-5 time-col">
-                                <div class="nome-time">${jogo.timeA}</div>
-                                <select class="form-control input-placar" 
-                                        name="placarA-${jogo.id}" 
-                                        onchange="atualizarDashboardHeader()">
-                                    ${gerarOpcoesSelect()}
-                                </select>
-                            </div>
-                            <div class="col-2 text-center">
-                                <div class="separador">X</div>
-                            </div>
-                            <div class="col-5 time-col">
-                                <div class="nome-time">${jogo.timeB}</div>
-                                <select class="form-control input-placar" 
-                                        name="placarB-${jogo.id}" 
-                                        onchange="atualizarDashboardHeader()">
-                                    ${gerarOpcoesSelect()}
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                container.appendChild(card);
-            });
-        }
-
-        // 🆕 FUNÇÃO MODIFICADA: Salvar palpites (agora vai direto para tela de envio)
-        function salvarPalpites() {
-            console.log('💾 === INICIANDO SALVAMENTO DOS PALPITES ===');
-
-            const verificacao = verificarTodosJogosPreenchidos();
-            
-            if (!verificacao.todosPreenchidos) {
-                let mensagem = '⚠️ Por favor, preencha todos os 10 jogos antes de salvar:\n\n';
-                verificacao.jogosNaoPreenchidos.forEach(jogoId => {
-                    mensagem += `• Jogo ${jogoId}\n`;
-                });
-                mensagem += '\nÉ obrigatório preencher todos os jogos.';
-                alert(mensagem);
-                return;
-            }
-
-            const palpites = [];
-
-            jogosRodada.forEach(jogo => {
-                const placarA = document.querySelector(`select[name="placarA-${jogo.id}"]`);
-                const placarB = document.querySelector(`select[name="placarB-${jogo.id}"]`);
-                
-                console.log(`🔍 Coletando jogo ${jogo.id}:`, {
-                    'Time A': jogo.timeA,
-                    'Placar A': placarA.value,
-                    'Time B': jogo.timeB,
-                    'Placar B': placarB.value
-                });
-                
-                palpites.push({
-                    jogoId: jogo.id,
-                    timeA: jogo.timeA,
-                    placarA: placarA.value,
-                    timeB: jogo.timeB,
-                    placarB: placarB.value
-                });
-            });
-
-            const dataHoraFormatada = formatarDataHora();
-
-            const palpiteRodada = {
-                timestamp: new Date().toISOString(),
-                data_hora: new Date().toLocaleString('pt-BR'),
-                data_hora_palpite: dataHoraFormatada,
-                participante: dadosApp.participante,
-                rodada: configRodada.numeroRodada,
-                palpites: palpites
-            };
-
-            console.log('💾 Palpite da rodada salvo:', palpiteRodada);
-
-            // 🆕 RESETAR FLAGS AO SALVAR NOVOS PALPITES (incluindo edições)
-            dadosApp.dadosEnviados = false;
-            dadosApp.ultimoErroEnvio = null;
-            dadosApp.erroInternet = false;
-            
-            if (dadosApp.palpitesSalvos.length > 0) {
-                dadosApp.palpitesSalvos[dadosApp.palpitesSalvos.length - 1] = palpiteRodada;
-            } else {
-                dadosApp.palpitesSalvos.push(palpiteRodada);
-            }
-            
-            salvarDados();
-
-            // 🆕 MODIFICAÇÃO: Ir direto para tela de envio, não para conclusão
-            mostrarTela('tela-envio-google');
-            document.getElementById('resultado-envio').classList.add('d-none');
-            document.getElementById('btn-fechar-envio-internet').classList.add('d-none');
-            document.getElementById('btn-fechar-envio-sucesso').classList.add('d-none');
-            document.getElementById('btn-reiniciar-envio').classList.add('d-none');
-            
-            // 🆕 Iniciar envio automaticamente (se dentro do prazo)
-            if (verificarPrazoValido()) {
-                enviarParaGoogleForms();
-            } else {
-                // Se fora do prazo, mostrar mensagem
-                document.getElementById('resultado-envio').classList.remove('d-none');
-                document.getElementById('resultado-envio').innerHTML = `<div class="alert alert-warning">
-                    ⏰ <strong>Prazo Expirado!</strong><br>
-                    O prazo para envio dos palpites desta rodada já expirou em ${configRodada.dataLimite}.<br>
-                    Seus palpites foram salvos, mas não podem ser enviados.
-                </div>`;
-                document.getElementById('btn-fechar-envio-sucesso').classList.remove('d-none');
-            }
-            
-            atualizarDashboardHeader();
-        }
-
-        function voltarInicio() {
-            dadosApp.participante = '';
-            dadosApp.rodadaSalva = '';
-            dadosApp.palpitesSalvos = [];
-            dadosApp.dadosEnviados = false;
-            dadosApp.dadosCompartilhados = false;
-            dadosApp.tentativaForaPrazo = null;
-            dadosApp.ultimoErroEnvio = null;
-            dadosApp.erroInternet = false;
-            salvarDados();
-            mostrarTela('tela-participante');
-            verificarEstadoAplicacao();
-        }
-
-        function voltarConclusao() {
-            mostrarTela('tela-conclusao');
-            atualizarBotoesConclusao();
-        }
-
-        function limparDados() {
-            if (confirm('⚠️ ATENÇÃO: Isso vai apagar TODOS os dados salvos.\n\nTem certeza?')) {
-                dadosApp.participante = '';
-                dadosApp.rodadaSalva = '';
-                dadosApp.palpitesSalvos = [];
-                dadosApp.dadosEnviados = false;
-                dadosApp.dadosCompartilhados = false;
-                dadosApp.tentativaForaPrazo = null;
-                dadosApp.ultimoErroEnvio = null;
-                dadosApp.erroInternet = false;
-                salvarDados();
-                
-                document.getElementById('alert-rodada-diferente').classList.add('d-none');
-                document.getElementById('alert-dados-enviados').classList.add('d-none');
-                document.getElementById('alert-erro-envio').classList.add('d-none');
-                document.getElementById('alert-prazo-expirado').classList.add('d-none');
-                
-                alert('✅ Dados limpos com sucesso!');
-                
-                mostrarTela('tela-participante');
-                verificarEstadoAplicacao();
-            }
-        }
-
-        // 🆕 FUNÇÃO MODIFICADA: Mostrar tela com controle das datas no header
-        function mostrarTela(telaId) {
-            document.querySelectorAll('.tela').forEach(tela => {
-                tela.classList.add('d-none');
-            });
-            document.getElementById(telaId).classList.remove('d-none');
-            
-            // 🆕 iOS FIX: Forçar redraw para evitar bugs de renderização
-            if (isIOS()) {
-                document.body.style.overflow = 'hidden';
-                setTimeout(() => {
-                    document.body.style.overflow = '';
-                }, 50);
-            }
-            
-            const areaRodada = document.getElementById('area-rodada-header');
-            const datasRodada = document.getElementById('datas-rodada-container');
-            const progressoPalpites = document.querySelector('.progresso-palpites-header');
-            
-            if (telaId === 'tela-palpites') {
-                document.body.classList.add('tela-formulario');
-                progressoPalpites.classList.remove('d-none');
-                areaRodada.classList.remove('d-none');
-                datasRodada.classList.add('d-none');
-                atualizarDashboardHeader();
-            } else {
-                document.body.classList.remove('tela-formulario');
-                progressoPalpites.classList.add('d-none');
-                areaRodada.classList.remove('d-none');
-                datasRodada.classList.remove('d-none');
-            }
-            
-            if (telaId === 'tela-participante') {
-                verificarEstadoAplicacao();
-            }
-            
-            if (telaId === 'tela-conclusao') {
-                atualizarBotoesConclusao();
-            }
-        }
-
-        // 🆕 FUNÇÃO MODIFICADA: Iniciar envio
-        function iniciarEnvioGoogleForms() {
-            if (dadosApp.palpitesSalvos.length === 0) {
-                alert('⚠️ Nenhum palpite para enviar!');
-                return;
-            }
-            
-            // 🆕 Verificar prazo antes de permitir envio
-            if (!verificarPrazoValido()) {
-                alert('⏰ O prazo para envio dos palpites desta rodada já expirou.');
-                return;
-            }
-            
-            if (!navigator.onLine) {
-                alert('📡 Sem conexão com internet! Conecte-se para enviar os palpites.');
-                return;
-            }
-            
-            mostrarTela('tela-envio-google');
-            document.getElementById('resultado-envio').classList.add('d-none');
-            document.getElementById('btn-fechar-envio-internet').classList.add('d-none');
-            document.getElementById('btn-fechar-envio-sucesso').classList.add('d-none');
-            document.getElementById('btn-reiniciar-envio').classList.add('d-none');
-            
-            // 🆕 Iniciar o envio
-            enviarParaGoogleForms();
-        }
-
-        // 🆕 FUNÇÃO ATUALIZADA: Compartilhamento CSV com suporte iOS melhorado
-        async function compartilharCSV() {
-            if (dadosApp.palpitesSalvos.length === 0) {
-                alert('Nenhum palpite para compartilhar.');
-                return;
-            }
-
-            try {
-                const cabecalho = ['Rodada', 'Time_A', 'Placar_A', 'Placar_B', 'Time_B', 'Participante', 'Data_Hora'];
-
-                const linhas = [];
-                
-                const ultimoPalpite = dadosApp.palpitesSalvos[dadosApp.palpitesSalvos.length - 1];
-                
-                ultimoPalpite.palpites.forEach(jogo => {
-                    const linha = [
-                        ultimoPalpite.rodada,
-                        jogo.timeA,
-                        jogo.placarA,
-                        jogo.placarB,
-                        jogo.timeB,
-                        ultimoPalpite.participante,
-                        ultimoPalpite.data_hora_palpite
-                    ];
-
-                    const linhaFormatada = linha.map(valor => {
-                        const valorString = String(valor);
-                        if (valorString.includes(',') || valorString.includes('\n') || valorString.includes('"')) {
-                            return `"${valorString.replace(/"/g, '""')}"`;
-                        }
-                        return valorString;
-                    }).join(',');
-
-                    linhas.push(linhaFormatada);
-                });
-
-                const csvData = [cabecalho.join(','), ...linhas].join('\n');
-                
-                const nomeParticipante = dadosApp.participante || 'Participante';
-                const dataAtual = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
-                
-                const nomeParticipanteLimpo = nomeParticipante
-                    .normalize('NFD')
-                    .replace(/[\u0300-\u036f]/g, '')
-                    .replace(/[^a-zA-Z0-9\s]/g, '')
-                    .replace(/\s+/g, '_');
-                
-                const nomeArquivo = `Bolao_${configRodada.numeroRodada.replace(/\s+/g, '_')}_${nomeParticipanteLimpo}_${dataAtual}.csv`;
-                
-                const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
-                
-                // 🆕 iOS FIX: Verificar se é iOS e usar abordagem diferente para compartilhamento
-                if (isIOS() && navigator.share) {
-                    try {
-                        // iOS pode ter problemas com File API, usar URL
-                        const url = URL.createObjectURL(blob);
-                        await navigator.share({
-                            title: 'Palpites do Bolão',
-                            text: `Palpites do ${configRodada.numeroRodada} - ${nomeParticipante}`,
-                            url: url
-                        });
-                        
-                        URL.revokeObjectURL(url);
-                        console.log('Arquivo compartilhado com sucesso via iOS');
-                        dadosApp.dadosCompartilhados = true;
-                        salvarDados();
-                        mostrarTela('tela-exportacao');
-                        
-                    } catch (error) {
-                        console.log('iOS share error:', error);
-                        // Fallback para download
-                        fazerDownloadCSV(blob, nomeArquivo);
-                    }
-                } else if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], nomeArquivo)] })) {
-                    try {
-                        const file = new File([blob], nomeArquivo, { type: 'text/csv' });
-                        await navigator.share({
-                            title: 'Palpites do Bolão',
-                            text: `Palpites do ${configRodada.numeroRodada} - ${nomeParticipante}`,
-                            files: [file]
-                        });
-                        
-                        console.log('Arquivo compartilhado com sucesso');
-                        dadosApp.dadosCompartilhados = true;
-                        salvarDados();
-                        mostrarTela('tela-exportacao');
-                        
-                    } catch (error) {
-                        if (error.name !== 'AbortError') {
-                            console.log('Erro ao compartilhar:', error);
-                            fazerDownloadCSV(blob, nomeArquivo);
-                        }
-                    }
-                } else {
-                    // Fallback para navegadores sem suporte a share
-                    alert(isIOS() ? 
-                        'Seu dispositivo iOS não suporta compartilhamento direto. Fazendo download...' : 
-                        'Seu navegador não suporta compartilhamento de arquivos. Fazendo download...');
-                    fazerDownloadCSV(blob, nomeArquivo);
-                }
-                
-            } catch (error) {
-                console.error('❌ Erro ao gerar CSV:', error);
-                alert('❌ Erro ao gerar arquivo CSV. Tente novamente.');
-            }
-        }
-
-        // 🆕 FUNÇÃO AUXILIAR PARA FAZER DOWNLOAD
-        function fazerDownloadCSV(blob, nomeArquivo) {
-            try {
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = nomeArquivo;
-                link.style.display = 'none';
-                
-                document.body.appendChild(link);
-                
-                // 🆕 iOS FIX: Usar click() sincrono
-                const clickEvent = new MouseEvent('click', {
-                    view: window,
-                    bubbles: true,
-                    cancelable: true
-                });
-                
-                link.dispatchEvent(clickEvent);
-                
-                setTimeout(() => {
-                    document.body.removeChild(link);
-                    URL.revokeObjectURL(url);
-                    
-                    dadosApp.dadosCompartilhados = true;
-                    salvarDados();
-                    mostrarTela('tela-exportacao');
-                }, 100);
-                
-            } catch (error) {
-                console.error('❌ Erro ao fazer download:', error);
-                alert('❌ Erro ao fazer download do arquivo. Tente novamente.');
-            }
-        }
-
-        // 🚀 FUNÇÃO SIMPLIFICADA: ENVIAR PARA GOOGLE FORMS (envio completo sempre)
-        async function enviarParaGoogleForms() {
-            if (dadosApp.palpitesSalvos.length === 0) {
-                alert('Nenhum palpite para enviar.');
-                return;
-            }
-
-            // 🆕 Verificar prazo antes de iniciar envio
-            if (!verificarPrazoValido()) {
-                document.getElementById('resultado-envio').classList.remove('d-none');
-                document.getElementById('resultado-envio').innerHTML = `<div class="alert alert-warning">
-                    ⏰ <strong>Prazo Expirado!</strong><br>
-                    O prazo para envio dos palpites desta rodada já expirou em ${configRodada.dataLimite}.<br>
-                    Seus palpites foram salvos, mas não podem ser enviados.
-                </div>`;
-                document.getElementById('btn-fechar-envio-sucesso').classList.remove('d-none');
-                return;
-            }
-
-            // 🆕 Verificar conexão com internet ANTES de tentar enviar
-            if (!navigator.onLine) {
-                document.getElementById('resultado-envio').classList.remove('d-none');
-                document.getElementById('resultado-envio').innerHTML = `<div class="alert alert-sem-internet">
-                    📡 <strong>Sem conexão com internet!</strong><br>
-                    Não foi possível enviar os palpites porque você está offline.<br>
-                    Conecte-se à internet e tente novamente.
-                </div>`;
-                document.getElementById('btn-fechar-envio-internet').classList.remove('d-none');
-                return;
-            }
-
-            try {
-                const ultimoPalpite = dadosApp.palpitesSalvos[dadosApp.palpitesSalvos.length - 1];
-                const totalJogos = ultimoPalpite.palpites.length;
-                
-                let enviados = 0;
-                let erros = [];
-
-                document.getElementById('texto-progresso-envio').textContent = 
-                    `Enviando 0 de ${totalJogos}`;
-
-                // 🆕 INICIAR ENVIO COMPLETO (sempre todos os jogos)
-                for (let i = 0; i < totalJogos; i++) {
-                    const jogo = ultimoPalpite.palpites[i];
-                    
-                    try {
-                        const formData = new FormData();
-                        
-                        formData.append(CONFIG_GOOGLE_FORMS.entryIds[0], ultimoPalpite.rodada);
-                        formData.append(CONFIG_GOOGLE_FORMS.entryIds[1], jogo.timeA);
-                        formData.append(CONFIG_GOOGLE_FORMS.entryIds[2], jogo.placarA);
-                        formData.append(CONFIG_GOOGLE_FORMS.entryIds[3], jogo.placarB);
-                        formData.append(CONFIG_GOOGLE_FORMS.entryIds[4], jogo.timeB);
-                        formData.append(CONFIG_GOOGLE_FORMS.entryIds[5], ultimoPalpite.participante);
-                        formData.append(CONFIG_GOOGLE_FORMS.entryIds[6], ultimoPalpite.data_hora_palpite);
-                        
-                        console.log('📤 Enviando jogo:', jogo.jogoId);
-                        
-                        // 🆕 iOS FIX: Usar fetch com timeout
-                        const controller = new AbortController();
-                        const timeoutId = setTimeout(() => controller.abort(), 10000);
-                        
-                        await fetch(CONFIG_GOOGLE_FORMS.url, {
-                            method: 'POST',
-                            body: formData,
-                            mode: 'no-cors',
-                            signal: controller.signal
-                        });
-                        
-                        clearTimeout(timeoutId);
-                        
-                        enviados++;
-                        
-                        // 🆕 ATUALIZAR PROGRESSO
-                        const porcentagem = (enviados / totalJogos) * 100;
-                        document.getElementById('barra-progresso-envio').style.width = porcentagem + '%';
-                        document.getElementById('texto-progresso-envio').textContent = 
-                            `Enviando ${enviados} de ${totalJogos}`;
-                        
-                        await new Promise(resolve => setTimeout(resolve, 300));
-                        
-                    } catch (error) {
-                        console.error('❌ Erro ao enviar jogo:', error);
-                        erros.push({ 
-                            jogoId: jogo.jogoId,
-                            error: error.message 
-                        });
-                        
-                        // 🆕 PARAR SE HOUVER ERRO (provavelmente perda de conexão)
-                        break;
-                    }
-                }
-
-                const resultadoDiv = document.getElementById('resultado-envio');
-                resultadoDiv.classList.remove('d-none');
-                
-                // 🆕 VERIFICAR SE TODOS FORAM ENVIADOS
-                if (enviados === totalJogos) {
-                    // ENVIO COMPLETO
-                    dadosApp.dadosEnviados = true;
-                    dadosApp.erroInternet = false;
-                    dadosApp.ultimoErroEnvio = null;
-                    
-                    resultadoDiv.innerHTML = `<div class="alert alert-success">
-                        ✅ <strong>Envio Concluído com Sucesso!</strong><br>
-                        Todos os ${enviados} palpites foram enviados!
-                    </div>`;
-                    document.getElementById('btn-fechar-envio-sucesso').classList.remove('d-none');
-                    
-                } else {
-                    // FALHA NO ENVIO
-                    dadosApp.dadosEnviados = false;
-                    dadosApp.erroInternet = true;
-                    dadosApp.ultimoErroEnvio = {
-                        timestamp: new Date().toISOString(),
-                        dataHora: formatarDataHora(),
-                        mensagem: `Envio interrompido: ${enviados} de ${totalJogos} enviados`,
-                        rodada: configRodada.numeroRodada,
-                        isNetworkError: true
-                    };
-                    
-                    resultadoDiv.innerHTML = `<div class="alert alert-warning">
-                        ⚠️ <strong>Envio Interrompido!</strong><br>
-                        Apenas ${enviados} de ${totalJogos} palpites foram enviados.<br>
-                        <small>Possível perda de conexão durante o envio.</small>
-                    </div>`;
-                    document.getElementById('btn-reiniciar-envio').classList.remove('d-none');
-                }
-                
-                salvarDados();
-                
-            } catch (error) {
-                console.error('❌ Erro geral ao enviar palpites:', error);
-                
-                // 🆕 VERIFICAR SE É ERRO DE INTERNET
-                const isNetworkError = error.message.includes('network') || 
-                                      error.message.includes('internet') || 
-                                      error.message.includes('offline') ||
-                                      error.message.includes('Failed to fetch') ||
-                                      error.name === 'TypeError';
-                
-                document.getElementById('resultado-envio').classList.remove('d-none');
-                
-                if (isNetworkError) {
-                    // ERRO DE INTERNET
-                    dadosApp.dadosEnviados = false;
-                    dadosApp.erroInternet = true;
-                    dadosApp.ultimoErroEnvio = {
-                        timestamp: new Date().toISOString(),
-                        dataHora: formatarDataHora(),
-                        mensagem: error.message,
-                        rodada: configRodada.numeroRodada,
-                        isNetworkError: true
-                    };
-                    
-                    document.getElementById('resultado-envio').innerHTML = `<div class="alert alert-sem-internet">
-                        📡 <strong>Sem conexão com internet!</strong><br>
-                        O envio foi interrompido.<br>
-                        Conecte-se à internet e clique em "Reiniciar Envio".
-                    </div>`;
-                    document.getElementById('btn-reiniciar-envio').classList.remove('d-none');
-                    
-                } else {
-                    // OUTRO TIPO DE ERRO
-                    document.getElementById('resultado-envio').innerHTML = `<div class="alert alert-danger">
-                        ❌ <strong>Erro ao enviar palpites!</strong><br>
-                        Tente novamente mais tarde.<br>
-                        <small>Erro: ${error.message}</small>
-                    </div>`;
-                    document.getElementById('btn-fechar-envio-sucesso').classList.remove('d-none');
-                    
-                    dadosApp.ultimoErroEnvio = {
-                        timestamp: new Date().toISOString(),
-                        dataHora: formatarDataHora(),
-                        mensagem: error.message,
-                        rodada: configRodada.numeroRodada,
-                        isNetworkError: false
-                    };
-                }
-                
-                salvarDados();
-            }
-        }
-        
-        // 🆕 FUNÇÃO: Detectar iOS e aplicar ajustes específicos
-        function aplicarAjustesIOS() {
-            if (isIOS()) {
-                console.log('📱 iOS detectado, aplicando ajustes específicos');
-                
-                // Prevenir zoom em inputs
-                document.addEventListener('focusin', function(e) {
-                    if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT') {
-                        document.body.style.fontSize = '16px';
-                    }
-                });
-                
-                document.addEventListener('focusout', function(e) {
-                    if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT') {
-                        setTimeout(() => {
-                            document.body.style.fontSize = '';
-                        }, 100);
-                    }
-                });
-                
-                // Corrigir altura da viewport
-                function ajustarAlturaViewport() {
-                    const vh = window.innerHeight * 0.01;
-                    document.documentElement.style.setProperty('--vh', `${vh}px`);
-                }
-                
-                ajustarAlturaViewport();
-                window.addEventListener('resize', ajustarAlturaViewport);
-                window.addEventListener('orientationchange', ajustarAlturaViewport);
-            }
-        }
-        
-        // Inicializar ajustes iOS
-        aplicarAjustesIOS();
-    </script>
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- JavaScript personalizado -->
+    <script src="app.js?v=2.0"></script>
 </body>
 </html>
