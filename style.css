@@ -1,4 +1,4 @@
-/* style.css?v=2.0 */
+/* style.css?v=2.1 */
 
 /* Reset mínimo */
 * {
@@ -14,17 +14,32 @@ body {
 /* Header fixo com safe area */
 .header-fixo {
     padding-top: env(safe-area-inset-top) !important;
+    z-index: 1000;
 }
 
-/* Ajuste de margem para header fixo */
+/* Conteúdo principal com padding-top dinâmico */
 .conteudo-dinamico {
-    margin-top: 150px;
-    min-height: calc(100vh - 150px);
+    padding-top: 160px; /* Altura inicial do header */
+    min-height: 100vh;
 }
 
+/* Quando a barra de progresso está visível (na tela de palpites) */
+body.tela-formulario .conteudo-dinamico {
+    padding-top: 200px; /* Aumenta quando a barra de progresso aparece */
+}
+
+/* Ajuste para safe area */
 @supports (padding-top: env(safe-area-inset-top)) {
+    .header-fixo {
+        padding-top: env(safe-area-inset-top) !important;
+    }
+    
     .conteudo-dinamico {
-        margin-top: calc(150px + env(safe-area-inset-top));
+        padding-top: calc(160px + env(safe-area-inset-top));
+    }
+    
+    body.tela-formulario .conteudo-dinamico {
+        padding-top: calc(200px + env(safe-area-inset-top));
     }
 }
 
@@ -181,12 +196,20 @@ input[type="number"] {
 /* Ajustes para mobile */
 @media (max-width: 768px) {
     .conteudo-dinamico {
-        margin-top: 140px;
+        padding-top: 150px;
+    }
+    
+    body.tela-formulario .conteudo-dinamico {
+        padding-top: 190px;
     }
     
     @supports (padding-top: env(safe-area-inset-top)) {
         .conteudo-dinamico {
-            margin-top: calc(140px + env(safe-area-inset-top));
+            padding-top: calc(150px + env(safe-area-inset-top));
+        }
+        
+        body.tela-formulario .conteudo-dinamico {
+            padding-top: calc(190px + env(safe-area-inset-top));
         }
     }
     
@@ -212,12 +235,20 @@ input[type="number"] {
 /* Ajustes para telas muito pequenas */
 @media (max-width: 576px) {
     .conteudo-dinamico {
-        margin-top: 130px;
+        padding-top: 140px;
+    }
+    
+    body.tela-formulario .conteudo-dinamico {
+        padding-top: 180px;
     }
     
     @supports (padding-top: env(safe-area-inset-top)) {
         .conteudo-dinamico {
-            margin-top: calc(130px + env(safe-area-inset-top));
+            padding-top: calc(140px + env(safe-area-inset-top));
+        }
+        
+        body.tela-formulario .conteudo-dinamico {
+            padding-top: calc(180px + env(safe-area-inset-top));
         }
     }
     
@@ -238,17 +269,31 @@ input[type="number"] {
 /* Ajuste para orientação paisagem em mobile */
 @media (max-height: 500px) and (orientation: landscape) {
     .conteudo-dinamico {
-        margin-top: 120px;
+        padding-top: 130px;
+    }
+    
+    body.tela-formulario .conteudo-dinamico {
+        padding-top: 170px;
     }
     
     @supports (padding-top: env(safe-area-inset-top)) {
         .conteudo-dinamico {
-            margin-top: calc(120px + env(safe-area-inset-top));
+            padding-top: calc(130px + env(safe-area-inset-top));
+        }
+        
+        body.tela-formulario .conteudo-dinamico {
+            padding-top: calc(170px + env(safe-area-inset-top));
         }
     }
 }
 
-/* Ajuste para tela de palpites */
-#tela-palpites .row {
+/* Ajuste para evitar sobreposição na tela de palpites */
+#tela-palpites .card {
     margin-top: 0;
+}
+
+/* Garantir que o container py-4 não adicione espaço extra */
+.container.py-4 {
+    padding-top: 0 !important;
+    padding-bottom: 1.5rem !important;
 }

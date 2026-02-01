@@ -1,4 +1,4 @@
-// app.js?v=2.0
+// app.js?v=2.1
 
 // ====================
 // 🔧 CONFIGURAÇÃO ÚNICA
@@ -753,6 +753,9 @@ function mostrarTela(telaId) {
     if (telaId === 'tela-conclusao') {
         atualizarBotoesConclusao();
     }
+    
+    // Scroll para o topo para garantir que o conteúdo esteja visível
+    window.scrollTo(0, 0);
 }
 
 function iniciarEnvioGoogleForms() {
