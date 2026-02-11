@@ -1,4 +1,4 @@
-// app.js?v=4.0
+// app.js?v=4.1
 
 // ====================
 // 🔧 CONFIGURAÇÃO ÚNICA
@@ -323,57 +323,106 @@ function verificarRodadaSalva() {
 function verificarEstadoAplicacao() {
     const statusRodada = verificarRodadaSalva();
     
+    // Esconde todos os alertas primeiro
     document.getElementById('alert-rodada-diferente').classList.add('d-none');
     document.getElementById('alert-dados-enviados').classList.add('d-none');
     document.getElementById('alert-erro-envio').classList.add('d-none');
     document.getElementById('alert-prazo-expirado').classList.add('d-none');
     document.getElementById('formulario-inicial').classList.add('d-none');
     
+    // Se não há dados salvos, mostra formulário inicial
     if (!dadosApp.participante && dadosApp.palpitesSalvos.length === 0) {
         document.getElementById('formulario-inicial').classList.remove('d-none');
         return;
     }
     
+    // CASO 1: RODADA DIFERENTE
     if (statusRodada === 'rodada_diferente') {
         document.getElementById('texto-rodada-diferente').textContent = 
-            `Existem palpites salvos da ${dadosApp.rodadaSalva} no seu dispositivo.\n\n` +
+            `📋 Existem palpites salvos da ${dadosApp.rodadaSalva} no seu dispositivo.\n\n` +
             `Para acessar a ${configRodada.numeroRodada}, limpe os dados salvos primeiro.`;
         document.getElementById('alert-rodada-diferente').classList.remove('d-none');
         return;
-        
-    } else if (statusRodada === 'mesma_rodada') {
-        if (dadosApp.dadosEnviados) {
-            document.getElementById('texto-dados-enviados').textContent = 
-                `Seus palpites da ${configRodada.numeroRodada} já foram enviados com sucesso.`;
-            document.getElementById('alert-dados-enviados').classList.remove('d-none');
-        } else {
-            if (dadosApp.ultimoErroEnvio) {
-                const erroMsg = dadosApp.ultimoErroEnvio.mensagem || 'Erro desconhecido';
-                
-                if (dadosApp.erroInternet || erroMsg.includes('internet') || erroMsg.includes('network') || erroMsg.includes('conexão')) {
-                    document.getElementById('texto-erro-envio').textContent = 
-                        `Falta de conexão com a internet!\n\n` +
-                        `Seus palpites da ${configRodada.numeroRodada} foram salvos, mas não foi possível enviá-los.\n\n` +
-                        `Tente enviar novamente quando estiver conectado à internet.`;
-                } else {
-                    document.getElementById('texto-erro-envio').textContent = 
-                        `O envio dos palpites da ${configRodada.numeroRodada} falhou anteriormente.\n\n` +
-                        `Erro: ${erroMsg}\n\n` +
-                        `Tente enviar novamente.`;
-                }
-                
-                document.getElementById('alert-erro-envio').classList.remove('d-none');
-            } else {
-                document.getElementById('texto-dados-enviados').textContent = 
-                    `Seus palpites da ${configRodada.numeroRodada} foram salvos, mas ainda não foram enviados.`;
-                document.getElementById('alert-dados-enviados').classList.remove('d-none');
-            }
-        }
     }
     
-    const prazoValido = verificarPrazoValido();
+    // CASO 2: MESMA RODADA
+    if (statusRodada === 'mesma_rodada') {
+        
+        // Subcaso 2.1: PALPITES JÁ ENVIADOS COM SUCESSO
+        if (dadosApp.dadosEnviados) {
+            document.getElementById('texto-dados-enviados').innerHTML = `
+                <strong>✅ Palpites enviados com sucesso!</strong><br>
+                Seus palpites da ${configRodada.numeroRodada} já foram enviados.
+            `;
+            document.getElementById('alert-dados-enviados').classList.remove('d-none');
+            return;
+        }
+        
+        // Subcaso 2.2: HOUVE ERRO NO ENVIO ANTERIOR
+        if (dadosApp.ultimoErroEnvio) {
+            const erroMsg = dadosApp.ultimoErroEnvio.mensagem || 'Erro desconhecido';
+            
+            if (dadosApp.erroInternet || erroMsg.includes('internet') || erroMsg.includes('network') || erroMsg.includes('conexão')) {
+                document.getElementById('texto-erro-envio').innerHTML = `
+                    <strong>📡 Falta de conexão com a internet!</strong><br>
+                    Seus palpites da ${configRodada.numeroRodada} foram salvos, mas não foi possível enviá-los.<br>
+                    Tente enviar novamente quando estiver conectado.
+                `;
+            } else {
+                document.getElementById('texto-erro-envio').innerHTML = `
+                    <strong>❌ Erro no envio anterior!</strong><br>
+                    Seus palpites da ${configRodada.numeroRodada} estão salvos, mas o envio falhou.<br>
+                    Erro: ${erroMsg}<br>
+                    Tente enviar novamente.
+                `;
+            }
+            
+            document.getElementById('alert-erro-envio').classList.remove('d-none');
+            return;
+        }
+        
+        // Subcaso 2.3: PALPITES SALVOS (RASCUNHO) - NUNCA ENVIADOS
+        // É O ÚNICO CASO QUE FALTAVA TRATAR CORRETAMENTE!
+        
+        // Conta quantos palpites estão preenchidos
+        let totalPreenchidos = 0;
+        if (dadosApp.palpitesSalvos.length > 0) {
+            const ultimoPalpite = dadosApp.palpitesSalvos[dadosApp.palpitesSalvos.length - 1];
+            totalPreenchidos = ultimoPalpite.palpites.filter(p => p.placarA && p.placarB).length;
+        }
+        
+        document.getElementById('texto-dados-enviados').innerHTML = `
+            <strong>📋 Palpites salvos no dispositivo!</strong><br>
+            Você tem <strong>${totalPreenchidos} de 10</strong> palpites preenchidos.<br>
+            Continue preenchendo todos os jogos para enviar seus palpites.
+        `;
+        
+        // Altera o texto do botão de "Visualizar/Editar" para "Continuar Preenchendo"
+        const alertDadosEnviados = document.getElementById('alert-dados-enviados');
+        const botoesExistentes = alertDadosEnviados.querySelectorAll('.btn');
+        
+        // Remove botões antigos se existirem
+        botoesExistentes.forEach(btn => btn.remove());
+        
+        // Adiciona novos botões
+        const divBotoes = document.createElement('div');
+        divBotoes.className = 'mt-2 d-flex gap-2 flex-wrap';
+        divBotoes.innerHTML = `
+            <button class="btn btn-sm btn-primary" onclick="visualizarPalpitesSalvos()">
+                <i class="bi bi-play-circle"></i> Continuar Preenchendo
+            </button>
+            <button class="btn btn-sm btn-danger" onclick="limparDados()">
+                <i class="bi bi-trash"></i> Limpar Dados
+            </button>
+        `;
+        
+        alertDadosEnviados.appendChild(divBotoes);
+        alertDadosEnviados.classList.remove('d-none');
+    }
     
-    if (!prazoValido && dadosApp.participante && statusRodada === 'mesma_rodada') {
+    // Verifica prazo expirado
+    const prazoValido = verificarPrazoValido();
+    if (!prazoValido && dadosApp.participante && statusRodada === 'mesma_rodada' && !dadosApp.dadosEnviados) {
         document.getElementById('alert-prazo-expirado').classList.remove('d-none');
     }
 }

@@ -1,4 +1,4 @@
-/* style.css?v=4.0 */
+/* style.css?v=4.1 */
 
 /* Reset mínimo */
 * {
@@ -543,5 +543,42 @@ input[type="number"] {
         bottom: 70px;
         min-width: 260px;
         padding: 10px 14px;
+    }
+}
+
+/* ==================== */
+/* 🆕 AJUSTE BOTÕES ALERTA */
+/* ==================== */
+
+#alert-dados-enviados .d-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+#alert-dados-enviados .btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    border-radius: 6px;
+    min-height: 40px;
+}
+
+#alert-dados-enviados .btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+#alert-dados-enviados .btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+@media (max-width: 576px) {
+    #alert-dados-enviados .d-flex {
+        flex-direction: column;
+    }
+    
+    #alert-dados-enviados .btn-sm {
+        width: 100%;
     }
 }
