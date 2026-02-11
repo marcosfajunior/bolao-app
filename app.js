@@ -1,10 +1,10 @@
-// app.js?v=4.2
+// app.js?v=4.3
 
 // ====================
 // 🔧 CONFIGURAÇÃO ÚNICA
 // ====================
 
-const VERSAO_ATUAL = "20260211_1200_R04";
+const VERSAO_ATUAL = "20260211_1300_R04";
 
 const configRodada = {
     nomeBolao: "⚽ Bolão Campeonato Brasileiro 2026",
@@ -484,24 +484,58 @@ function exibirAlertaRascunho() {
     
     const texto = document.createElement('p');
     texto.className = 'mb-2';
-    texto.innerHTML = `Você tem <strong>${totalPreenchidos} de 10</strong> palpites preenchidos.<br>
-                      Continue preenchendo <strong>todos os jogos</strong> para enviar seus palpites.`;
     
     const divBotoes = document.createElement('div');
     divBotoes.className = 'd-flex gap-2 flex-wrap';
     
-    const btnContinuar = document.createElement('button');
-    btnContinuar.className = 'btn btn-sm btn-primary';
-    btnContinuar.innerHTML = '<i class="bi bi-play-circle"></i> Continuar Preenchendo';
-    btnContinuar.onclick = () => visualizarPalpitesSalvos();
-    
-    const btnLimpar = document.createElement('button');
-    btnLimpar.className = 'btn btn-sm btn-danger';
-    btnLimpar.innerHTML = '<i class="bi bi-trash"></i> Limpar Dados';
-    btnLimpar.onclick = () => limparDados();
-    
-    divBotoes.appendChild(btnContinuar);
-    divBotoes.appendChild(btnLimpar);
+    if (totalPreenchidos === 10) {
+        // ✅ 10/10: 3 botões
+        texto.innerHTML = `✅ Você já preencheu <strong>todos os 10 palpites</strong>!<br>
+                          Agora é só enviar ou verificar seus palpites.`;
+        
+        const btnVisualizar = document.createElement('button');
+        btnVisualizar.className = 'btn btn-sm btn-outline-primary';
+        btnVisualizar.innerHTML = '<i class="bi bi-eye"></i> Visualizar/Editar';
+        btnVisualizar.onclick = () => visualizarPalpitesSalvos();
+        
+        const btnEnviar = document.createElement('button');
+        btnEnviar.className = 'btn btn-sm btn-success';
+        btnEnviar.innerHTML = '<i class="bi bi-send"></i> Enviar Agora';
+        btnEnviar.onclick = () => {
+            visualizarPalpitesSalvos();
+            setTimeout(() => {
+                const btnSalvar = document.getElementById('btn-salvar-palpites');
+                if (btnSalvar) btnSalvar.click();
+            }, 500);
+        };
+        
+        const btnLimpar = document.createElement('button');
+        btnLimpar.className = 'btn btn-sm btn-danger';
+        btnLimpar.innerHTML = '<i class="bi bi-trash"></i> Limpar Dados';
+        btnLimpar.onclick = () => limparDados();
+        
+        divBotoes.appendChild(btnVisualizar);
+        divBotoes.appendChild(btnEnviar);
+        divBotoes.appendChild(btnLimpar);
+        
+    } else {
+        // ✅ 0-9/10: 2 botões (Continuar + Limpar)
+        texto.innerHTML = `📋 Você tem <strong>${totalPreenchidos} de 10</strong> palpites preenchidos.<br>
+                          Continue preenchendo <strong>todos os jogos</strong> para enviar seus palpites.`;
+        
+        const btnContinuar = document.createElement('button');
+        btnContinuar.className = 'btn btn-sm btn-primary';
+        btnContinuar.innerHTML = '<i class="bi bi-play-circle"></i> Continuar Preenchendo';
+        btnContinuar.onclick = () => visualizarPalpitesSalvos();
+        
+        const btnLimpar = document.createElement('button');
+        btnLimpar.className = 'btn btn-sm btn-danger';
+        btnLimpar.innerHTML = '<i class="bi bi-trash"></i> Limpar Dados';
+        btnLimpar.onclick = () => limparDados();
+        
+        divBotoes.appendChild(btnContinuar);
+        divBotoes.appendChild(btnLimpar);
+    }
     
     alert.appendChild(heading);
     alert.appendChild(texto);
