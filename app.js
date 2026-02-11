@@ -1,10 +1,10 @@
-// app.js?v=4.1
+// app.js?v=4.2
 
 // ====================
 // 🔧 CONFIGURAÇÃO ÚNICA
 // ====================
 
-const VERSAO_ATUAL = "20260211_0000_R04";
+const VERSAO_ATUAL = "20260211_1200_R04";
 
 const configRodada = {
     nomeBolao: "⚽ Bolão Campeonato Brasileiro 2026",
@@ -29,13 +29,13 @@ const jogosRodada = [
 const CONFIG_GOOGLE_FORMS = {
     url: 'https://docs.google.com/forms/d/1haBOnuTc65ZE9wcM9N64b7-hgVauhE0JptwIk1eUDWQ/formResponse',
     entryIds: [
-        'entry.26241625', // Rodada
-        'entry.39347237', // Time A
-        'entry.654774410', // Palpite A
-        'entry.514438451', // Palpite B
-        'entry.1360858266', // Time B
-        'entry.1629904542', // Participante
-        'entry.1686925319'  // Data e Hora
+        'entry.26241625',
+        'entry.39347237',
+        'entry.654774410',
+        'entry.514438451',
+        'entry.1360858266',
+        'entry.1629904542',
+        'entry.1686925319'
     ]
 };
 
@@ -75,34 +75,158 @@ let dadosApp = {
 };
 
 // ====================
-// 🆕 SISTEMA DE TOAST NOTIFICATION
+// 🔧 INICIALIZAÇÃO DOS EVENTOS
+// ====================
+
+document.addEventListener('DOMContentLoaded', function() {
+    // iOS fixes
+    document.addEventListener('touchmove', function(e) {
+        if (e.target.tagName === 'SELECT') {
+            e.preventDefault();
+        }
+    }, { passive: false });
+    
+    document.addEventListener('touchstart', function() {}, { passive: true });
+    
+    // Configurar eventos
+    configurarEventos();
+    
+    // Carregar dados
+    carregarDadosSalvos();
+    atualizarInfoRodada();
+    verificarEstadoAplicacao();
+    
+    window.addEventListener('orientationchange', function() {
+        setTimeout(function() {
+            window.scrollTo(0, 0);
+            atualizarDashboardHeader();
+        }, 100);
+    });
+});
+
+function configurarEventos() {
+    // Formulário participante
+    const formParticipante = document.getElementById('formParticipante');
+    if (formParticipante) {
+        formParticipante.addEventListener('submit', function(e) {
+            e.preventDefault();
+            onSubmitParticipante();
+        });
+    }
+    
+    // Formulário palpites
+    const formPalpites = document.getElementById('formPalpites');
+    if (formPalpites) {
+        formPalpites.addEventListener('submit', function(e) {
+            e.preventDefault();
+            salvarPalpites();
+        });
+    }
+    
+    // Botão inserir palpites
+    const btnInserir = document.getElementById('btn-inserir-palpites');
+    if (btnInserir) {
+        btnInserir.addEventListener('click', function(e) {
+            e.preventDefault();
+            onSubmitParticipante();
+        });
+    }
+    
+    // Botões da tela de conclusão
+    const btnEditar = document.getElementById('btn-editar-palpites');
+    if (btnEditar) {
+        btnEditar.addEventListener('click', function() {
+            visualizarPalpitesSalvos();
+        });
+    }
+    
+    const btnCompartilhar = document.getElementById('btn-compartilhar-csv');
+    if (btnCompartilhar) {
+        btnCompartilhar.addEventListener('click', function() {
+            compartilharCSV();
+        });
+    }
+    
+    const btnLimparConclusao = document.getElementById('btn-limpar-dados-conclusao');
+    if (btnLimparConclusao) {
+        btnLimparConclusao.addEventListener('click', function() {
+            limparDados();
+        });
+    }
+    
+    const btnVoltarConclusao = document.getElementById('btn-voltar-conclusao');
+    if (btnVoltarConclusao) {
+        btnVoltarConclusao.addEventListener('click', function() {
+            voltarConclusao();
+        });
+    }
+    
+    // Botões da tela de envio
+    const btnFecharInternet = document.getElementById('btn-fechar-envio-internet');
+    if (btnFecharInternet) {
+        btnFecharInternet.addEventListener('click', function() {
+            irParaConclusaoComErroInternet();
+        });
+    }
+    
+    const btnFecharSucesso = document.getElementById('btn-fechar-envio-sucesso');
+    if (btnFecharSucesso) {
+        btnFecharSucesso.addEventListener('click', function() {
+            irParaConclusaoComSucesso();
+        });
+    }
+    
+    const btnReiniciar = document.getElementById('btn-reiniciar-envio');
+    if (btnReiniciar) {
+        btnReiniciar.addEventListener('click', function() {
+            reiniciarEnvio();
+        });
+    }
+}
+
+function onSubmitParticipante() {
+    const select = document.getElementById('nomeParticipante');
+    dadosApp.participante = select.value;
+    salvarDados();
+    mostrarTela('tela-palpites');
+    carregarJogos();
+    carregarPalpitesSalvos();
+    atualizarDashboardHeader();
+}
+
+// ====================
+// 🆕 TOAST NOTIFICATION
 // ====================
 
 function mostrarToast(mensagem, tipo = 'success') {
-    // Remove toast existente se houver
     const toastExistente = document.querySelector('.toast-notification');
     if (toastExistente) {
         toastExistente.remove();
     }
 
-    // Cria o toast
     const toast = document.createElement('div');
     toast.className = `toast-notification toast-${tipo}`;
     
-    let icone = '';
-    if (tipo === 'success') icone = '<i class="bi bi-check-circle-fill me-2"></i>';
-    if (tipo === 'warning') icone = '<i class="bi bi-exclamation-triangle-fill me-2"></i>';
-    if (tipo === 'info') icone = '<i class="bi bi-info-circle-fill me-2"></i>';
+    const icon = document.createElement('i');
+    icon.className = tipo === 'success' ? 'bi bi-check-circle-fill' : 
+                     tipo === 'warning' ? 'bi bi-exclamation-triangle-fill' : 
+                     'bi bi-info-circle-fill';
     
-    toast.innerHTML = `
-        ${icone}
-        <span class="flex-grow-1">${mensagem}</span>
-        <button class="toast-close" onclick="this.parentElement.remove()">×</button>
-    `;
+    const span = document.createElement('span');
+    span.className = 'flex-grow-1';
+    span.textContent = mensagem;
+    
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'toast-close';
+    closeBtn.innerHTML = '×';
+    closeBtn.onclick = () => toast.remove();
+    
+    toast.appendChild(icon);
+    toast.appendChild(span);
+    toast.appendChild(closeBtn);
     
     document.body.appendChild(toast);
     
-    // Auto-remover após 3 segundos
     setTimeout(() => {
         if (toast.parentElement) {
             toast.remove();
@@ -118,10 +242,7 @@ function salvarPalpiteAutomatico(jogoId) {
     const placarA = document.querySelector(`select[name="placarA-${jogoId}"]`);
     const placarB = document.querySelector(`select[name="placarB-${jogoId}"]`);
     
-    // Só salva se ambos os placares estiverem preenchidos
     if (placarA && placarB && placarA.value && placarB.value) {
-        
-        // Busca palpites atuais
         const palpites = [];
         
         jogosRodada.forEach(jogo => {
@@ -140,13 +261,12 @@ function salvarPalpiteAutomatico(jogoId) {
         const palpiteRodada = {
             timestamp: new Date().toISOString(),
             data_hora: new Date().toLocaleString('pt-BR'),
-            data_hora_palpite: '', // Só preenchida no envio
+            data_hora_palpite: '',
             participante: dadosApp.participante,
             rodada: configRodada.numeroRodada,
             palpites: palpites
         };
 
-        // Atualiza os palpites salvos
         if (dadosApp.palpitesSalvos.length > 0) {
             dadosApp.palpitesSalvos[dadosApp.palpitesSalvos.length - 1] = palpiteRodada;
         } else {
@@ -155,15 +275,10 @@ function salvarPalpiteAutomatico(jogoId) {
         
         salvarDados();
         
-        // Mostra feedback visual
         const jogo = jogosRodada.find(j => j.id === jogoId);
         mostrarToast(`✅ Palpite do Jogo ${jogoId} (${jogo.timeA} x ${jogo.timeB}) salvo!`, 'success');
     }
 }
-
-// ====================
-// 🆕 CARREGAR PALPITES SALVOS
-// ====================
 
 function carregarPalpitesSalvos() {
     if (dadosApp.palpitesSalvos.length > 0) {
@@ -182,13 +297,317 @@ function carregarPalpitesSalvos() {
             }
         });
         
-        // Mostra toast informativo apenas se houver palpites salvos
         const totalPreenchidos = ultimoPalpite.palpites.filter(p => p.placarA && p.placarB).length;
         if (totalPreenchidos > 0) {
             mostrarToast(`📋 ${totalPreenchidos} palpites carregados do rascunho`, 'info');
         }
     }
 }
+
+// ====================
+// 📊 ESTADO DA APLICAÇÃO
+// ====================
+
+function verificarEstadoAplicacao() {
+    const statusRodada = verificarRodadaSalva();
+    
+    // Esconder todos
+    ocultarTodosAlertas();
+    
+    if (!dadosApp.participante && dadosApp.palpitesSalvos.length === 0) {
+        document.getElementById('formulario-inicial').classList.remove('d-none');
+        return;
+    }
+    
+    if (statusRodada === 'rodada_diferente') {
+        exibirAlertaRodadaDiferente();
+        return;
+    }
+    
+    if (statusRodada === 'mesma_rodada') {
+        if (dadosApp.dadosEnviados) {
+            exibirAlertaEnviado();
+        } else if (dadosApp.ultimoErroEnvio) {
+            exibirAlertaErroEnvio();
+        } else {
+            exibirAlertaRascunho();
+        }
+    }
+    
+    const prazoValido = verificarPrazoValido();
+    if (!prazoValido && dadosApp.participante && statusRodada === 'mesma_rodada' && !dadosApp.dadosEnviados) {
+        exibirAlertaPrazoExpirado();
+    }
+}
+
+function ocultarTodosAlertas() {
+    document.getElementById('alert-rodada-diferente').classList.add('d-none');
+    document.getElementById('alert-dados-enviados').classList.add('d-none');
+    document.getElementById('alert-erro-envio').classList.add('d-none');
+    document.getElementById('alert-prazo-expirado').classList.add('d-none');
+    document.getElementById('formulario-inicial').classList.add('d-none');
+    
+    // Limpar conteúdos
+    document.getElementById('alert-rodada-diferente').innerHTML = '';
+    document.getElementById('alert-dados-enviados').innerHTML = '';
+    document.getElementById('alert-erro-envio').innerHTML = '';
+    document.getElementById('alert-prazo-expirado').innerHTML = '';
+}
+
+function exibirAlertaRodadaDiferente() {
+    const alert = document.getElementById('alert-rodada-diferente');
+    
+    const heading = document.createElement('h6');
+    heading.className = 'alert-heading';
+    heading.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Dados de rodada diferente encontrados!';
+    
+    const texto = document.createElement('p');
+    texto.className = 'mb-2';
+    texto.innerHTML = `📋 Existem palpites salvos da <strong>${dadosApp.rodadaSalva}</strong> no seu dispositivo.<br>
+                       Para acessar a <strong>${configRodada.numeroRodada}</strong>, limpe os dados salvos primeiro.`;
+    
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-sm btn-danger mt-1';
+    btn.innerHTML = '<i class="bi bi-trash"></i> Limpar Dados';
+    btn.onclick = () => limparDados();
+    
+    alert.appendChild(heading);
+    alert.appendChild(texto);
+    alert.appendChild(btn);
+    alert.classList.remove('d-none');
+}
+
+function exibirAlertaEnviado() {
+    const alert = document.getElementById('alert-dados-enviados');
+    
+    const heading = document.createElement('h6');
+    heading.className = 'alert-heading';
+    heading.innerHTML = '<i class="bi bi-check-circle-fill text-success"></i> Palpites enviados com sucesso!';
+    
+    const texto = document.createElement('p');
+    texto.className = 'mb-2';
+    texto.innerHTML = `Seus palpites da <strong>${configRodada.numeroRodada}</strong> já foram enviados.`;
+    
+    const subtitulo = document.createElement('p');
+    subtitulo.className = 'fw-semibold mb-2';
+    subtitulo.textContent = 'Você pode visualizar ou alterar seus palpites:';
+    
+    const divBotoes = document.createElement('div');
+    divBotoes.className = 'd-flex gap-2 flex-wrap';
+    
+    const btnVisualizar = document.createElement('button');
+    btnVisualizar.className = 'btn btn-sm btn-outline-primary';
+    btnVisualizar.innerHTML = '<i class="bi bi-eye"></i> Visualizar/Editar';
+    btnVisualizar.onclick = () => visualizarPalpitesSalvos();
+    
+    const btnLimpar = document.createElement('button');
+    btnLimpar.className = 'btn btn-sm btn-danger';
+    btnLimpar.innerHTML = '<i class="bi bi-trash"></i> Limpar Dados';
+    btnLimpar.onclick = () => limparDados();
+    
+    divBotoes.appendChild(btnVisualizar);
+    divBotoes.appendChild(btnLimpar);
+    
+    alert.appendChild(heading);
+    alert.appendChild(texto);
+    alert.appendChild(subtitulo);
+    alert.appendChild(divBotoes);
+    alert.classList.remove('d-none');
+}
+
+function exibirAlertaErroEnvio() {
+    const erroMsg = dadosApp.ultimoErroEnvio.mensagem || 'Erro desconhecido';
+    const alert = document.getElementById('alert-erro-envio');
+    
+    const heading = document.createElement('h6');
+    heading.className = 'alert-heading';
+    
+    if (dadosApp.erroInternet || erroMsg.includes('internet') || erroMsg.includes('network') || erroMsg.includes('conexão')) {
+        heading.innerHTML = '<i class="bi bi-wifi-off"></i> Falta de conexão com a internet!';
+    } else {
+        heading.innerHTML = '<i class="bi bi-x-circle"></i> Erro no envio anterior!';
+    }
+    
+    const texto = document.createElement('p');
+    texto.className = 'mb-2';
+    
+    if (dadosApp.erroInternet || erroMsg.includes('internet') || erroMsg.includes('network') || erroMsg.includes('conexão')) {
+        texto.innerHTML = `Seus palpites da <strong>${configRodada.numeroRodada}</strong> foram salvos,<br>
+                          mas <strong>não foi possível enviá-los</strong>.<br>
+                          Tente enviar novamente quando estiver conectado à internet.`;
+    } else {
+        texto.innerHTML = `Seus palpites da <strong>${configRodada.numeroRodada}</strong> estão salvos,<br>
+                          mas o envio falhou.<br>
+                          <small class="text-muted">Erro: ${erroMsg}</small>`;
+    }
+    
+    const divBotoes = document.createElement('div');
+    divBotoes.className = 'd-flex gap-2 flex-wrap';
+    
+    const btnTentar = document.createElement('button');
+    btnTentar.className = 'btn btn-sm btn-primary';
+    btnTentar.innerHTML = '<i class="bi bi-arrow-clockwise"></i> Tentar Novamente';
+    btnTentar.onclick = () => reenviarPalpites();
+    
+    const btnVerificar = document.createElement('button');
+    btnVerificar.className = 'btn btn-sm btn-outline-primary';
+    btnVerificar.innerHTML = '<i class="bi bi-eye"></i> Verificar';
+    btnVerificar.onclick = () => visualizarPalpitesSalvos();
+    
+    const btnLimpar = document.createElement('button');
+    btnLimpar.className = 'btn btn-sm btn-danger';
+    btnLimpar.innerHTML = '<i class="bi bi-trash"></i> Limpar';
+    btnLimpar.onclick = () => limparDados();
+    
+    divBotoes.appendChild(btnTentar);
+    divBotoes.appendChild(btnVerificar);
+    divBotoes.appendChild(btnLimpar);
+    
+    alert.appendChild(heading);
+    alert.appendChild(texto);
+    alert.appendChild(divBotoes);
+    alert.classList.remove('d-none');
+}
+
+function exibirAlertaRascunho() {
+    let totalPreenchidos = 0;
+    if (dadosApp.palpitesSalvos.length > 0) {
+        const ultimoPalpite = dadosApp.palpitesSalvos[dadosApp.palpitesSalvos.length - 1];
+        totalPreenchidos = ultimoPalpite.palpites.filter(p => p.placarA && p.placarB).length;
+    }
+    
+    const alert = document.getElementById('alert-dados-enviados');
+    
+    const heading = document.createElement('h6');
+    heading.className = 'alert-heading';
+    heading.innerHTML = '<i class="bi bi-save2 text-primary"></i> Palpites salvos no dispositivo!';
+    
+    const texto = document.createElement('p');
+    texto.className = 'mb-2';
+    texto.innerHTML = `Você tem <strong>${totalPreenchidos} de 10</strong> palpites preenchidos.<br>
+                      Continue preenchendo <strong>todos os jogos</strong> para enviar seus palpites.`;
+    
+    const divBotoes = document.createElement('div');
+    divBotoes.className = 'd-flex gap-2 flex-wrap';
+    
+    const btnContinuar = document.createElement('button');
+    btnContinuar.className = 'btn btn-sm btn-primary';
+    btnContinuar.innerHTML = '<i class="bi bi-play-circle"></i> Continuar Preenchendo';
+    btnContinuar.onclick = () => visualizarPalpitesSalvos();
+    
+    const btnLimpar = document.createElement('button');
+    btnLimpar.className = 'btn btn-sm btn-danger';
+    btnLimpar.innerHTML = '<i class="bi bi-trash"></i> Limpar Dados';
+    btnLimpar.onclick = () => limparDados();
+    
+    divBotoes.appendChild(btnContinuar);
+    divBotoes.appendChild(btnLimpar);
+    
+    alert.appendChild(heading);
+    alert.appendChild(texto);
+    alert.appendChild(divBotoes);
+    alert.classList.remove('d-none');
+}
+
+function exibirAlertaPrazoExpirado() {
+    const alert = document.getElementById('alert-prazo-expirado');
+    
+    const heading = document.createElement('h6');
+    heading.className = 'alert-heading';
+    heading.innerHTML = '<i class="bi bi-clock"></i> Prazo Expirado!';
+    
+    const texto = document.createElement('p');
+    texto.className = 'mb-2';
+    texto.innerHTML = `O prazo para envio dos palpites desta rodada já expirou em <strong>${configRodada.dataLimite}</strong>.<br>
+                      Seus palpites foram salvos, mas <strong>não podem ser enviados</strong>.`;
+    
+    const divBotoes = document.createElement('div');
+    divBotoes.className = 'd-flex gap-2 flex-wrap';
+    
+    const btnVisualizar = document.createElement('button');
+    btnVisualizar.className = 'btn btn-sm btn-outline-primary';
+    btnVisualizar.innerHTML = '<i class="bi bi-eye"></i> Visualizar Palpites';
+    btnVisualizar.onclick = () => visualizarPalpitesSalvos();
+    
+    const btnLimpar = document.createElement('button');
+    btnLimpar.className = 'btn btn-sm btn-danger';
+    btnLimpar.innerHTML = '<i class="bi bi-trash"></i> Limpar Dados';
+    btnLimpar.onclick = () => limparDados();
+    
+    divBotoes.appendChild(btnVisualizar);
+    divBotoes.appendChild(btnLimpar);
+    
+    alert.appendChild(heading);
+    alert.appendChild(texto);
+    alert.appendChild(divBotoes);
+    alert.classList.remove('d-none');
+}
+
+function atualizarBotoesConclusao() {
+    const alertInternet = document.getElementById('alert-sem-internet-conclusao');
+    const alertSucesso = document.getElementById('alert-envio-sucesso-conclusao');
+    const alertPrazo = document.getElementById('alert-prazo-expirado-conclusao');
+    const dataLimiteExibida = document.getElementById('data-limite-exibida');
+    
+    alertInternet.innerHTML = '';
+    alertSucesso.innerHTML = '';
+    alertPrazo.innerHTML = '';
+    alertInternet.classList.add('d-none');
+    alertSucesso.classList.add('d-none');
+    alertPrazo.classList.add('d-none');
+    
+    const prazoValido = verificarPrazoValido();
+    
+    if (!prazoValido) {
+        const heading = document.createElement('h6');
+        heading.className = 'alert-heading';
+        heading.innerHTML = '<i class="bi bi-clock"></i> Prazo Expirado!';
+        
+        const texto = document.createElement('p');
+        texto.className = 'mb-0';
+        texto.innerHTML = `O prazo para envio dos palpites desta rodada já expirou em 
+                          <span class="fw-bold">${configRodada.dataLimite}</span>.`;
+        
+        alertPrazo.appendChild(heading);
+        alertPrazo.appendChild(texto);
+        alertPrazo.classList.remove('d-none');
+        dataLimiteExibida.textContent = configRodada.dataLimite;
+    } else if (dadosApp.dadosEnviados) {
+        const heading = document.createElement('h6');
+        heading.className = 'alert-heading';
+        heading.innerHTML = '<i class="bi bi-check-circle"></i> Palpites enviados com sucesso!';
+        
+        const texto = document.createElement('p');
+        texto.className = 'mb-0';
+        texto.textContent = `Seus palpites da ${configRodada.numeroRodada} já foram enviados.`;
+        
+        alertSucesso.appendChild(heading);
+        alertSucesso.appendChild(texto);
+        alertSucesso.classList.remove('d-none');
+    } else if (dadosApp.erroInternet) {
+        const heading = document.createElement('h6');
+        heading.className = 'alert-heading';
+        heading.innerHTML = '<i class="bi bi-wifi-off"></i> Sem conexão com internet!';
+        
+        const texto = document.createElement('p');
+        texto.className = 'mb-2';
+        texto.textContent = 'Seus palpites foram salvos, mas não foi possível enviá-los.';
+        
+        const btn = document.createElement('button');
+        btn.className = 'btn btn-primary btn-sm';
+        btn.innerHTML = '<i class="bi bi-arrow-clockwise"></i> Tentar Novamente';
+        btn.onclick = () => iniciarEnvioGoogleForms();
+        
+        alertInternet.appendChild(heading);
+        alertInternet.appendChild(texto);
+        alertInternet.appendChild(btn);
+        alertInternet.classList.remove('d-none');
+    }
+}
+
+// ====================
+// 🎯 FUNÇÕES PRINCIPAIS
+// ====================
 
 function formatarDataHora() {
     const agora = new Date();
@@ -239,45 +658,6 @@ function verificarPrazoValido() {
     return true;
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    document.addEventListener('touchmove', function(e) {
-        if (e.target.tagName === 'SELECT') {
-            e.preventDefault();
-        }
-    }, { passive: false });
-    
-    document.addEventListener('touchstart', function() {}, { passive: true });
-    
-    carregarDadosSalvos();
-    configurarFormularios();
-    atualizarInfoRodada();
-    verificarEstadoAplicacao();
-    
-    window.addEventListener('orientationchange', function() {
-        setTimeout(function() {
-            window.scrollTo(0, 0);
-            atualizarDashboardHeader();
-        }, 100);
-    });
-});
-
-function configurarFormularios() {
-    document.getElementById('formParticipante').addEventListener('submit', function(e) {
-        e.preventDefault();
-        dadosApp.participante = document.getElementById('nomeParticipante').value;
-        salvarDados();
-        mostrarTela('tela-palpites');
-        carregarJogos();
-        carregarPalpitesSalvos(); // 🆕 Carrega palpites salvos automaticamente
-        atualizarDashboardHeader();
-    });
-
-    document.getElementById('formPalpites').addEventListener('submit', function(e) {
-        e.preventDefault();
-        salvarPalpites();
-    });
-}
-
 function carregarDadosSalvos() {
     try {
         const dados = localStorage.getItem('bolaoBrasileiro');
@@ -312,283 +692,7 @@ function carregarDadosSalvos() {
 
 function verificarRodadaSalva() {
     if (!dadosApp.rodadaSalva) return 'dados_invalidos';
-    
-    if (dadosApp.rodadaSalva === configRodada.numeroRodada) {
-        return 'mesma_rodada';
-    } else {
-        return 'rodada_diferente';
-    }
-}
-
-function verificarEstadoAplicacao() {
-    const statusRodada = verificarRodadaSalva();
-    
-    // Esconde todos os alertas primeiro
-    document.getElementById('alert-rodada-diferente').classList.add('d-none');
-    document.getElementById('alert-dados-enviados').classList.add('d-none');
-    document.getElementById('alert-erro-envio').classList.add('d-none');
-    document.getElementById('alert-prazo-expirado').classList.add('d-none');
-    document.getElementById('formulario-inicial').classList.add('d-none');
-    
-    // Se não há dados salvos, mostra formulário inicial
-    if (!dadosApp.participante && dadosApp.palpitesSalvos.length === 0) {
-        document.getElementById('formulario-inicial').classList.remove('d-none');
-        return;
-    }
-    
-    // CASO 1: RODADA DIFERENTE
-    if (statusRodada === 'rodada_diferente') {
-        document.getElementById('texto-rodada-diferente').textContent = 
-            `📋 Existem palpites salvos da ${dadosApp.rodadaSalva} no seu dispositivo.\n\n` +
-            `Para acessar a ${configRodada.numeroRodada}, limpe os dados salvos primeiro.`;
-        document.getElementById('alert-rodada-diferente').classList.remove('d-none');
-        return;
-    }
-    
-    // CASO 2: MESMA RODADA
-    if (statusRodada === 'mesma_rodada') {
-        
-        // Subcaso 2.1: PALPITES JÁ ENVIADOS COM SUCESSO
-        if (dadosApp.dadosEnviados) {
-            document.getElementById('texto-dados-enviados').innerHTML = `
-                <strong>✅ Palpites enviados com sucesso!</strong><br>
-                Seus palpites da ${configRodada.numeroRodada} já foram enviados.
-            `;
-            document.getElementById('alert-dados-enviados').classList.remove('d-none');
-            return;
-        }
-        
-        // Subcaso 2.2: HOUVE ERRO NO ENVIO ANTERIOR
-        if (dadosApp.ultimoErroEnvio) {
-            const erroMsg = dadosApp.ultimoErroEnvio.mensagem || 'Erro desconhecido';
-            
-            if (dadosApp.erroInternet || erroMsg.includes('internet') || erroMsg.includes('network') || erroMsg.includes('conexão')) {
-                document.getElementById('texto-erro-envio').innerHTML = `
-                    <strong>📡 Falta de conexão com a internet!</strong><br>
-                    Seus palpites da ${configRodada.numeroRodada} foram salvos, mas não foi possível enviá-los.<br>
-                    Tente enviar novamente quando estiver conectado.
-                `;
-            } else {
-                document.getElementById('texto-erro-envio').innerHTML = `
-                    <strong>❌ Erro no envio anterior!</strong><br>
-                    Seus palpites da ${configRodada.numeroRodada} estão salvos, mas o envio falhou.<br>
-                    Erro: ${erroMsg}<br>
-                    Tente enviar novamente.
-                `;
-            }
-            
-            document.getElementById('alert-erro-envio').classList.remove('d-none');
-            return;
-        }
-        
-        // Subcaso 2.3: PALPITES SALVOS (RASCUNHO) - NUNCA ENVIADOS
-        // É O ÚNICO CASO QUE FALTAVA TRATAR CORRETAMENTE!
-        
-        // Conta quantos palpites estão preenchidos
-        let totalPreenchidos = 0;
-        if (dadosApp.palpitesSalvos.length > 0) {
-            const ultimoPalpite = dadosApp.palpitesSalvos[dadosApp.palpitesSalvos.length - 1];
-            totalPreenchidos = ultimoPalpite.palpites.filter(p => p.placarA && p.placarB).length;
-        }
-        
-        document.getElementById('texto-dados-enviados').innerHTML = `
-            <strong>📋 Palpites salvos no dispositivo!</strong><br>
-            Você tem <strong>${totalPreenchidos} de 10</strong> palpites preenchidos.<br>
-            Continue preenchendo todos os jogos para enviar seus palpites.
-        `;
-        
-        // Altera o texto do botão de "Visualizar/Editar" para "Continuar Preenchendo"
-        const alertDadosEnviados = document.getElementById('alert-dados-enviados');
-        const botoesExistentes = alertDadosEnviados.querySelectorAll('.btn');
-        
-        // Remove botões antigos se existirem
-        botoesExistentes.forEach(btn => btn.remove());
-        
-        // Adiciona novos botões
-        const divBotoes = document.createElement('div');
-        divBotoes.className = 'mt-2 d-flex gap-2 flex-wrap';
-        divBotoes.innerHTML = `
-            <button class="btn btn-sm btn-primary" onclick="visualizarPalpitesSalvos()">
-                <i class="bi bi-play-circle"></i> Continuar Preenchendo
-            </button>
-            <button class="btn btn-sm btn-danger" onclick="limparDados()">
-                <i class="bi bi-trash"></i> Limpar Dados
-            </button>
-        `;
-        
-        alertDadosEnviados.appendChild(divBotoes);
-        alertDadosEnviados.classList.remove('d-none');
-    }
-    
-    // Verifica prazo expirado
-    const prazoValido = verificarPrazoValido();
-    if (!prazoValido && dadosApp.participante && statusRodada === 'mesma_rodada' && !dadosApp.dadosEnviados) {
-        document.getElementById('alert-prazo-expirado').classList.remove('d-none');
-    }
-}
-
-function reenviarPalpites() {
-    if (dadosApp.palpitesSalvos.length === 0) {
-        alert('Nenhum palpite para enviar.');
-        return;
-    }
-    
-    if (!verificarPrazoValido()) {
-        alert('⏰ O prazo para envio dos palpites desta rodada já expirou.');
-        return;
-    }
-    
-    if (!navigator.onLine) {
-        alert('📡 Sem conexão com internet! Conecte-se para enviar os palpites.');
-        return;
-    }
-    
-    mostrarTela('tela-envio-google');
-    document.getElementById('resultado-envio').classList.add('d-none');
-    document.getElementById('btn-fechar-envio-internet').classList.add('d-none');
-    document.getElementById('btn-fechar-envio-sucesso').classList.add('d-none');
-    document.getElementById('btn-reiniciar-envio').classList.add('d-none');
-    enviarParaGoogleForms();
-}
-
-function reiniciarEnvio() {
-    if (!navigator.onLine) {
-        alert('📡 Sem conexão com internet! Conecte-se para reiniciar o envio.');
-        return;
-    }
-    
-    document.getElementById('resultado-envio').classList.add('d-none');
-    document.getElementById('btn-reiniciar-envio').classList.add('d-none');
-    document.getElementById('btn-fechar-envio-internet').classList.add('d-none');
-    document.getElementById('btn-fechar-envio-sucesso').classList.add('d-none');
-    
-    enviarParaGoogleForms();
-}
-
-function visualizarPalpitesEnviados() {
-    mostrarTela('tela-palpites');
-    carregarJogosComDadosSalvos();
-}
-
-function visualizarPalpitesSalvos() {
-    mostrarTela('tela-palpites');
-    carregarJogosComDadosSalvos();
-}
-
-function voltarParaEdicao() {
-    mostrarTela('tela-palpites');
-    carregarJogosComDadosSalvos();
-}
-
-function irParaConclusaoComErroInternet() {
-    dadosApp.erroInternet = true;
-    salvarDados();
-    mostrarTela('tela-conclusao');
-    atualizarBotoesConclusao();
-}
-
-function irParaConclusaoComSucesso() {
-    dadosApp.dadosEnviados = true;
-    dadosApp.erroInternet = false;
-    salvarDados();
-    mostrarTela('tela-conclusao');
-    atualizarBotoesConclusao();
-}
-
-function atualizarBotoesConclusao() {
-    const alertInternet = document.getElementById('alert-sem-internet-conclusao');
-    const alertSucesso = document.getElementById('alert-envio-sucesso-conclusao');
-    const alertPrazo = document.getElementById('alert-prazo-expirado-conclusao');
-    const dataLimiteExibida = document.getElementById('data-limite-exibida');
-    
-    const alertSucessoElement = document.getElementById('alert-envio-sucesso-conclusao');
-    if (alertSucessoElement) {
-        alertSucessoElement.innerHTML = `
-            <h6 class="alert-heading"><i class="bi bi-check-circle"></i> Palpites enviados com sucesso!</h6>
-            <p class="mb-0">Seus palpites da ${configRodada.numeroRodada} já foram enviados.</p>
-        `;
-    }
-    
-    alertInternet.classList.add('d-none');
-    alertSucesso.classList.add('d-none');
-    alertPrazo.classList.add('d-none');
-    
-    const prazoValido = verificarPrazoValido();
-    
-    if (!prazoValido) {
-        alertPrazo.classList.remove('d-none');
-        dataLimiteExibida.textContent = configRodada.dataLimite;
-    } else if (dadosApp.dadosEnviados) {
-        alertSucesso.classList.remove('d-none');
-    } else if (dadosApp.erroInternet) {
-        alertInternet.classList.remove('d-none');
-    }
-}
-
-function carregarJogosComDadosSalvos() {
-    const container = document.getElementById('jogos-container');
-    container.innerHTML = '';
-    
-    document.getElementById('participante-atual').textContent = dadosApp.participante;
-
-    const ultimoPalpite = dadosApp.palpitesSalvos[dadosApp.palpitesSalvos.length - 1];
-    const palpitesSalvos = ultimoPalpite.palpites;
-
-    jogosRodada.forEach(jogo => {
-        const palpiteSalvo = palpitesSalvos.find(p => p.jogoId === jogo.id);
-        const placarA = palpiteSalvo ? palpiteSalvo.placarA : '';
-        const placarB = palpiteSalvo ? palpiteSalvo.placarB : '';
-        
-        const card = document.createElement('div');
-        card.className = 'col-12 col-md-6 col-lg-4';
-        card.innerHTML = `
-            <div class="jogo-card h-100">
-                <div class="cabecalho-jogo rounded-top text-white p-3">
-                    <h6 class="mb-0">Jogo ${jogo.id}</h6>
-                </div>
-                <div class="p-3">
-                    <div class="row align-items-center">
-                        <div class="col-5 text-center">
-                            <div class="fw-bold mb-2 small">${jogo.timeA}</div>
-                            <select class="form-control input-placar" 
-                                    name="placarA-${jogo.id}" 
-                                    onchange="atualizarDashboardHeader(); salvarPalpiteAutomatico('${jogo.id}')">
-                                ${gerarOpcoesSelect(placarA)}
-                            </select>
-                        </div>
-                        <div class="col-2 text-center">
-                            <div class="fw-bold fs-5">X</div>
-                        </div>
-                        <div class="col-5 text-center">
-                            <div class="fw-bold mb-2 small">${jogo.timeB}</div>
-                            <select class="form-control input-placar" 
-                                    name="placarB-${jogo.id}" 
-                                    onchange="atualizarDashboardHeader(); salvarPalpiteAutomatico('${jogo.id}')">
-                                ${gerarOpcoesSelect(placarB)}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        container.appendChild(card);
-    });
-
-    const btnSalvar = document.getElementById('btn-salvar-palpites');
-    const titulo = document.getElementById('titulo-tela-palpites');
-    
-    btnSalvar.classList.remove('d-none');
-    
-    if (dadosApp.dadosEnviados) {
-        titulo.textContent = '👀 Visualizar/Editar Palpites - ' + configRodada.numeroRodada;
-        btnSalvar.innerHTML = '<i class="bi bi-save"></i> Salvar Alterações e Enviar';
-    } else {
-        titulo.textContent = '📝 Seus Palpites - ' + configRodada.numeroRodada;
-        btnSalvar.innerHTML = '<i class="bi bi-save"></i> Salvar e Enviar';
-    }
-
-    atualizarDashboardHeader();
+    return dadosApp.rodadaSalva === configRodada.numeroRodada ? 'mesma_rodada' : 'rodada_diferente';
 }
 
 function salvarDados() {
@@ -618,7 +722,6 @@ function atualizarDashboardHeader() {
     const barra = document.getElementById('header-barra-progresso-palpites');
     const textoBarra = document.getElementById('header-texto-barra');
     const bolaFutebol = document.getElementById('bola-futebol');
-    const bolaEmoji = bolaFutebol ? bolaFutebol.querySelector('.bola-emoji') : null;
     
     const preenchidos = contarJogosPreenchidos();
     const totalJogos = jogosRodada.length;
@@ -634,13 +737,8 @@ function atualizarDashboardHeader() {
     if (posicaoBola > 100) posicaoBola = 100;
     if (posicaoBola < 0) posicaoBola = 0;
     
-    if (posicaoBola === 0) {
-        bolaFutebol.style.left = '0%';
-    } else if (posicaoBola === 100) {
-        bolaFutebol.style.left = '100%';
-    } else {
-        bolaFutebol.style.left = posicaoBola + '%';
-    }
+    bolaFutebol.style.left = posicaoBola === 0 ? '0%' : 
+                             posicaoBola === 100 ? '100%' : posicaoBola + '%';
     
     barra.classList.remove('baixo', 'medio', 'alto', 'completo');
     bolaFutebol.classList.remove('baixo', 'medio', 'alto', 'animando', 'completo');
@@ -663,12 +761,7 @@ function atualizarDashboardHeader() {
     
     if (distancia > 0 && porcentagem < 100) {
         bolaFutebol.classList.add('animando');
-        
-        setTimeout(() => {
-            if (bolaFutebol) {
-                bolaFutebol.classList.remove('animando');
-            }
-        }, 800);
+        setTimeout(() => bolaFutebol.classList.remove('animando'), 800);
     }
     
     barra.style.transition = 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
@@ -702,10 +795,7 @@ function verificarTodosJogosPreenchidos() {
         }
     });
     
-    return {
-        todosPreenchidos,
-        jogosNaoPreenchidos
-    };
+    return { todosPreenchidos, jogosNaoPreenchidos };
 }
 
 function carregarJogos() {
@@ -727,8 +817,7 @@ function carregarJogos() {
                         <div class="col-5 text-center">
                             <div class="fw-bold mb-2 small">${jogo.timeA}</div>
                             <select class="form-control input-placar" 
-                                    name="placarA-${jogo.id}" 
-                                    onchange="atualizarDashboardHeader(); salvarPalpiteAutomatico('${jogo.id}')">
+                                    name="placarA-${jogo.id}">
                                 ${gerarOpcoesSelect()}
                             </select>
                         </div>
@@ -738,8 +827,7 @@ function carregarJogos() {
                         <div class="col-5 text-center">
                             <div class="fw-bold mb-2 small">${jogo.timeB}</div>
                             <select class="form-control input-placar" 
-                                    name="placarB-${jogo.id}" 
-                                    onchange="atualizarDashboardHeader(); salvarPalpiteAutomatico('${jogo.id}')">
+                                    name="placarB-${jogo.id}">
                                 ${gerarOpcoesSelect()}
                             </select>
                         </div>
@@ -749,7 +837,98 @@ function carregarJogos() {
         `;
 
         container.appendChild(card);
+        
+        // Adicionar eventos aos selects
+        const selectA = card.querySelector(`select[name="placarA-${jogo.id}"]`);
+        const selectB = card.querySelector(`select[name="placarB-${jogo.id}"]`);
+        
+        selectA.addEventListener('change', function() {
+            atualizarDashboardHeader();
+            salvarPalpiteAutomatico(jogo.id);
+        });
+        
+        selectB.addEventListener('change', function() {
+            atualizarDashboardHeader();
+            salvarPalpiteAutomatico(jogo.id);
+        });
     });
+}
+
+function carregarJogosComDadosSalvos() {
+    const container = document.getElementById('jogos-container');
+    container.innerHTML = '';
+    
+    document.getElementById('participante-atual').textContent = dadosApp.participante;
+
+    const ultimoPalpite = dadosApp.palpitesSalvos[dadosApp.palpitesSalvos.length - 1];
+    const palpitesSalvos = ultimoPalpite.palpites;
+
+    jogosRodada.forEach(jogo => {
+        const palpiteSalvo = palpitesSalvos.find(p => p.jogoId === jogo.id);
+        const placarA = palpiteSalvo ? palpiteSalvo.placarA : '';
+        const placarB = palpiteSalvo ? palpiteSalvo.placarB : '';
+        
+        const card = document.createElement('div');
+        card.className = 'col-12 col-md-6 col-lg-4';
+        card.innerHTML = `
+            <div class="jogo-card h-100">
+                <div class="cabecalho-jogo rounded-top text-white p-3">
+                    <h6 class="mb-0">Jogo ${jogo.id}</h6>
+                </div>
+                <div class="p-3">
+                    <div class="row align-items-center">
+                        <div class="col-5 text-center">
+                            <div class="fw-bold mb-2 small">${jogo.timeA}</div>
+                            <select class="form-control input-placar" 
+                                    name="placarA-${jogo.id}">
+                                ${gerarOpcoesSelect(placarA)}
+                            </select>
+                        </div>
+                        <div class="col-2 text-center">
+                            <div class="fw-bold fs-5">X</div>
+                        </div>
+                        <div class="col-5 text-center">
+                            <div class="fw-bold mb-2 small">${jogo.timeB}</div>
+                            <select class="form-control input-placar" 
+                                    name="placarB-${jogo.id}">
+                                ${gerarOpcoesSelect(placarB)}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(card);
+        
+        const selectA = card.querySelector(`select[name="placarA-${jogo.id}"]`);
+        const selectB = card.querySelector(`select[name="placarB-${jogo.id}"]`);
+        
+        selectA.addEventListener('change', function() {
+            atualizarDashboardHeader();
+            salvarPalpiteAutomatico(jogo.id);
+        });
+        
+        selectB.addEventListener('change', function() {
+            atualizarDashboardHeader();
+            salvarPalpiteAutomatico(jogo.id);
+        });
+    });
+
+    const btnSalvar = document.getElementById('btn-salvar-palpites');
+    const titulo = document.getElementById('titulo-tela-palpites');
+    
+    btnSalvar.classList.remove('d-none');
+    
+    if (dadosApp.dadosEnviados) {
+        titulo.textContent = '👀 Visualizar/Editar Palpites - ' + configRodada.numeroRodada;
+        btnSalvar.innerHTML = '<i class="bi bi-save"></i> Salvar Alterações e Enviar';
+    } else {
+        titulo.textContent = '📝 Seus Palpites - ' + configRodada.numeroRodada;
+        btnSalvar.innerHTML = '<i class="bi bi-save"></i> Salvar e Enviar';
+    }
+
+    atualizarDashboardHeader();
 }
 
 function salvarPalpites() {
@@ -813,14 +992,16 @@ function salvarPalpites() {
         enviarParaGoogleForms();
     } else {
         document.getElementById('resultado-envio').classList.remove('d-none');
-        document.getElementById('resultado-envio').innerHTML = `
+        const resultadoDiv = document.getElementById('resultado-envio');
+        resultadoDiv.innerHTML = `
             <div class="alert alert-warning">
                 <h6 class="alert-heading"><i class="bi bi-clock"></i> Prazo Expirado!</h6>
                 <p class="mb-0">
                     O prazo para envio dos palpites desta rodada já expirou em ${configRodada.dataLimite}.<br>
                     Seus palpites foram salvos, mas não podem ser enviados.
                 </p>
-            </div>`;
+            </div>
+        `;
         document.getElementById('btn-fechar-envio-sucesso').classList.remove('d-none');
     }
     
@@ -878,9 +1059,7 @@ function mostrarTela(telaId) {
     
     if (isIOS()) {
         document.body.style.overflow = 'hidden';
-        setTimeout(() => {
-            document.body.style.overflow = '';
-        }, 50);
+        setTimeout(() => document.body.style.overflow = '', 50);
     }
     
     const areaRodada = document.getElementById('area-rodada-header');
@@ -900,15 +1079,72 @@ function mostrarTela(telaId) {
         datasRodada.classList.remove('d-none');
     }
     
-    if (telaId === 'tela-participante') {
-        verificarEstadoAplicacao();
-    }
-    
-    if (telaId === 'tela-conclusao') {
-        atualizarBotoesConclusao();
-    }
+    if (telaId === 'tela-participante') verificarEstadoAplicacao();
+    if (telaId === 'tela-conclusao') atualizarBotoesConclusao();
     
     window.scrollTo(0, 0);
+}
+
+function visualizarPalpitesSalvos() {
+    mostrarTela('tela-palpites');
+    carregarJogosComDadosSalvos();
+}
+
+function visualizarPalpitesEnviados() {
+    visualizarPalpitesSalvos();
+}
+
+function reenviarPalpites() {
+    if (dadosApp.palpitesSalvos.length === 0) {
+        alert('Nenhum palpite para enviar.');
+        return;
+    }
+    
+    if (!verificarPrazoValido()) {
+        alert('⏰ O prazo para envio dos palpites desta rodada já expirou.');
+        return;
+    }
+    
+    if (!navigator.onLine) {
+        alert('📡 Sem conexão com internet! Conecte-se para enviar os palpites.');
+        return;
+    }
+    
+    mostrarTela('tela-envio-google');
+    document.getElementById('resultado-envio').classList.add('d-none');
+    document.getElementById('btn-fechar-envio-internet').classList.add('d-none');
+    document.getElementById('btn-fechar-envio-sucesso').classList.add('d-none');
+    document.getElementById('btn-reiniciar-envio').classList.add('d-none');
+    enviarParaGoogleForms();
+}
+
+function reiniciarEnvio() {
+    if (!navigator.onLine) {
+        alert('📡 Sem conexão com internet! Conecte-se para reiniciar o envio.');
+        return;
+    }
+    
+    document.getElementById('resultado-envio').classList.add('d-none');
+    document.getElementById('btn-reiniciar-envio').classList.add('d-none');
+    document.getElementById('btn-fechar-envio-internet').classList.add('d-none');
+    document.getElementById('btn-fechar-envio-sucesso').classList.add('d-none');
+    
+    enviarParaGoogleForms();
+}
+
+function irParaConclusaoComErroInternet() {
+    dadosApp.erroInternet = true;
+    salvarDados();
+    mostrarTela('tela-conclusao');
+    atualizarBotoesConclusao();
+}
+
+function irParaConclusaoComSucesso() {
+    dadosApp.dadosEnviados = true;
+    dadosApp.erroInternet = false;
+    salvarDados();
+    mostrarTela('tela-conclusao');
+    atualizarBotoesConclusao();
 }
 
 function iniciarEnvioGoogleForms() {
@@ -934,133 +1170,6 @@ function iniciarEnvioGoogleForms() {
     document.getElementById('btn-reiniciar-envio').classList.add('d-none');
     
     enviarParaGoogleForms();
-}
-
-async function compartilharCSV() {
-    if (dadosApp.palpitesSalvos.length === 0) {
-        alert('Nenhum palpite para compartilhar.');
-        return;
-    }
-
-    try {
-        const cabecalho = ['Rodada', 'Time_A', 'Placar_A', 'Placar_B', 'Time_B', 'Participante', 'Data_Hora'];
-
-        const linhas = [];
-        
-        const ultimoPalpite = dadosApp.palpitesSalvos[dadosApp.palpitesSalvos.length - 1];
-        
-        ultimoPalpite.palpites.forEach(jogo => {
-            const linha = [
-                ultimoPalpite.rodada,
-                jogo.timeA,
-                jogo.placarA,
-                jogo.placarB,
-                jogo.timeB,
-                ultimoPalpite.participante,
-                ultimoPalpite.data_hora_palpite
-            ];
-
-            const linhaFormatada = linha.map(valor => {
-                const valorString = String(valor);
-                if (valorString.includes(',') || valorString.includes('\n') || valorString.includes('"')) {
-                    return `"${valorString.replace(/"/g, '""')}"`;
-                }
-                return valorString;
-            }).join(',');
-
-            linhas.push(linhaFormatada);
-        });
-
-        const csvData = [cabecalho.join(','), ...linhas].join('\n');
-        
-        const nomeParticipante = dadosApp.participante || 'Participante';
-        const dataAtual = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
-        
-        const nomeParticipanteLimpo = nomeParticipante
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/[^a-zA-Z0-9\s]/g, '')
-            .replace(/\s+/g, '_');
-        
-        const nomeArquivo = `Bolao_${configRodada.numeroRodada.replace(/\s+/g, '_')}_${nomeParticipanteLimpo}_${dataAtual}.csv`;
-        
-        const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
-        
-        if (isIOS() && navigator.share) {
-            try {
-                const url = URL.createObjectURL(blob);
-                await navigator.share({
-                    title: 'Palpites do Bolão',
-                    text: `Palpites do ${configRodada.numeroRodada} - ${nomeParticipante}`,
-                    url: url
-                });
-                
-                URL.revokeObjectURL(url);
-                dadosApp.dadosCompartilhados = true;
-                salvarDados();
-                mostrarTela('tela-exportacao');
-                
-            } catch (error) {
-                fazerDownloadCSV(blob, nomeArquivo);
-            }
-        } else if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], nomeArquivo)] })) {
-            try {
-                const file = new File([blob], nomeArquivo, { type: 'text/csv' });
-                await navigator.share({
-                    title: 'Palpites do Bolão',
-                    text: `Palpites do ${configRodada.numeroRodada} - ${nomeParticipante}`,
-                    files: [file]
-                });
-                
-                dadosApp.dadosCompartilhados = true;
-                salvarDados();
-                mostrarTela('tela-exportacao');
-                
-            } catch (error) {
-                if (error.name !== 'AbortError') {
-                    fazerDownloadCSV(blob, nomeArquivo);
-                }
-            }
-        } else {
-            alert('Seu navegador não suporta compartilhamento de arquivos. Fazendo download...');
-            fazerDownloadCSV(blob, nomeArquivo);
-        }
-        
-    } catch (error) {
-        alert('❌ Erro ao gerar arquivo CSV. Tente novamente.');
-    }
-}
-
-function fazerDownloadCSV(blob, nomeArquivo) {
-    try {
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = nomeArquivo;
-        link.style.display = 'none';
-        
-        document.body.appendChild(link);
-        
-        const clickEvent = new MouseEvent('click', {
-            view: window,
-            bubbles: true,
-            cancelable: true
-        });
-        
-        link.dispatchEvent(clickEvent);
-        
-        setTimeout(() => {
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-            
-            dadosApp.dadosCompartilhados = true;
-            salvarDados();
-            mostrarTela('tela-exportacao');
-        }, 100);
-        
-    } catch (error) {
-        alert('❌ Erro ao fazer download do arquivo. Tente novamente.');
-    }
 }
 
 async function enviarParaGoogleForms() {
@@ -1102,7 +1211,6 @@ async function enviarParaGoogleForms() {
         const totalJogos = ultimoPalpite.palpites.length;
         
         let enviados = 0;
-        let erros = [];
 
         document.getElementById('texto-progresso-envio').textContent = 
             `Enviando 0 de ${totalJogos}`;
@@ -1143,10 +1251,6 @@ async function enviarParaGoogleForms() {
                 await new Promise(resolve => setTimeout(resolve, 300));
                 
             } catch (error) {
-                erros.push({ 
-                    jogoId: jogo.jogoId,
-                    error: error.message 
-                });
                 break;
             }
         }
@@ -1244,6 +1348,124 @@ async function enviarParaGoogleForms() {
     }
 }
 
+async function compartilharCSV() {
+    if (dadosApp.palpitesSalvos.length === 0) {
+        alert('Nenhum palpite para compartilhar.');
+        return;
+    }
+
+    try {
+        const cabecalho = ['Rodada', 'Time_A', 'Placar_A', 'Placar_B', 'Time_B', 'Participante', 'Data_Hora'];
+        const linhas = [];
+        const ultimoPalpite = dadosApp.palpitesSalvos[dadosApp.palpitesSalvos.length - 1];
+        
+        ultimoPalpite.palpites.forEach(jogo => {
+            const linha = [
+                ultimoPalpite.rodada,
+                jogo.timeA,
+                jogo.placarA,
+                jogo.placarB,
+                jogo.timeB,
+                ultimoPalpite.participante,
+                ultimoPalpite.data_hora_palpite
+            ];
+
+            const linhaFormatada = linha.map(valor => {
+                const valorString = String(valor);
+                if (valorString.includes(',') || valorString.includes('\n') || valorString.includes('"')) {
+                    return `"${valorString.replace(/"/g, '""')}"`;
+                }
+                return valorString;
+            }).join(',');
+
+            linhas.push(linhaFormatada);
+        });
+
+        const csvData = [cabecalho.join(','), ...linhas].join('\n');
+        
+        const nomeParticipante = dadosApp.participante || 'Participante';
+        const dataAtual = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
+        
+        const nomeParticipanteLimpo = nomeParticipante
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-zA-Z0-9\s]/g, '')
+            .replace(/\s+/g, '_');
+        
+        const nomeArquivo = `Bolao_${configRodada.numeroRodada.replace(/\s+/g, '_')}_${nomeParticipanteLimpo}_${dataAtual}.csv`;
+        
+        const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+        
+        if (isIOS() && navigator.share) {
+            try {
+                const url = URL.createObjectURL(blob);
+                await navigator.share({
+                    title: 'Palpites do Bolão',
+                    text: `Palpites do ${configRodada.numeroRodada} - ${nomeParticipante}`,
+                    url: url
+                });
+                
+                URL.revokeObjectURL(url);
+                dadosApp.dadosCompartilhados = true;
+                salvarDados();
+                mostrarTela('tela-exportacao');
+                
+            } catch (error) {
+                fazerDownloadCSV(blob, nomeArquivo);
+            }
+        } else if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], nomeArquivo)] })) {
+            try {
+                const file = new File([blob], nomeArquivo, { type: 'text/csv' });
+                await navigator.share({
+                    title: 'Palpites do Bolão',
+                    text: `Palpites do ${configRodada.numeroRodada} - ${nomeParticipante}`,
+                    files: [file]
+                });
+                
+                dadosApp.dadosCompartilhados = true;
+                salvarDados();
+                mostrarTela('tela-exportacao');
+                
+            } catch (error) {
+                if (error.name !== 'AbortError') {
+                    fazerDownloadCSV(blob, nomeArquivo);
+                }
+            }
+        } else {
+            alert('Seu navegador não suporta compartilhamento de arquivos. Fazendo download...');
+            fazerDownloadCSV(blob, nomeArquivo);
+        }
+        
+    } catch (error) {
+        alert('❌ Erro ao gerar arquivo CSV. Tente novamente.');
+    }
+}
+
+function fazerDownloadCSV(blob, nomeArquivo) {
+    try {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = nomeArquivo;
+        link.style.display = 'none';
+        
+        document.body.appendChild(link);
+        link.click();
+        
+        setTimeout(() => {
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            dadosApp.dadosCompartilhados = true;
+            salvarDados();
+            mostrarTela('tela-exportacao');
+        }, 100);
+        
+    } catch (error) {
+        alert('❌ Erro ao fazer download do arquivo. Tente novamente.');
+    }
+}
+
 function aplicarAjustesIOS() {
     if (isIOS()) {
         document.addEventListener('focusin', function(e) {
@@ -1254,9 +1476,7 @@ function aplicarAjustesIOS() {
         
         document.addEventListener('focusout', function(e) {
             if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT') {
-                setTimeout(() => {
-                    document.body.style.fontSize = '';
-                }, 100);
+                setTimeout(() => document.body.style.fontSize = '', 100);
             }
         });
     }

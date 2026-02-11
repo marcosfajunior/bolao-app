@@ -14,23 +14,20 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     
-    <!-- CSS mínimo personalizado versionamento -->
-    <link rel="stylesheet" href="style.css?v=4.1">
+    <!-- CSS personalizado Versionamento -->
+    <link rel="stylesheet" href="style.css?v=4.2">
 </head>
 <body class="d-flex flex-column min-vh-100">
     <!-- Header Fixo -->
     <header class="header-fixo fixed-top bg-white shadow-sm border-bottom">
         <div class="container py-2">
             <div class="text-center">
-                <!-- NOME DO BOLÃO -->
                 <h5 class="mb-1 fw-bold text-dark" id="nome-bolao"></h5>
                 
-                <!-- NÚMERO DA RODADA -->
                 <div id="area-rodada-header" class="mb-1">
                     <p class="mb-0 fw-bold text-primary" id="numero-rodada"></p>
                 </div>
                 
-                <!-- DATAS DA RODADA -->
                 <div id="datas-rodada-container" class="small">
                     <div class="mb-1">
                         <i class="bi bi-calendar text-secondary"></i> 
@@ -42,44 +39,36 @@
                     </div>
                 </div>
                 
-                <!-- Barra de Progresso com bola de futebol rolante -->
+                <!-- Barra de Progresso -->
                 <div class="progresso-palpites-header d-none mt-3">
                     <div class="barra-progresso-com-bolinha mx-auto" style="max-width: 400px;">
-                        <!-- Container principal -->
                         <div class="position-relative">
-                            <!-- Texto do progresso -->
                             <div class="text-center mb-1">
                                 <span class="fw-bold text-dark" id="header-texto-barra">0 de 0 (0%)</span>
                             </div>
                             
-                            <!-- Barra de progresso com bola de futebol -->
                             <div class="progress-container position-relative">
-                                <!-- Faixa da barra -->
                                 <div class="barra-faixa position-absolute top-50 start-0 end-0 translate-middle-y" 
                                      style="height: 6px; background-color: #e9ecef; border-radius: 3px;">
                                 </div>
                                 
-                                <!-- Barra de progresso (parte colorida) -->
                                 <div class="barra-progresso position-absolute top-50 start-0 translate-middle-y" 
                                      id="header-barra-progresso-palpites"
                                      style="height: 6px; width: 0%; border-radius: 3px 0 0 3px;">
                                 </div>
                                 
-                                <!-- Bola de futebol que se move e roda -->
                                 <div class="bola-futebol position-absolute top-50 translate-middle-y d-flex align-items-center justify-content-center" 
                                      id="bola-futebol"
                                      style="left: 0%;">
                                     <span class="bola-emoji">⚽</span>
                                 </div>
                                 
-                                <!-- Marcadores -->
                                 <div class="marcadores-bar position-absolute top-50 start-0 end-0 translate-middle-y d-flex justify-content-between">
                                     <div class="marcador inicio" style="width: 1px; height: 10px; background-color: #adb5bd;"></div>
                                     <div class="marcador fim" style="width: 1px; height: 10px; background-color: #adb5bd;"></div>
                                 </div>
                             </div>
                             
-                            <!-- Labels dos extremos -->
                             <div class="d-flex justify-content-between mt-1 small text-muted">
                                 <span>0%</span>
                                 <span>100%</span>
@@ -106,69 +95,13 @@
                                 </h4>
                             </div>
                             <div class="card-body">
-                                <!-- Alertas -->
-                                <div id="alert-rodada-diferente" class="alert alert-warning d-none">
-                                    <h6 class="alert-heading">
-                                        <i class="bi bi-exclamation-triangle"></i> 
-                                        Dados de rodada diferente encontrados!
-                                    </h6>
-                                    <p id="texto-rodada-diferente" class="mb-2"></p>
-                                    <button class="btn btn-sm btn-danger mt-1" onclick="limparDados()">
-                                        <i class="bi bi-trash"></i> Limpar Dados
-                                    </button>
-                                </div>
+                                <!-- ALERTAS - APENAS CONTAINERS -->
+                                <div id="alert-rodada-diferente" class="alert alert-warning d-none"></div>
+                                <div id="alert-dados-enviados" class="alert alert-info d-none"></div>
+                                <div id="alert-erro-envio" class="alert alert-danger d-none"></div>
+                                <div id="alert-prazo-expirado" class="alert alert-warning d-none"></div>
                                 
-                                <div id="alert-dados-enviados" class="alert alert-info d-none">
-                                    <h6 class="alert-heading">
-                                        <i class="bi bi-check-circle"></i> 
-                                        Palpites já enviados!
-                                    </h6>
-                                    <p id="texto-dados-enviados" class="mb-2"></p>
-                                    <p class="fw-semibold mb-2">Você pode visualizar ou alterar seus palpites:</p>
-                                    <button class="btn btn-sm btn-outline-primary me-2" onclick="visualizarPalpitesEnviados()">
-                                        <i class="bi bi-eye"></i> Visualizar/Editar
-                                    </button>
-                                    <button class="btn btn-sm btn-danger" onclick="limparDados()">
-                                        <i class="bi bi-trash"></i> Limpar Dados
-                                    </button>
-                                </div>
-                                
-                                <div id="alert-erro-envio" class="alert alert-danger d-none">
-                                    <h6 class="alert-heading">
-                                        <i class="bi bi-x-circle"></i> 
-                                        Erro no envio anterior!
-                                    </h6>
-                                    <p id="texto-erro-envio" class="mb-2"></p>
-                                    <div class="btn-group btn-group-sm" role="group">
-                                        <button class="btn btn-primary" onclick="reenviarPalpites()">
-                                            <i class="bi bi-arrow-clockwise"></i> Tentar Novamente
-                                        </button>
-                                        <button class="btn btn-outline-primary" onclick="visualizarPalpitesSalvos()">
-                                            <i class="bi bi-eye"></i> Verificar
-                                        </button>
-                                        <button class="btn btn-danger" onclick="limparDados()">
-                                            <i class="bi bi-trash"></i> Limpar
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <div id="alert-prazo-expirado" class="alert alert-warning d-none">
-                                    <h6 class="alert-heading">
-                                        <i class="bi bi-clock"></i> 
-                                        Prazo Expirado!
-                                    </h6>
-                                    <p class="mb-2">O prazo para envio dos palpites desta rodada já expirou.</p>
-                                    <div class="btn-group btn-group-sm" role="group">
-                                        <button class="btn btn-outline-primary" onclick="visualizarPalpitesSalvos()">
-                                            <i class="bi bi-eye"></i> Visualizar
-                                        </button>
-                                        <button class="btn btn-danger" onclick="limparDados()">
-                                            <i class="bi bi-trash"></i> Limpar
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <!-- Formulário -->
+                                <!-- FORMULÁRIO INICIAL -->
                                 <div id="formulario-inicial" class="d-none">
                                     <form id="formParticipante">
                                         <div class="mb-3">
@@ -193,7 +126,7 @@
                                                 <option value="WESCLEY GALDINO">WESCLEY GALDINO</option>
                                             </select>
                                         </div>
-                                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                                        <button type="submit" class="btn btn-primary btn-lg w-100" id="btn-inserir-palpites">
                                             <i class="bi bi-target"></i> Inserir Palpites
                                         </button>
                                     </form>
@@ -250,32 +183,12 @@
                                 </h4>
                             </div>
                             <div class="card-body text-center">
-                                <div id="alert-prazo-expirado-conclusao" class="alert alert-warning d-none">
-                                    <h6 class="alert-heading">
-                                        <i class="bi bi-clock"></i> Prazo Expirado!
-                                    </h6>
-                                    <p class="mb-0">
-                                        O prazo para envio dos palpites desta rodada já expirou em 
-                                        <span id="data-limite-exibida" class="fw-bold"></span>.
-                                    </p>
-                                </div>
+                                <!-- ALERTAS - APENAS CONTAINERS -->
+                                <div id="alert-prazo-expirado-conclusao" class="alert alert-warning d-none"></div>
                                 
                                 <div id="conteudo-normal-conclusao">
-                                    <div id="alert-sem-internet-conclusao" class="alert alert-info d-none mb-3">
-                                        <h6 class="alert-heading">
-                                            <i class="bi bi-wifi-off"></i> Sem conexão com internet!
-                                        </h6>
-                                        <p class="mb-2">Seus palpites foram salvos, mas não foi possível enviá-los.</p>
-                                        <button class="btn btn-primary btn-sm" onclick="iniciarEnvioGoogleForms()">
-                                            <i class="bi bi-arrow-clockwise"></i> Tentar Novamente
-                                        </button>
-                                    </div>
-                                    
-                                    <div id="alert-envio-sucesso-conclusao" class="alert alert-success d-none mb-3">
-                                        <h6 class="alert-heading">
-                                            <i class="bi bi-check-circle"></i> Palpites enviados com sucesso!
-                                        </h6>
-                                    </div>
+                                    <div id="alert-sem-internet-conclusao" class="alert alert-info d-none mb-3"></div>
+                                    <div id="alert-envio-sucesso-conclusao" class="alert alert-success d-none mb-3"></div>
                                     
                                     <h5 class="mb-3">
                                         <i class="bi bi-check2-circle text-success"></i> 
@@ -286,17 +199,17 @@
                                     </p>
 
                                     <div class="d-grid gap-2 mb-4">
-                                        <button class="btn btn-outline-primary" onclick="visualizarPalpitesSalvos()">
+                                        <button class="btn btn-outline-primary" id="btn-editar-palpites">
                                             <i class="bi bi-pencil"></i> Editar Palpites
                                         </button>
-                                        <button class="btn btn-info" id="btn-compartilhar-csv" onclick="compartilharCSV()">
+                                        <button class="btn btn-info" id="btn-compartilhar-csv">
                                             <i class="bi bi-share"></i> Compartilhar CSV
                                         </button>
                                     </div>
                                 </div>
 
                                 <div id="container-limpar-conclusao" class="mt-4 pt-3 border-top">
-                                    <button class="btn btn-danger w-100 mb-2" onclick="limparDados()">
+                                    <button class="btn btn-danger w-100 mb-2" id="btn-limpar-dados-conclusao">
                                         <i class="bi bi-trash"></i> Limpar Dados do Dispositivo
                                     </button>
                                     <small class="text-muted d-block">
@@ -330,7 +243,7 @@
                                 <h5>Dados Compartilhados com Sucesso!</h5>
                                 <p class="text-muted mb-4">Arquivo CSV compartilhado no seu dispositivo</p>
                                 
-                                <button class="btn btn-success btn-lg w-100" onclick="voltarConclusao()">
+                                <button class="btn btn-success btn-lg w-100" id="btn-voltar-conclusao">
                                     <i class="bi bi-arrow-left"></i> Voltar
                                 </button>
                             </div>
@@ -361,15 +274,15 @@
                                 
                                 <div id="resultado-envio" class="d-none"></div>
                                 
-                                <button id="btn-fechar-envio-internet" class="btn btn-primary w-100 d-none mt-3" onclick="irParaConclusaoComErroInternet()">
+                                <button id="btn-fechar-envio-internet" class="btn btn-primary w-100 d-none mt-3">
                                     <i class="bi bi-check-circle"></i> Fechar
                                 </button>
                                 
-                                <button id="btn-fechar-envio-sucesso" class="btn btn-success w-100 d-none mt-3" onclick="irParaConclusaoComSucesso()">
+                                <button id="btn-fechar-envio-sucesso" class="btn btn-success w-100 d-none mt-3">
                                     <i class="bi bi-check-circle"></i> Fechar
                                 </button>
                                 
-                                <button id="btn-reiniciar-envio" class="btn btn-warning w-100 d-none mt-2" onclick="reiniciarEnvio()">
+                                <button id="btn-reiniciar-envio" class="btn btn-warning w-100 d-none mt-2">
                                     <i class="bi bi-arrow-clockwise"></i> Reiniciar Envio
                                 </button>
                             </div>
@@ -393,7 +306,7 @@
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- JavaScript personalizado versionamento -->
-    <script src="app.js?v=4.1"></script>
+    <!-- JavaScript personalizado Versionamento -->
+    <script src="app.js?v=4.2"></script>
 </body>
 </html>
