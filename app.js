@@ -1,29 +1,29 @@
-// app.js?v=3.0
+// app.js?v=4.0
 
 // ====================
 // 🔧 CONFIGURAÇÃO ÚNICA
 // ====================
 
-const VERSAO_ATUAL = "20260206_1600_R03";
+const VERSAO_ATUAL = "20260211_0000_R04";
 
 const configRodada = {
     nomeBolao: "⚽ Bolão Campeonato Brasileiro 2026",
-    numeroRodada: "RODADA 03",
-    dataInicio: "10/02/2026",
-    dataLimite: "09/02/2026"
+    numeroRodada: "RODADA 04",
+    dataInicio: "25/02/2026",
+    dataLimite: "24/02/2026"
 };
 
 const jogosRodada = [
-    { id: "1", timeA: "Fluminense RJ", timeB: "Botafogo RJ" },
-    { id: "2", timeA: "Vasco RJ", timeB: "Bahia BA" },
-    { id: "3", timeA: "São Paulo SP", timeB: "Grêmio RS" },
-    { id: "4", timeA: "Corinthians SP", timeB: "Bragantino SP" },
-    { id: "5", timeA: "Mirassol SP", timeB: "Cruzeiro MG" },
-    { id: "6", timeA: "Atlético MG", timeB: "Remo PA" },
-    { id: "7", timeA: "Internacional RS", timeB: "Palmeiras SP" },
-    { id: "8", timeA: "Athletico PR", timeB: "Santos SP" },
-    { id: "9", timeA: "Vitória BA", timeB: "Flamengo RJ" },
-    { id: "10", timeA: "Chapecoense SC", timeB: "Coritiba PR" }
+    { id: "1", timeA: "Flamengo RJ", timeB: "Mirassol SP" },
+    { id: "2", timeA: "Botafogo RJ", timeB: "Vitória BA" },
+    { id: "3", timeA: "Santos SP", timeB: "Vasco RJ" },
+    { id: "4", timeA: "Palmeiras SP", timeB: "Fluminense RJ" },
+    { id: "5", timeA: "Bragantino SP", timeB: "Athletico PR" },
+    { id: "6", timeA: "Cruzeiro MG", timeB: "Corinthians SP" },
+    { id: "7", timeA: "Grêmio RS", timeB: "Atlético MG" },
+    { id: "8", timeA: "Coritiba PR", timeB: "São Paulo SP" },
+    { id: "9", timeA: "Bahia BA", timeB: "Chapecoense SC" },
+    { id: "10", timeA: "Remo PA", timeB: "Internacional RS" }
 ];
 
 const CONFIG_GOOGLE_FORMS = {
@@ -73,6 +73,122 @@ let dadosApp = {
     ultimoErroEnvio: null,
     erroInternet: false
 };
+
+// ====================
+// 🆕 SISTEMA DE TOAST NOTIFICATION
+// ====================
+
+function mostrarToast(mensagem, tipo = 'success') {
+    // Remove toast existente se houver
+    const toastExistente = document.querySelector('.toast-notification');
+    if (toastExistente) {
+        toastExistente.remove();
+    }
+
+    // Cria o toast
+    const toast = document.createElement('div');
+    toast.className = `toast-notification toast-${tipo}`;
+    
+    let icone = '';
+    if (tipo === 'success') icone = '<i class="bi bi-check-circle-fill me-2"></i>';
+    if (tipo === 'warning') icone = '<i class="bi bi-exclamation-triangle-fill me-2"></i>';
+    if (tipo === 'info') icone = '<i class="bi bi-info-circle-fill me-2"></i>';
+    
+    toast.innerHTML = `
+        ${icone}
+        <span class="flex-grow-1">${mensagem}</span>
+        <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    // Auto-remover após 3 segundos
+    setTimeout(() => {
+        if (toast.parentElement) {
+            toast.remove();
+        }
+    }, 3000);
+}
+
+// ====================
+// 🆕 SALVAMENTO AUTOMÁTICO
+// ====================
+
+function salvarPalpiteAutomatico(jogoId) {
+    const placarA = document.querySelector(`select[name="placarA-${jogoId}"]`);
+    const placarB = document.querySelector(`select[name="placarB-${jogoId}"]`);
+    
+    // Só salva se ambos os placares estiverem preenchidos
+    if (placarA && placarB && placarA.value && placarB.value) {
+        
+        // Busca palpites atuais
+        const palpites = [];
+        
+        jogosRodada.forEach(jogo => {
+            const pA = document.querySelector(`select[name="placarA-${jogo.id}"]`);
+            const pB = document.querySelector(`select[name="placarB-${jogo.id}"]`);
+            
+            palpites.push({
+                jogoId: jogo.id,
+                timeA: jogo.timeA,
+                placarA: pA && pA.value ? pA.value : '',
+                timeB: jogo.timeB,
+                placarB: pB && pB.value ? pB.value : ''
+            });
+        });
+
+        const palpiteRodada = {
+            timestamp: new Date().toISOString(),
+            data_hora: new Date().toLocaleString('pt-BR'),
+            data_hora_palpite: '', // Só preenchida no envio
+            participante: dadosApp.participante,
+            rodada: configRodada.numeroRodada,
+            palpites: palpites
+        };
+
+        // Atualiza os palpites salvos
+        if (dadosApp.palpitesSalvos.length > 0) {
+            dadosApp.palpitesSalvos[dadosApp.palpitesSalvos.length - 1] = palpiteRodada;
+        } else {
+            dadosApp.palpitesSalvos.push(palpiteRodada);
+        }
+        
+        salvarDados();
+        
+        // Mostra feedback visual
+        const jogo = jogosRodada.find(j => j.id === jogoId);
+        mostrarToast(`✅ Palpite do Jogo ${jogoId} (${jogo.timeA} x ${jogo.timeB}) salvo!`, 'success');
+    }
+}
+
+// ====================
+// 🆕 CARREGAR PALPITES SALVOS
+// ====================
+
+function carregarPalpitesSalvos() {
+    if (dadosApp.palpitesSalvos.length > 0) {
+        const ultimoPalpite = dadosApp.palpitesSalvos[dadosApp.palpitesSalvos.length - 1];
+        
+        jogosRodada.forEach(jogo => {
+            const palpiteSalvo = ultimoPalpite.palpites.find(p => p.jogoId === jogo.id);
+            if (palpiteSalvo && palpiteSalvo.placarA && palpiteSalvo.placarB) {
+                const placarA = document.querySelector(`select[name="placarA-${jogo.id}"]`);
+                const placarB = document.querySelector(`select[name="placarB-${jogo.id}"]`);
+                
+                if (placarA && placarB) {
+                    placarA.value = palpiteSalvo.placarA;
+                    placarB.value = palpiteSalvo.placarB;
+                }
+            }
+        });
+        
+        // Mostra toast informativo apenas se houver palpites salvos
+        const totalPreenchidos = ultimoPalpite.palpites.filter(p => p.placarA && p.placarB).length;
+        if (totalPreenchidos > 0) {
+            mostrarToast(`📋 ${totalPreenchidos} palpites carregados do rascunho`, 'info');
+        }
+    }
+}
 
 function formatarDataHora() {
     const agora = new Date();
@@ -152,6 +268,7 @@ function configurarFormularios() {
         salvarDados();
         mostrarTela('tela-palpites');
         carregarJogos();
+        carregarPalpitesSalvos(); // 🆕 Carrega palpites salvos automaticamente
         atualizarDashboardHeader();
     });
 
@@ -386,7 +503,7 @@ function carregarJogosComDadosSalvos() {
                             <div class="fw-bold mb-2 small">${jogo.timeA}</div>
                             <select class="form-control input-placar" 
                                     name="placarA-${jogo.id}" 
-                                    onchange="atualizarDashboardHeader()">
+                                    onchange="atualizarDashboardHeader(); salvarPalpiteAutomatico('${jogo.id}')">
                                 ${gerarOpcoesSelect(placarA)}
                             </select>
                         </div>
@@ -397,7 +514,7 @@ function carregarJogosComDadosSalvos() {
                             <div class="fw-bold mb-2 small">${jogo.timeB}</div>
                             <select class="form-control input-placar" 
                                     name="placarB-${jogo.id}" 
-                                    onchange="atualizarDashboardHeader()">
+                                    onchange="atualizarDashboardHeader(); salvarPalpiteAutomatico('${jogo.id}')">
                                 ${gerarOpcoesSelect(placarB)}
                             </select>
                         </div>
@@ -431,7 +548,7 @@ function salvarDados() {
         localStorage.setItem('bolaoBrasileiro', JSON.stringify(dadosApp));
         atualizarDashboardHeader();
     } catch (e) {
-        alert('⚠️ Erro ao salvar dados. Tente novamente.');
+        mostrarToast('⚠️ Erro ao salvar dados. Tente novamente.', 'warning');
     }
 }
 
@@ -458,22 +575,16 @@ function atualizarDashboardHeader() {
     const totalJogos = jogosRodada.length;
     const porcentagem = Math.round((preenchidos / totalJogos) * 100);
     
-    // Salva a posição anterior para calcular a distância percorrida
     const posicaoAnterior = parseFloat(barra.style.width) || 0;
     const distancia = Math.abs(porcentagem - posicaoAnterior);
     
-    // Atualiza a barra de progresso
     barra.style.width = porcentagem + '%';
-    
-    // Atualiza o texto acima da barra
     textoBarra.textContent = `${preenchidos} de ${totalJogos} (${porcentagem}%)`;
     
-    // Move a bola de futebol
     let posicaoBola = porcentagem;
     if (posicaoBola > 100) posicaoBola = 100;
     if (posicaoBola < 0) posicaoBola = 0;
     
-    // Ajusta para que a bola não saia da barra
     if (posicaoBola === 0) {
         bolaFutebol.style.left = '0%';
     } else if (posicaoBola === 100) {
@@ -482,11 +593,9 @@ function atualizarDashboardHeader() {
         bolaFutebol.style.left = posicaoBola + '%';
     }
     
-    // Remove classes de cor anteriores
     barra.classList.remove('baixo', 'medio', 'alto', 'completo');
     bolaFutebol.classList.remove('baixo', 'medio', 'alto', 'animando', 'completo');
     
-    // Adiciona classe de cor baseada na porcentagem
     if (porcentagem < 30) {
         barra.classList.add('baixo');
         bolaFutebol.classList.add('baixo');
@@ -498,25 +607,21 @@ function atualizarDashboardHeader() {
         bolaFutebol.classList.add('alto');
     }
     
-    // Adiciona efeito especial quando atinge 100%
     if (porcentagem === 100) {
         barra.classList.add('completo');
         bolaFutebol.classList.add('completo');
     }
     
-    // Adiciona animação de rotação durante o movimento
     if (distancia > 0 && porcentagem < 100) {
         bolaFutebol.classList.add('animando');
         
-        // Remove a classe de animação após a transição terminar
         setTimeout(() => {
             if (bolaFutebol) {
                 bolaFutebol.classList.remove('animando');
             }
-        }, 800); // Tempo igual à duração da transição
+        }, 800);
     }
     
-    // Animação suave com easing
     barra.style.transition = 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
     bolaFutebol.style.transition = 'left 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
 }
@@ -574,7 +679,7 @@ function carregarJogos() {
                             <div class="fw-bold mb-2 small">${jogo.timeA}</div>
                             <select class="form-control input-placar" 
                                     name="placarA-${jogo.id}" 
-                                    onchange="atualizarDashboardHeader()">
+                                    onchange="atualizarDashboardHeader(); salvarPalpiteAutomatico('${jogo.id}')">
                                 ${gerarOpcoesSelect()}
                             </select>
                         </div>
@@ -585,7 +690,7 @@ function carregarJogos() {
                             <div class="fw-bold mb-2 small">${jogo.timeB}</div>
                             <select class="form-control input-placar" 
                                     name="placarB-${jogo.id}" 
-                                    onchange="atualizarDashboardHeader()">
+                                    onchange="atualizarDashboardHeader(); salvarPalpiteAutomatico('${jogo.id}')">
                                 ${gerarOpcoesSelect()}
                             </select>
                         </div>
@@ -709,7 +814,7 @@ function limparDados() {
         document.getElementById('alert-erro-envio').classList.add('d-none');
         document.getElementById('alert-prazo-expirado').classList.add('d-none');
         
-        alert('✅ Dados limpos com sucesso!');
+        mostrarToast('✅ Dados limpos com sucesso!', 'success');
         
         mostrarTela('tela-participante');
         verificarEstadoAplicacao();
@@ -754,7 +859,6 @@ function mostrarTela(telaId) {
         atualizarBotoesConclusao();
     }
     
-    // Scroll para o topo para garantir que o conteúdo esteja visível
     window.scrollTo(0, 0);
 }
 

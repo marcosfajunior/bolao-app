@@ -1,4 +1,4 @@
-/* style.css?v=3.0 */
+/* style.css?v=4.0 */
 
 /* Reset mínimo */
 * {
@@ -433,5 +433,115 @@ input[type="number"] {
 @media (max-height: 600px) {
     .whatsapp-float {
         bottom: 10px;
+    }
+}
+
+/* ==================== */
+/* 🆕 TOAST NOTIFICATION */
+/* ==================== */
+
+.toast-notification {
+    position: fixed;
+    bottom: 90px; /* Fica acima do botão do WhatsApp */
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 300px;
+    max-width: 90%;
+    background-color: white;
+    color: #333;
+    padding: 14px 20px;
+    border-radius: 50px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    z-index: 9999;
+    font-weight: 500;
+    border-left: 5px solid;
+    animation: slideInUp 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+}
+
+.toast-success {
+    border-left-color: #28a745;
+    background-color: #f0fff4;
+}
+
+.toast-warning {
+    border-left-color: #ffc107;
+    background-color: #fff9e6;
+}
+
+.toast-info {
+    border-left-color: #17a2b8;
+    background-color: #e3f2fd;
+}
+
+.toast-notification i {
+    font-size: 1.2rem;
+}
+
+.toast-success i {
+    color: #28a745;
+}
+
+.toast-warning i {
+    color: #ffc107;
+}
+
+.toast-info i {
+    color: #17a2b8;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #999;
+    padding: 0 5px;
+}
+
+.toast-close:hover {
+    color: #666;
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translate(-50%, 100%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+/* Ajuste para mobile */
+@media (max-width: 768px) {
+    .toast-notification {
+        bottom: 80px;
+        min-width: 280px;
+        padding: 12px 16px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .toast-notification {
+        bottom: 70px;
+        min-width: 260px;
+        padding: 10px 14px;
     }
 }
