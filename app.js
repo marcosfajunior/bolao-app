@@ -1,10 +1,10 @@
-// app.js?v=4.3
+// app.js?v=4.5
 
 // ====================
 // 🔧 CONFIGURAÇÃO ÚNICA
 // ====================
 
-const VERSAO_ATUAL = "20260211_1300_R04";
+const VERSAO_ATUAL = "20260211_1330_R04";
 
 const configRodada = {
     nomeBolao: "⚽ Bolão Campeonato Brasileiro 2026",
@@ -274,10 +274,33 @@ function salvarPalpiteAutomatico(jogoId) {
         }
         
         salvarDados();
+        atualizarDestaquesJogos();
         
         const jogo = jogosRodada.find(j => j.id === jogoId);
         mostrarToast(`✅ Palpite do Jogo ${jogoId} (${jogo.timeA} x ${jogo.timeB}) salvo!`, 'success');
     }
+}
+
+// ====================
+// 🟢 DESTAQUE DE JOGOS PREENCHIDOS
+// ====================
+
+function atualizarDestaquesJogos() {
+    jogosRodada.forEach(jogo => {
+        const placarA = document.querySelector(`select[name="placarA-${jogo.id}"]`);
+        const placarB = document.querySelector(`select[name="placarB-${jogo.id}"]`);
+        const jogoCard = placarA?.closest('.jogo-card');
+        
+        if (jogoCard) {
+            const ambosPreenchidos = placarA?.value && placarB?.value;
+            
+            if (ambosPreenchidos) {
+                jogoCard.classList.add('preenchido');
+            } else {
+                jogoCard.classList.remove('preenchido');
+            }
+        }
+    });
 }
 
 function carregarPalpitesSalvos() {
@@ -468,6 +491,10 @@ function exibirAlertaErroEnvio() {
     alert.appendChild(divBotoes);
     alert.classList.remove('d-none');
 }
+
+// ====================
+// 📋 ALERTA DE RASCUNHO
+// ====================
 
 function exibirAlertaRascunho() {
     let totalPreenchidos = 0;
@@ -752,6 +779,10 @@ function atualizarInfoRodada() {
     document.getElementById('rodada-tela-envio').textContent = configRodada.numeroRodada;
 }
 
+// ====================
+// 📊 ATUALIZAR BARRA DE PROGRESSO
+// ====================
+
 function atualizarDashboardHeader() {
     const barra = document.getElementById('header-barra-progresso-palpites');
     const textoBarra = document.getElementById('header-texto-barra');
@@ -800,6 +831,8 @@ function atualizarDashboardHeader() {
     
     barra.style.transition = 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
     bolaFutebol.style.transition = 'left 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+
+    atualizarDestaquesJogos();
 }
 
 function contarJogosPreenchidos() {
@@ -831,6 +864,10 @@ function verificarTodosJogosPreenchidos() {
     
     return { todosPreenchidos, jogosNaoPreenchidos };
 }
+
+// ====================
+// 🎯 CARREGAR JOGOS (SEM DADOS SALVOS)
+// ====================
 
 function carregarJogos() {
     const container = document.getElementById('jogos-container');
@@ -886,7 +923,15 @@ function carregarJogos() {
             salvarPalpiteAutomatico(jogo.id);
         });
     });
+
+    setTimeout(() => {
+        atualizarDestaquesJogos();
+    }, 100);
 }
+
+// ====================
+// 🎯 CARREGAR JOGOS COM DADOS SALVOS
+// ====================
 
 function carregarJogosComDadosSalvos() {
     const container = document.getElementById('jogos-container');
@@ -963,6 +1008,10 @@ function carregarJogosComDadosSalvos() {
     }
 
     atualizarDashboardHeader();
+
+    setTimeout(() => {
+        atualizarDestaquesJogos();
+    }, 100);
 }
 
 function salvarPalpites() {

@@ -1,4 +1,4 @@
-/* style.css?v=4.3 */
+/* style.css?v=4.5 */
 
 /* Reset mínimo */
 * {
@@ -11,24 +11,24 @@ body {
     -webkit-text-size-adjust: 100%;
 }
 
-/* Header fixo com safe area */
+/* ==================== */
+/* HEADER E LAYOUT */
+/* ==================== */
+
 .header-fixo {
     padding-top: env(safe-area-inset-top) !important;
     z-index: 1000;
 }
 
-/* Conteúdo principal com padding-top dinâmico */
 .conteudo-dinamico {
-    padding-top: 160px; /* Altura inicial do header */
+    padding-top: 160px;
     min-height: 100vh;
 }
 
-/* Quando a barra de progresso está visível (na tela de palpites) */
 body.tela-formulario .conteudo-dinamico {
-    padding-top: 200px; /* Aumenta quando a barra de progresso aparece */
+    padding-top: 200px;
 }
 
-/* Ajuste para safe area */
 @supports (padding-top: env(safe-area-inset-top)) {
     .header-fixo {
         padding-top: env(safe-area-inset-top) !important;
@@ -43,7 +43,15 @@ body.tela-formulario .conteudo-dinamico {
     }
 }
 
-/* Cards de jogo */
+.container.py-4 {
+    padding-top: 0 !important;
+    padding-bottom: 1.5rem !important;
+}
+
+/* ==================== */
+/* CARDS DE JOGO */
+/* ==================== */
+
 .jogo-card {
     border: 2px solid #dee2e6;
     border-radius: 10px;
@@ -59,9 +67,8 @@ body.tela-formulario .conteudo-dinamico {
     background: linear-gradient(135deg, #2c3e50, #34495e);
 }
 
-/* Inputs de placar */
 .input-placar {
-    font-size: 16px !important; /* Previne zoom iOS */
+    font-size: 16px !important;
     text-align: center;
     transition: all 0.2s;
 }
@@ -72,54 +79,36 @@ body.tela-formulario .conteudo-dinamico {
 }
 
 /* ==================== */
-/* BARRA DE PROGRESSO COM BOLA DE FUTEBOL ROLANTE */
+/* BARRA DE PROGRESSO COM BOLA */
 /* ==================== */
 
-/* Animação de rotação da bola de futebol */
 @keyframes girarBola {
-    0% {
-        transform: translate(-50%, -50%) rotate(0deg);
-    }
-    100% {
-        transform: translate(-50%, -50%) rotate(360deg);
-    }
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
 @keyframes girarBolaSuave {
-    0% {
-        transform: translate(-50%, -50%) rotate(0deg);
-    }
-    50% {
-        transform: translate(-50%, -50%) rotate(180deg);
-    }
-    100% {
-        transform: translate(-50%, -50%) rotate(360deg);
-    }
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    50% { transform: translate(-50%, -50%) rotate(180deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
 @keyframes quicarBola {
-    0%, 100% {
-        transform: translate(-50%, -50%);
-    }
-    50% {
-        transform: translate(-50%, -55%);
-    }
+    0%, 100% { transform: translate(-50%, -50%); }
+    50% { transform: translate(-50%, -55%); }
 }
 
-/* Container da barra */
 .barra-progresso-com-bolinha .progress-container {
     height: 30px;
     margin: 0 10px;
 }
 
-/* Barra de progresso colorida */
 .barra-progresso {
     background: linear-gradient(90deg, #3498db, #2ecc71);
     transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1;
 }
 
-/* Bola de futebol que rola */
 .bola-futebol {
     z-index: 2;
     transition: left 0.8s cubic-bezier(0.4, 0, 0.2, 1);
@@ -136,170 +125,86 @@ body.tela-formulario .conteudo-dinamico {
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
-/* Barra faixa (fundo) */
-.barra-faixa {
-    z-index: 0;
-}
+.barra-faixa { z-index: 0; }
+.marcadores-bar { z-index: 0; }
 
-/* Marcadores da barra */
-.marcadores-bar {
-    z-index: 0;
-}
+/* Cores dinâmicas */
+.barra-progresso.baixo { background: linear-gradient(90deg, #e74c3c, #ff7675); }
+.barra-progresso.medio { background: linear-gradient(90deg, #f39c12, #fdcb6e); }
+.barra-progresso.alto { background: linear-gradient(90deg, #2ecc71, #00b894); }
 
-/* Cores dinâmicas baseadas na porcentagem */
-.barra-progresso.baixo {
-    background: linear-gradient(90deg, #e74c3c, #ff7675);
-}
-
-.barra-progresso.medio {
-    background: linear-gradient(90deg, #f39c12, #fdcb6e);
-}
-
-.barra-progresso.alto {
-    background: linear-gradient(90deg, #2ecc71, #00b894);
-}
-
-/* Efeitos de cor na bola de futebol */
-.bola-futebol.animando .bola-emoji {
-    animation: girarBola 0.5s linear infinite;
-}
-
-.bola-futebol.baixo .bola-emoji {
-    filter: drop-shadow(0 2px 3px rgba(231, 76, 60, 0.4));
-}
-
-.bola-futebol.medio .bola-emoji {
-    filter: drop-shadow(0 2px 3px rgba(243, 156, 18, 0.4));
-}
-
-.bola-futebol.alto .bola-emoji {
-    filter: drop-shadow(0 2px 3px rgba(46, 204, 113, 0.4));
-}
-
-/* Efeito de quicar quando atinge 100% */
-.bola-futebol.completo .bola-emoji {
-    animation: girarBolaSuave 1s linear infinite, quicarBola 0.6s ease-in-out infinite;
-}
-
-/* Remover spinner em inputs number */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type="number"] {
-    -moz-appearance: textfield;
-    appearance: textfield;
-}
-
-/* Ajustes para mobile */
-@media (max-width: 768px) {
-    .conteudo-dinamico {
-        padding-top: 150px;
-    }
-    
-    body.tela-formulario .conteudo-dinamico {
-        padding-top: 190px;
-    }
-    
-    @supports (padding-top: env(safe-area-inset-top)) {
-        .conteudo-dinamico {
-            padding-top: calc(150px + env(safe-area-inset-top));
-        }
-        
-        body.tela-formulario .conteudo-dinamico {
-            padding-top: calc(190px + env(safe-area-inset-top));
-        }
-    }
-    
-    .header-fixo .container {
-        padding-top: 0.5rem !important;
-        padding-bottom: 0.5rem !important;
-    }
-    
-    .barra-progresso-com-bolinha {
-        max-width: 100% !important;
-    }
-    
-    .bola-futebol {
-        width: 28px !important;
-        height: 28px !important;
-    }
-    
-    .bola-emoji {
-        font-size: 1.5rem;
-    }
-}
-
-/* Ajustes para telas muito pequenas */
-@media (max-width: 576px) {
-    .conteudo-dinamico {
-        padding-top: 140px;
-    }
-    
-    body.tela-formulario .conteudo-dinamico {
-        padding-top: 180px;
-    }
-    
-    @supports (padding-top: env(safe-area-inset-top)) {
-        .conteudo-dinamico {
-            padding-top: calc(140px + env(safe-area-inset-top));
-        }
-        
-        body.tela-formulario .conteudo-dinamico {
-            padding-top: calc(180px + env(safe-area-inset-top));
-        }
-    }
-    
-    .progresso-palpites-header .small {
-        font-size: 0.75rem !important;
-    }
-    
-    .bola-futebol {
-        width: 24px !important;
-        height: 24px !important;
-    }
-    
-    .bola-emoji {
-        font-size: 1.3rem;
-    }
-}
-
-/* Ajuste para orientação paisagem em mobile */
-@media (max-height: 500px) and (orientation: landscape) {
-    .conteudo-dinamico {
-        padding-top: 130px;
-    }
-    
-    body.tela-formulario .conteudo-dinamico {
-        padding-top: 170px;
-    }
-    
-    @supports (padding-top: env(safe-area-inset-top)) {
-        .conteudo-dinamico {
-            padding-top: calc(130px + env(safe-area-inset-top));
-        }
-        
-        body.tela-formulario .conteudo-dinamico {
-            padding-top: calc(170px + env(safe-area-inset-top));
-        }
-    }
-}
-
-/* Ajuste para evitar sobreposição na tela de palpites */
-#tela-palpites .card {
-    margin-top: 0;
-}
-
-/* Garantir que o container py-4 não adicione espaço extra */
-.container.py-4 {
-    padding-top: 0 !important;
-    padding-bottom: 1.5rem !important;
+.bola-futebol.animando .bola-emoji { animation: girarBola 0.5s linear infinite; }
+.bola-futebol.baixo .bola-emoji { filter: drop-shadow(0 2px 3px rgba(231, 76, 60, 0.4)); }
+.bola-futebol.medio .bola-emoji { filter: drop-shadow(0 2px 3px rgba(243, 156, 18, 0.4)); }
+.bola-futebol.alto .bola-emoji { filter: drop-shadow(0 2px 3px rgba(46, 204, 113, 0.4)); }
+.bola-futebol.completo .bola-emoji { 
+    animation: girarBolaSuave 1s linear infinite, quicarBola 0.6s ease-in-out infinite; 
 }
 
 /* ==================== */
-/* BOTÃO FLUTUANTE WHATSAPP */
+/* DESTAQUE JOGOS PREENCHIDOS */
+/* ==================== */
+
+.jogo-card.preenchido {
+    border: 2px solid #28a745 !important;
+    background: linear-gradient(to bottom, #ffffff, #f0fff4);
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1), 0 4px 12px rgba(40, 167, 69, 0.2);
+    position: relative;
+}
+
+.jogo-card.preenchido:hover {
+    border-color: #28a745 !important;
+    box-shadow: 0 0 0 4px rgba(40, 167, 69, 0.15), 0 6px 16px rgba(40, 167, 69, 0.25);
+    transform: translateY(-3px);
+}
+
+.jogo-card.preenchido .cabecalho-jogo {
+    background: linear-gradient(135deg, #28a745, #218838);
+    border-bottom: 2px solid #1e7e34;
+}
+
+.jogo-card.preenchido::after {
+    content: "✓✓";
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: #28a745;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 10;
+    letter-spacing: 2px;
+}
+
+@keyframes checkPop {
+    0% { transform: scale(0); }
+    80% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.jogo-card.preenchido .cabecalho-jogo h6::after {
+    content: " ✓";
+    animation: checkPop 0.4s ease;
+    font-weight: bold;
+}
+
+.jogo-card.preenchido .input-placar {
+    background-color: #f0fff4;
+    border-color: #28a745;
+    color: #155724;
+    font-weight: 600;
+}
+
+.jogo-card.preenchido .input-placar:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+}
+
+/* ==================== */
+/* WHATSAPP BUTTON */
 /* ==================== */
 
 .whatsapp-float {
@@ -331,24 +236,12 @@ input[type="number"] {
 .whatsapp-btn:hover {
     background-color: #128C7E;
     transform: scale(1.1);
-    box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
 }
 
-.whatsapp-btn:active {
-    transform: scale(0.95);
-}
-
-/* Efeito de pulso (opcional) */
 @keyframes pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
-    }
-    70% {
-        box-shadow: 0 0 0 10px rgba(37, 211, 102, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
-    }
+    0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
 }
 
 .whatsapp-btn::after {
@@ -361,7 +254,6 @@ input[type="number"] {
     z-index: -1;
 }
 
-/* Tooltip (opcional) */
 .whatsapp-btn::before {
     content: 'Precisa de ajuda?';
     position: absolute;
@@ -385,64 +277,13 @@ input[type="number"] {
     visibility: visible;
 }
 
-/* Ajustes para mobile */
-@media (max-width: 768px) {
-    .whatsapp-float {
-        bottom: 15px;
-        right: 15px;
-    }
-    
-    .whatsapp-btn {
-        width: 55px;
-        height: 55px;
-    }
-    
-    .whatsapp-btn i {
-        font-size: 28px;
-    }
-    
-    .whatsapp-btn::before {
-        font-size: 0.75rem;
-        padding: 6px 10px;
-        right: 65px;
-    }
-}
-
-/* Ajuste para telas muito pequenas */
-@media (max-width: 576px) {
-    .whatsapp-float {
-        bottom: 10px;
-        right: 10px;
-    }
-    
-    .whatsapp-btn {
-        width: 50px;
-        height: 50px;
-    }
-    
-    .whatsapp-btn i {
-        font-size: 26px;
-    }
-    
-    .whatsapp-btn::before {
-        right: 60px;
-    }
-}
-
-/* Garantir que o botão não sobreponha elementos importantes */
-@media (max-height: 600px) {
-    .whatsapp-float {
-        bottom: 10px;
-    }
-}
-
 /* ==================== */
-/* 🆕 TOAST NOTIFICATION */
+/* TOAST NOTIFICATION */
 /* ==================== */
 
 .toast-notification {
     position: fixed;
-    bottom: 90px; /* Fica acima do botão do WhatsApp */
+    bottom: 90px;
     left: 50%;
     transform: translateX(-50%);
     min-width: 300px;
@@ -462,36 +303,14 @@ input[type="number"] {
     animation: slideInUp 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
 }
 
-.toast-success {
-    border-left-color: #28a745;
-    background-color: #f0fff4;
-}
+.toast-success { border-left-color: #28a745; background-color: #f0fff4; }
+.toast-warning { border-left-color: #ffc107; background-color: #fff9e6; }
+.toast-info { border-left-color: #17a2b8; background-color: #e3f2fd; }
 
-.toast-warning {
-    border-left-color: #ffc107;
-    background-color: #fff9e6;
-}
-
-.toast-info {
-    border-left-color: #17a2b8;
-    background-color: #e3f2fd;
-}
-
-.toast-notification i {
-    font-size: 1.2rem;
-}
-
-.toast-success i {
-    color: #28a745;
-}
-
-.toast-warning i {
-    color: #ffc107;
-}
-
-.toast-info i {
-    color: #17a2b8;
-}
+.toast-notification i { font-size: 1.2rem; }
+.toast-success i { color: #28a745; }
+.toast-warning i { color: #ffc107; }
+.toast-info i { color: #17a2b8; }
 
 .toast-close {
     background: none;
@@ -503,51 +322,20 @@ input[type="number"] {
     padding: 0 5px;
 }
 
-.toast-close:hover {
-    color: #666;
-}
+.toast-close:hover { color: #666; }
 
 @keyframes slideInUp {
-    from {
-        transform: translate(-50%, 100%);
-        opacity: 0;
-    }
-    to {
-        transform: translate(-50%, 0);
-        opacity: 1;
-    }
+    from { transform: translate(-50%, 100%); opacity: 0; }
+    to { transform: translate(-50%, 0); opacity: 1; }
 }
 
 @keyframes fadeOut {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-        visibility: hidden;
-    }
-}
-
-/* Ajuste para mobile */
-@media (max-width: 768px) {
-    .toast-notification {
-        bottom: 80px;
-        min-width: 280px;
-        padding: 12px 16px;
-        font-size: 0.9rem;
-    }
-}
-
-@media (max-width: 576px) {
-    .toast-notification {
-        bottom: 70px;
-        min-width: 260px;
-        padding: 10px 14px;
-    }
+    from { opacity: 1; }
+    to { opacity: 0; visibility: hidden; }
 }
 
 /* ==================== */
-/* 🆕 AJUSTE BOTÕES ALERTA */
+/* AJUSTES BOTÕES ALERTA */
 /* ==================== */
 
 #alert-dados-enviados .d-flex {
@@ -563,22 +351,74 @@ input[type="number"] {
     min-height: 40px;
 }
 
-#alert-dados-enviados .btn-primary {
-    background-color: #0d6efd;
-    border-color: #0d6efd;
+/* ==================== */
+/* REMOVER SPINNER INPUTS */
+/* ==================== */
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
-#alert-dados-enviados .btn-primary:hover {
-    background-color: #0b5ed7;
-    border-color: #0a58ca;
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+/* ==================== */
+/* MOBILE */
+/* ==================== */
+
+@media (max-width: 768px) {
+    .conteudo-dinamico { padding-top: 150px; }
+    body.tela-formulario .conteudo-dinamico { padding-top: 190px; }
+    
+    @supports (padding-top: env(safe-area-inset-top)) {
+        .conteudo-dinamico { padding-top: calc(150px + env(safe-area-inset-top)); }
+        body.tela-formulario .conteudo-dinamico { padding-top: calc(190px + env(safe-area-inset-top)); }
+    }
+    
+    .header-fixo .container { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
+    .barra-progresso-com-bolinha { max-width: 100% !important; }
+    .bola-futebol { width: 28px !important; height: 28px !important; }
+    .bola-emoji { font-size: 1.5rem; }
+    .whatsapp-float { bottom: 15px; right: 15px; }
+    .whatsapp-btn { width: 55px; height: 55px; }
+    .whatsapp-btn i { font-size: 28px; }
+    .whatsapp-btn::before { font-size: 0.75rem; padding: 6px 10px; right: 65px; }
+    .toast-notification { bottom: 80px; min-width: 280px; padding: 12px 16px; font-size: 0.9rem; }
+    .jogo-card.preenchido::after { top: 8px; right: 10px; font-size: 0.7rem; padding: 3px 8px; }
 }
 
 @media (max-width: 576px) {
-    #alert-dados-enviados .d-flex {
-        flex-direction: column;
+    .conteudo-dinamico { padding-top: 140px; }
+    body.tela-formulario .conteudo-dinamico { padding-top: 180px; }
+    
+    @supports (padding-top: env(safe-area-inset-top)) {
+        .conteudo-dinamico { padding-top: calc(140px + env(safe-area-inset-top)); }
+        body.tela-formulario .conteudo-dinamico { padding-top: calc(180px + env(safe-area-inset-top)); }
     }
     
-    #alert-dados-enviados .btn-sm {
-        width: 100%;
+    .progresso-palpites-header .small { font-size: 0.75rem !important; }
+    .bola-futebol { width: 24px !important; height: 24px !important; }
+    .bola-emoji { font-size: 1.3rem; }
+    .whatsapp-float { bottom: 10px; right: 10px; }
+    .whatsapp-btn { width: 50px; height: 50px; }
+    .whatsapp-btn i { font-size: 26px; }
+    .whatsapp-btn::before { right: 60px; }
+    .toast-notification { bottom: 70px; min-width: 260px; padding: 10px 14px; }
+    #alert-dados-enviados .d-flex { flex-direction: column; }
+    #alert-dados-enviados .btn-sm { width: 100%; }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+    .conteudo-dinamico { padding-top: 130px; }
+    body.tela-formulario .conteudo-dinamico { padding-top: 170px; }
+    
+    @supports (padding-top: env(safe-area-inset-top)) {
+        .conteudo-dinamico { padding-top: calc(130px + env(safe-area-inset-top)); }
+        body.tela-formulario .conteudo-dinamico { padding-top: calc(170px + env(safe-area-inset-top)); }
     }
+    .whatsapp-float { bottom: 10px; }
 }
