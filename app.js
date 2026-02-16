@@ -4,7 +4,7 @@
 // 🔧 CONFIGURAÇÃO ÚNICA
 // ====================
 
-const VERSAO_ATUAL = "20260216_1300_R04";
+const VERSAO_ATUAL = "20260216_1310_R04";
 
 const configRodada = {
     nomeBolao: "⚽ Bolão Campeonato Brasileiro 2026",
@@ -14,7 +14,7 @@ const configRodada = {
 };
 
 const jogosRodada = [
-    { id: "1", timeA: "Athletico PR", timeB: "MCorinthians SP" }
+    { id: "1", timeA: "Athletico PR", timeB: "Corinthians SP" }
 ];
 
 const CONFIG_GOOGLE_FORMS = {
