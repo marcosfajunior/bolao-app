@@ -1,10 +1,10 @@
-// app.js?v=4.9
+// app.js?v=4.10
 
 // ====================
 // 🔧 CONFIGURAÇÃO ÚNICA
 // ====================
 
-const VERSAO_ATUAL = "20260220_1400_R04";
+const VERSAO_ATUAL = "20260220_1500_R04";
 
 const configRodada = {
     nomeBolao: "⚽ Bolão Campeonato Brasileiro 2026",
@@ -187,10 +187,18 @@ function configurarEventos() {
 function onSubmitParticipante() {
     const select = document.getElementById('nomeParticipante');
     dadosApp.participante = select.value;
+    
+    // 🟢 NOVO: Se já existem palpites salvos, mantém, senão inicia array vazio
+    if (!dadosApp.palpitesSalvos || dadosApp.palpitesSalvos.length === 0) {
+        dadosApp.palpitesSalvos = [];
+    }
+    
+    dadosApp.rodadaSalva = configRodada.numeroRodada;
     salvarDados();
+    
     mostrarTela('tela-palpites');
-    carregarJogos();
-    carregarPalpitesSalvos();
+    carregarJogos(); // Carrega jogos SEM dados salvos
+    carregarPalpitesSalvos(); // Tenta carregar palpites (não vai achar)
     atualizarDashboardHeader();
 }
 
@@ -304,7 +312,7 @@ function atualizarDestaquesJogos() {
 }
 
 function carregarPalpitesSalvos() {
-    if (dadosApp.palpitesSalvos.length > 0) {
+    if (dadosApp.palpitesSalvos && dadosApp.palpitesSalvos.length > 0) {
         const ultimoPalpite = dadosApp.palpitesSalvos[dadosApp.palpitesSalvos.length - 1];
         
         jogosRodada.forEach(jogo => {
@@ -337,16 +345,30 @@ function verificarEstadoAplicacao() {
     // Esconder todos
     ocultarTodosAlertas();
     
+    // CASO 1: SEM DADOS SALVOS - Mostra formulário inicial
     if (!dadosApp.participante && dadosApp.palpitesSalvos.length === 0) {
         document.getElementById('formulario-inicial').classList.remove('d-none');
         return;
     }
     
+    // CASO 2: TEM PARTICIPANTE MAS NENHUM PALPITE PREENCHIDO
+    // Isso acontece quando o usuário selecionou o nome mas não preencheu nada
+    if (dadosApp.participante && dadosApp.palpitesSalvos.length === 0) {
+        // Limpa os dados inconsistentes e volta para o início
+        dadosApp.participante = '';
+        dadosApp.rodadaSalva = '';
+        salvarDados();
+        document.getElementById('formulario-inicial').classList.remove('d-none');
+        return;
+    }
+    
+    // CASO 3: RODADA DIFERENTE
     if (statusRodada === 'rodada_diferente') {
         exibirAlertaRodadaDiferente();
         return;
     }
     
+    // CASO 4: MESMA RODADA COM PALPITES SALVOS
     if (statusRodada === 'mesma_rodada') {
         if (dadosApp.dadosEnviados) {
             exibirAlertaEnviado();
