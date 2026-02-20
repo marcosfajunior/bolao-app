@@ -1,20 +1,29 @@
-// app.js?v=4.7
+// app.js?v=4.8
 
 // ====================
 // 🔧 CONFIGURAÇÃO ÚNICA
 // ====================
 
-const VERSAO_ATUAL = "20260216_1310_R04";
+const VERSAO_ATUAL = "20260220_0800_R04";
 
 const configRodada = {
     nomeBolao: "⚽ Bolão Campeonato Brasileiro 2026",
-    numeroRodada: "RODADA 02 - Jogo adiado",
-    dataInicio: "19/02/2026",
-    dataLimite: "18/02/2026"
+    numeroRodada: "RODADA 04",
+    dataInicio: "25/02/2026",
+    dataLimite: "24/02/2026"
 };
 
 const jogosRodada = [
-    { id: "1", timeA: "Athletico PR", timeB: "Corinthians SP" }
+    { id: "1", timeA: "Flamengo RJ", timeB: "Mirassol SP" },
+    { id: "2", timeA: "Botafogo RJ", timeB: "Vitória BA" },
+    { id: "3", timeA: "Santos SP", timeB: "Vasco RJ" },
+    { id: "4", timeA: "Palmeiras SP", timeB: "Fluminense RJ" },
+    { id: "5", timeA: "Bragantino SP", timeB: "Athletico PR" },
+    { id: "6", timeA: "Cruzeiro MG", timeB: "Corinthians SP" },
+    { id: "7", timeA: "Grêmio RS", timeB: "Atlético MG" },
+    { id: "8", timeA: "Coritiba PR", timeB: "São Paulo SP" },
+    { id: "9", timeA: "Bahia BA", timeB: "Chapecoense SC" },
+    { id: "10", timeA: "Remo PA", timeB: "Internacional RS" }
 ];
 
 const CONFIG_GOOGLE_FORMS = {
