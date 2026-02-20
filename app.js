@@ -1,10 +1,10 @@
-// app.js?v=4.8
+// app.js?v=4.9
 
 // ====================
 // 🔧 CONFIGURAÇÃO ÚNICA
 // ====================
 
-const VERSAO_ATUAL = "20260220_0800_R04";
+const VERSAO_ATUAL = "20260220_1400_R04";
 
 const configRodada = {
     nomeBolao: "⚽ Bolão Campeonato Brasileiro 2026",
@@ -684,7 +684,7 @@ function formatarDataHora() {
 
 function gerarOpcoesSelect(valorSelecionado = '') {
     let opcoes = '<option value="">--</option>';
-    for (let i = 0; i <= 10; i++) {
+    for (let i = 0; i <= 5; i++) {
         const selecionado = valorSelecionado === i.toString() ? 'selected' : '';
         opcoes += `<option value="${i}" ${selecionado}>${i}</option>`;
     }
