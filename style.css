@@ -1,4 +1,4 @@
-/* style.css?v=4.10 */
+/* style.css?v=5.0 */
 
 /* Reset mínimo */
 * {
@@ -421,4 +421,50 @@ input[type="number"] {
         body.tela-formulario .conteudo-dinamico { padding-top: calc(170px + env(safe-area-inset-top)); }
     }
     .whatsapp-float { bottom: 10px; }
+}
+
+/* ==================== */
+/* 🏆 BOTÃO CLASSIFICAÇÃO */
+/* ==================== */
+
+.btn-outline-primary {
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(13, 110, 253, 0.3) !important;
+}
+
+.btn-outline-primary i.bi-trophy-fill {
+    filter: drop-shadow(0 2px 3px rgba(255, 193, 7, 0.4));
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover i.bi-trophy-fill {
+    animation: trophyShake 0.5s ease;
+    filter: drop-shadow(0 4px 6px rgba(255, 193, 7, 0.6));
+}
+
+@keyframes trophyShake {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
+}
+
+/* Ajuste para mobile */
+@media (max-width: 768px) {
+    .btn-outline-primary.btn-lg {
+        font-size: 1rem;
+        padding: 0.75rem 1.5rem !important;
+        width: 90%;
+    }
+}
+
+@media (max-width: 576px) {
+    .btn-outline-primary.btn-lg {
+        font-size: 0.95rem;
+        padding: 0.7rem 1rem !important;
+        width: 100%;
+    }
 }
