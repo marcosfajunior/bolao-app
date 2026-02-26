@@ -1,4 +1,4 @@
-// app.js?v=5.0
+// app.js?v=5.1
 
 // ====================
 // 🔧 CONFIGURAÇÃO ÚNICA
@@ -1589,3 +1589,4 @@ function aplicarAjustesIOS() {
 
 
 aplicarAjustesIOS();
+
