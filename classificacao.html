@@ -62,10 +62,23 @@
         }
         .update-info {
             color: white;
-            font-size: 0.9rem;
-            opacity: 0.9;
+            font-size: 1.1rem;
             text-align: center;
             width: 100%;
+            background-color: rgba(255,255,255,0.15);
+            padding: 8px 15px;
+            border-radius: 30px;
+            margin-top: 5px;
+        }
+        .update-info .rodada-destaque {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ffc107;
+            margin-right: 5px;
+        }
+        .update-info .data-info {
+            font-size: 0.9rem;
+            opacity: 0.9;
         }
         .header-card {
             background: #343a40;
@@ -81,13 +94,6 @@
         }
         .header-card h2 {
             margin-bottom: 5px;
-        }
-        .header-card .rodada-info {
-            display: inline-block;
-            background-color: rgba(255,255,255,0.2);
-            padding: 5px 15px;
-            border-radius: 20px;
-            margin-top: 5px;
         }
         .section-title {
             background-color: #343a40;
@@ -186,6 +192,12 @@
                 font-size: 14px;
                 max-width: 150px;
             }
+            .update-info {
+                font-size: 1rem;
+            }
+            .update-info .rodada-destaque {
+                font-size: 1.2rem;
+            }
         }
         @media (max-width: 576px) {
             .table {
@@ -206,6 +218,12 @@
                 font-size: 13px;
                 max-width: 130px;
             }
+            .update-info {
+                font-size: 0.9rem;
+            }
+            .update-info .rodada-destaque {
+                font-size: 1.1rem;
+            }
         }
     </style>
 </head>
@@ -222,9 +240,9 @@
                 </button>
             </div>
             <div class="update-info">
-                <i class="bi bi-trophy"></i> Rodada 4
-                <br>
-                <i class="bi bi-clock"></i> Atualizado em: 26/02/2026 18:49
+                <span class="rodada-destaque"><i class="bi bi-trophy-fill"></i> Rodada 4</span>
+                <br class="d-sm-none">
+                <span class="data-info"><i class="bi bi-clock"></i> Atualizado em: 26/02/2026 18:54</span>
             </div>
         </div>
     </div>
