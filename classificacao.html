@@ -4,70 +4,251 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Bolão Brasileirão 2026 - Classificação Geral</title>
+    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
-        body { background-color: #f8f9fa; font-family: Arial, sans-serif; }
-        .top-buttons { position: sticky; top: 0; z-index: 1000; background-color: #343a40; padding: 15px 0; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .top-buttons .container { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-        .buttons-row { display: flex; justify-content: center; gap: 15px; width: 100%; }
-        .btn-nav { background-color: white; color: #343a40; border: none; padding: 10px 20px; border-radius: 6px; font-size: 16px; font-weight: 500; cursor: pointer; transition: background-color 0.2s; flex: 1; max-width: 200px; text-align: center; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-nav:hover { background-color: #f0f0f0; color: #000; }
-        .btn-nav i { font-size: 1.2rem; }
-        .update-info { color: white; text-align: center; width: 100%; background-color: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; margin-top: 10px; }
-        .update-info .rodada-destaque { display: block; font-size: 2.5rem; font-weight: 800; color: #ffc107; line-height: 1.2; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-        .update-info .rodada-destaque i { font-size: 2.2rem; margin-right: 10px; }
-        .update-info .data-info { display: block; font-size: 0.95rem; opacity: 0.9; letter-spacing: 0.5px; }
-        .header-card { background: #343a40; color: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
-        .header-card h1 { margin-bottom: 5px; }
-        .header-card h2 { margin-bottom: 5px; }
-        .section-title { background-color: #343a40; color: white; padding: 10px 15px; border-radius: 8px; margin: 20px 0 15px 0; font-weight: bold; text-align: center; }
-        .section-title i { margin-right: 8px; }
-        .section-title-red { background-color: #dc3545; color: white; padding: 10px 15px; border-radius: 8px; margin: 20px 0 15px 0; font-weight: bold; text-align: center; }
-        .section-title-red i { margin-right: 8px; }
-        .table-card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .table { margin-bottom: 0; font-size: 0.9rem; }
-        .table thead th { background-color: #343a40; color: white; font-weight: 600; font-size: 0.85rem; white-space: nowrap; padding: 10px 5px; border-bottom: none; }
-        .table tbody td { padding: 10px 5px; vertical-align: middle; }
-        .table-striped > tbody > tr:nth-of-type(odd) { background-color: rgba(0,0,0,.02); }
-        .badge-pos { background-color: #6c757d; color: white; padding: 3px 8px; border-radius: 20px; font-size: 0.8rem; font-weight: normal; }
-        .badge-pos-1 { background-color: #ffc107; color: #000; }
-        .footer-info { background-color: #e9ecef; border-radius: 10px; padding: 15px; margin-top: 20px; font-size: 0.85rem; color: #495057; text-align: center; }
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .top-buttons {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: #343a40;
+            padding: 15px 0;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .top-buttons .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .buttons-row {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+        }
+        .btn-nav {
+            background-color: white;
+            color: #343a40;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            flex: 1;
+            max-width: 200px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-nav:hover {
+            background-color: #f0f0f0;
+            color: #000;
+        }
+        .btn-nav i {
+            font-size: 1.2rem;
+        }
+        .update-info {
+            color: white;
+            font-size: 1.1rem;
+            text-align: center;
+            width: 100%;
+            background-color: rgba(255,255,255,0.15);
+            padding: 8px 15px;
+            border-radius: 30px;
+            margin-top: 5px;
+        }
+        .update-info .rodada-destaque {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ffc107;
+            margin-right: 5px;
+        }
+        .update-info .data-info {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .header-card {
+            background: #343a40;
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .header-card h1 {
+            margin-bottom: 5px;
+        }
+        .header-card h2 {
+            margin-bottom: 5px;
+        }
+        .section-title {
+            background-color: #343a40;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 20px 0 15px 0;
+            font-weight: bold;
+            text-align: center;
+        }
+        .section-title i {
+            margin-right: 8px;
+        }
+        .section-title-red {
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 20px 0 15px 0;
+            font-weight: bold;
+            text-align: center;
+        }
+        .section-title-red i {
+            margin-right: 8px;
+        }
+        .table-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .table {
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+        .table thead th {
+            background-color: #343a40;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            padding: 10px 5px;
+            border-bottom: none;
+        }
+        .table tbody td {
+            padding: 10px 5px;
+            vertical-align: middle;
+        }
+        .table-striped > tbody > tr:nth-of-type(odd) {
+            background-color: rgba(0,0,0,.02);
+        }
+        .badge-pos {
+            background-color: #6c757d;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: normal;
+        }
+        .badge-pos-1 {
+            background-color: #ffc107;
+            color: #000;
+        }
+        .footer-info {
+            background-color: #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #495057;
+            text-align: center;
+        }
         @media (max-width: 768px) {
-            .table { font-size: 0.8rem; }
-            .table thead th { font-size: 0.75rem; padding: 8px 3px; }
-            .table tbody td { padding: 8px 3px; }
-            .header-card { padding: 15px; }
-            .header-card h1 { font-size: 1.5rem; }
-            .header-card h2 { font-size: 1.2rem; }
-            .btn-nav { padding: 8px 16px; font-size: 14px; max-width: 150px; }
-            .update-info .rodada-destaque { font-size: 2rem; }
-            .update-info .rodada-destaque i { font-size: 1.8rem; }
+            .table {
+                font-size: 0.8rem;
+            }
+            .table thead th {
+                font-size: 0.75rem;
+                padding: 8px 3px;
+            }
+            .table tbody td {
+                padding: 8px 3px;
+            }
+            .header-card {
+                padding: 15px;
+            }
+            .header-card h1 {
+                font-size: 1.5rem;
+            }
+            .header-card h2 {
+                font-size: 1.2rem;
+            }
+            .btn-nav {
+                padding: 8px 16px;
+                font-size: 14px;
+                max-width: 150px;
+            }
+            .update-info {
+                font-size: 1rem;
+            }
+            .update-info .rodada-destaque {
+                font-size: 1.2rem;
+            }
         }
         @media (max-width: 576px) {
-            .table { font-size: 0.7rem; }
-            .table thead th { font-size: 0.65rem; padding: 6px 2px; }
-            .table tbody td { padding: 6px 2px; }
-            .buttons-row { gap: 10px; }
-            .btn-nav { padding: 6px 12px; font-size: 13px; max-width: 130px; }
+            .table {
+                font-size: 0.7rem;
+            }
+            .table thead th {
+                font-size: 0.65rem;
+                padding: 6px 2px;
+            }
+            .table tbody td {
+                padding: 6px 2px;
+            }
+            .buttons-row {
+                gap: 10px;
+            }
+            .btn-nav {
+                padding: 6px 12px;
+                font-size: 13px;
+                max-width: 130px;
+            }
+            .update-info {
+                font-size: 0.9rem;
+            }
+            .update-info .rodada-destaque {
+                font-size: 1.1rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Botões fixos no topo -->
     <div class="top-buttons">
         <div class="container">
             <div class="buttons-row">
-                <a href="index.html" class="btn-nav"><i class="bi bi-house-door"></i> Voltar</a>
-                <button onclick="location.reload()" class="btn-nav"><i class="bi bi-arrow-clockwise"></i> Recarregar</button>
+                <a href="index.html" class="btn-nav">
+                    <i class="bi bi-house-door"></i> Voltar
+                </a>
+                <button onclick="location.reload()" class="btn-nav">
+                    <i class="bi bi-arrow-clockwise"></i> Recarregar
+                </button>
             </div>
             <div class="update-info">
                 <span class="rodada-destaque"><i class="bi bi-trophy-fill"></i> Rodada 4</span>
-                <span class="data-info"><i class="bi bi-clock"></i> Atualizado em: 26/02/2026 19:07</span>
+                <br class="d-sm-none">
+                <span class="data-info"><i class="bi bi-clock"></i> Atualizado em: 26/02/2026 19:18</span>
             </div>
         </div>
     </div>
 
     <div class="container py-3">
+        <!-- PÁGINA 1: CLASSIFICAÇÃO GERAL -->
         <div class="header-card">
             <h1 class="mb-2">⚽ Bolão Brasileirão 2026</h1>
             <h2 class="h4 mb-2">Classificação Geral</h2>
@@ -184,7 +365,7 @@
                         <td class="text-center">4</td>
                         <td class="text-center">6</td>
                         <td class="text-center">0</td>
-                    </tr>           </tbody>
+                    </tr>       </tbody>
                 </table>
             </div>
             <div class="small text-muted mt-2 text-center">
@@ -192,15 +373,20 @@
             </div>
         </div>
 
+        <!-- PÁGINA 2: DESEMPENHO GERAL -->
         <div class="header-card mt-4">
             <h1 class="mb-2">⚽ Bolão Brasileirão 2026</h1>
             <h2 class="h4 mb-2">Desempenho Geral</h2>
         </div>
 
+        <!-- Layout responsivo: lado a lado em telas maiores, empilhado em mobile -->
         <div class="row g-3">
+            <!-- COLUNA 1: MELHOR PONTUAÇÃO DENTRE TODAS RODADAS -->
             <div class="col-md-6">
                 <div class="table-card h-100">
-                    <h3 class="section-title mb-3"><i class="bi bi-star-fill"></i> MELHOR PONTUAÇÃO</h3>
+                    <h3 class="section-title mb-3">
+                        <i class="bi bi-star-fill"></i> MELHOR PONTUAÇÃO
+                    </h3>
                     <div class="table-responsive">
                         <table class="table table-striped table-hover">
                             <thead>
@@ -287,9 +473,12 @@
                 </div>
             </div>
             
+            <!-- COLUNA 2: CLASSIFICAÇÃO DA RODADA ATUAL -->
             <div class="col-md-6">
                 <div class="table-card h-100">
-                    <h3 class="section-title-red mb-3"><i class="bi bi-bar-chart-fill"></i> PONTUAÇÃO RODADA 4</h3>
+                    <h3 class="section-title-red mb-3">
+                        <i class="bi bi-bar-chart-fill"></i> PONTUAÇÃO RODADA 4
+                    </h3>
                     <div class="table-responsive">
                         <table class="table table-striped table-hover">
                             <thead>
@@ -361,7 +550,8 @@
                 </div>
             </div>
         </div>
-    </div>
+
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
