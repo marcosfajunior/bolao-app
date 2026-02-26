@@ -1,4 +1,4 @@
-/* style.css?v=5.0 */
+/* style.css?v=5.1 */
 
 /* Reset mínimo */
 * {
@@ -467,4 +467,5 @@ input[type="number"] {
         padding: 0.7rem 1rem !important;
         width: 100%;
     }
+
 }
