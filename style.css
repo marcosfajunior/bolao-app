@@ -1,4 +1,4 @@
-/* style.css?v=5.7 */
+/* style.css?v=5.8 */
 
 /* Reset mínimo */
 * {
@@ -139,6 +139,157 @@ body.tela-formulario .conteudo-dinamico {
 .bola-futebol.alto .bola-emoji { filter: drop-shadow(0 2px 3px rgba(46, 204, 113, 0.4)); }
 .bola-futebol.completo .bola-emoji { 
     animation: girarBolaSuave 1s linear infinite, quicarBola 0.6s ease-in-out infinite; 
+}
+
+/* ==================== */
+/* ESTILOS UNIFICADOS - TODOS OS ELEMENTOS */
+/* ==================== */
+
+/* Selects - padrão unificado */
+.selector-nome, 
+.selector-rodada,
+#nomeParticipante.form-select,
+select.form-select {
+    border: 2px solid #0d6efd !important;
+    border-radius: 50px !important;
+    font-weight: 600 !important;
+    color: #0d6efd !important;
+    background-color: white !important;
+    transition: all 0.3s ease;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='%230d6efd' fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 1rem center !important;
+    background-size: 16px 16px !important;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    height: 58px; /* Altura fixa padrão */
+    padding: 0 1rem !important;
+    font-size: 1.1rem !important;
+}
+
+.selector-nome:hover, 
+.selector-rodada:hover,
+#nomeParticipante.form-select:hover,
+select.form-select:hover {
+    background-color: #f8f9ff !important;
+    border-color: #0a58ca !important;
+    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.2);
+}
+
+.selector-nome:focus, 
+.selector-rodada:focus,
+#nomeParticipante.form-select:focus,
+select.form-select:focus {
+    border-color: #0a58ca !important;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    outline: 0;
+}
+
+.selector-nome option, 
+.selector-rodada option,
+#nomeParticipante.form-select option,
+select.form-select option {
+    font-weight: 500;
+    color: #212529;
+}
+
+/* Botões - padrão unificado */
+.btn-inserir-palpites, 
+.btn-acessar-rodada, 
+.btn-classificacao,
+#btn-inserir-palpites,
+#btn-carregar-rodada,
+a[href="classificacao.html"] {
+    border-radius: 50px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    height: 58px; /* Mesma altura dos selects */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-width: 2px !important;
+    padding: 0 1rem !important;
+    font-size: 1.1rem !important;
+}
+
+/* Botão Inserir Palpites (azul sólido) */
+.btn-inserir-palpites,
+#btn-inserir-palpites {
+    background-color: #0d6efd !important;
+    border-color: #0d6efd !important;
+    color: white !important;
+}
+
+.btn-inserir-palpites:hover,
+#btn-inserir-palpites:hover {
+    background-color: #0b5ed7 !important;
+    border-color: #0a58ca !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(13, 110, 253, 0.3) !important;
+}
+
+/* Botão Acessar Rodada (azul sólido) */
+.btn-acessar-rodada,
+#btn-carregar-rodada {
+    background-color: #0d6efd !important;
+    border-color: #0d6efd !important;
+    color: white !important;
+}
+
+.btn-acessar-rodada:hover,
+#btn-carregar-rodada:hover {
+    background-color: #0b5ed7 !important;
+    border-color: #0a58ca !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(13, 110, 253, 0.3) !important;
+}
+
+/* Botão Classificação (outline azul) */
+.btn-classificacao,
+a[href="classificacao.html"] {
+    background-color: transparent !important;
+    border-color: #0d6efd !important;
+    color: #0d6efd !important;
+}
+
+.btn-classificacao:hover,
+a[href="classificacao.html"]:hover {
+    background-color: #f8f9ff !important;
+    border-color: #0a58ca !important;
+    color: #0a58ca !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(13, 110, 253, 0.2) !important;
+}
+
+/* Efeito no ícone do troféu */
+.btn-classificacao i.bi-trophy-fill,
+a[href="classificacao.html"] i.bi-trophy-fill {
+    filter: drop-shadow(0 2px 3px rgba(255, 193, 7, 0.4));
+    transition: all 0.3s ease;
+}
+
+.btn-classificacao:hover i.bi-trophy-fill,
+a[href="classificacao.html"]:hover i.bi-trophy-fill {
+    animation: trophyShake 0.5s ease;
+    filter: drop-shadow(0 4px 6px rgba(255, 193, 7, 0.6));
+}
+
+@keyframes trophyShake {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
+}
+
+.btn-inserir-palpites:active, 
+.btn-acessar-rodada:active, 
+.btn-classificacao:active,
+#btn-inserir-palpites:active,
+#btn-carregar-rodada:active,
+a[href="classificacao.html"]:active {
+    transform: translateY(0);
 }
 
 /* ==================== */
@@ -389,6 +540,26 @@ input[type="number"] {
     .whatsapp-btn::before { font-size: 0.75rem; padding: 6px 10px; right: 65px; }
     .toast-notification { bottom: 80px; min-width: 280px; padding: 12px 16px; font-size: 0.9rem; }
     .jogo-card.preenchido::after { top: 8px; right: 10px; font-size: 0.7rem; padding: 3px 8px; }
+    
+    /* Ajustes para elementos unificados em tablets */
+    .selector-nome, 
+    .selector-rodada,
+    #nomeParticipante.form-select,
+    select.form-select {
+        height: 52px;
+        font-size: 1rem !important;
+        background-position: right 0.75rem center !important;
+    }
+    
+    .btn-inserir-palpites, 
+    .btn-acessar-rodada, 
+    .btn-classificacao,
+    #btn-inserir-palpites,
+    #btn-carregar-rodada,
+    a[href="classificacao.html"] {
+        height: 52px;
+        font-size: 1rem !important;
+    }
 }
 
 @media (max-width: 576px) {
@@ -410,6 +581,66 @@ input[type="number"] {
     .toast-notification { bottom: 70px; min-width: 260px; padding: 10px 14px; }
     #alert-dados-enviados .d-flex { flex-direction: column; }
     #alert-dados-enviados .btn-sm { width: 100%; }
+    
+    /* Ajustes para elementos unificados em mobile */
+    .row.g-2 {
+        margin-left: -5px;
+        margin-right: -5px;
+    }
+    
+    .row.g-2 > [class*="col-"] {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    
+    .selector-nome, 
+    .selector-rodada,
+    #nomeParticipante.form-select,
+    select.form-select {
+        height: 48px;
+        font-size: 0.95rem !important;
+        padding: 0 0.5rem !important;
+        background-position: right 0.5rem center !important;
+        background-size: 14px 14px !important;
+    }
+    
+    .btn-inserir-palpites, 
+    .btn-acessar-rodada, 
+    .btn-classificacao,
+    #btn-inserir-palpites,
+    #btn-carregar-rodada,
+    a[href="classificacao.html"] {
+        height: 48px;
+        font-size: 0.95rem !important;
+        padding: 0 0.5rem !important;
+    }
+    
+    .btn-acessar-rodada i,
+    #btn-carregar-rodada i {
+        margin-right: 0.25rem !important;
+        font-size: 0.9rem;
+    }
+}
+
+/* Ajuste para telas muito pequenas */
+@media (max-width: 375px) {
+    .selector-nome, 
+    .selector-rodada,
+    #nomeParticipante.form-select,
+    select.form-select {
+        height: 44px;
+        font-size: 0.85rem !important;
+    }
+    
+    .btn-inserir-palpites, 
+    .btn-acessar-rodada, 
+    .btn-classificacao,
+    #btn-inserir-palpites,
+    #btn-carregar-rodada,
+    a[href="classificacao.html"] {
+        height: 44px;
+        font-size: 0.85rem !important;
+    }
 }
 
 @media (max-height: 500px) and (orientation: landscape) {
@@ -421,180 +652,4 @@ input[type="number"] {
         body.tela-formulario .conteudo-dinamico { padding-top: calc(170px + env(safe-area-inset-top)); }
     }
     .whatsapp-float { bottom: 10px; }
-}
-
-/* ==================== */
-/* 🏆 BOTÃO CLASSIFICAÇÃO */
-/* ==================== */
-
-.btn-outline-primary {
-    transition: all 0.3s ease;
-}
-
-.btn-outline-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(13, 110, 253, 0.3) !important;
-}
-
-.btn-outline-primary i.bi-trophy-fill {
-    filter: drop-shadow(0 2px 3px rgba(255, 193, 7, 0.4));
-    transition: all 0.3s ease;
-}
-
-.btn-outline-primary:hover i.bi-trophy-fill {
-    animation: trophyShake 0.5s ease;
-    filter: drop-shadow(0 4px 6px rgba(255, 193, 7, 0.6));
-}
-
-@keyframes trophyShake {
-    0%, 100% { transform: rotate(0deg); }
-    25% { transform: rotate(-10deg); }
-    75% { transform: rotate(10deg); }
-}
-
-/* Ajuste para mobile */
-@media (max-width: 768px) {
-    .btn-outline-primary.btn-lg {
-        font-size: 1rem;
-        padding: 0.75rem 1.5rem !important;
-        width: 90%;
-    }
-}
-
-@media (max-width: 576px) {
-    .btn-outline-primary.btn-lg {
-        font-size: 0.95rem;
-        padding: 0.7rem 1rem !important;
-        width: 100%;
-    }
-}
-
-/* ==================== */
-/* 📅 SELETOR DE RODADAS - MESMA ALTURA */
-/* ==================== */
-
-.selector-rodada {
-    border: 2px solid #0d6efd !important;
-    border-radius: 50px !important;
-    font-weight: 600 !important;
-    color: #0d6efd !important;
-    background-color: white !important;
-    transition: all 0.3s ease;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='%230d6efd' fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 16px 16px;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    cursor: pointer;
-    height: 58px; /* Altura fixa para desktop */
-}
-
-.selector-rodada:hover {
-    background-color: #f8f9ff !important;
-    border-color: #0a58ca !important;
-    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.2);
-}
-
-.selector-rodada:focus {
-    border-color: #0a58ca !important;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-    outline: 0;
-}
-
-.selector-rodada option {
-    font-weight: 500;
-    color: #212529;
-}
-
-/* Botão "Acessar" - mesma altura do select */
-.btn-acessar-rodada {
-    border-radius: 50px !important;
-    font-weight: 600 !important;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-    height: 58px; /* Mesma altura do select */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-width: 2px !important;
-}
-
-.btn-acessar-rodada:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(13, 110, 253, 0.3) !important;
-}
-
-.btn-acessar-rodada:active {
-    transform: translateY(0);
-}
-
-/* Card do seletor */
-#tela-participante .card.bg-light {
-    border: 1px solid rgba(0,0,0,0.05);
-    transition: all 0.3s ease;
-}
-
-#tela-participante .card.bg-light:hover {
-    border-color: #0d6efd;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-}
-
-/* Ajustes para mobile */
-@media (max-width: 768px) {
-    .selector-rodada {
-        height: 52px; /* Altura um pouco menor para tablets */
-        font-size: 1rem !important;
-        background-position: right 0.75rem center;
-    }
-    
-    .btn-acessar-rodada {
-        height: 52px; /* Mesma altura do select */
-        font-size: 0.95rem !important;
-    }
-}
-
-@media (max-width: 576px) {
-    .row.g-2 {
-        margin-left: -5px;
-        margin-right: -5px;
-    }
-    
-    .row.g-2 > [class*="col-"] {
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-    
-    .selector-rodada {
-        height: 48px; /* Altura exata para mobile */
-        font-size: 0.95rem !important;
-        padding: 0 0.5rem !important;
-        background-position: right 0.5rem center;
-        background-size: 14px 14px;
-    }
-    
-    .btn-acessar-rodada {
-        height: 48px; /* EXATAMENTE a mesma altura do select */
-        font-size: 0.9rem !important;
-        padding: 0 0.3rem !important;
-    }
-    
-    .btn-acessar-rodada i {
-        margin-right: 0.25rem !important;
-        font-size: 0.9rem;
-    }
-}
-
-/* Ajuste para telas muito pequenas */
-@media (max-width: 375px) {
-    .selector-rodada {
-        height: 44px;
-        font-size: 0.85rem !important;
-    }
-    
-    .btn-acessar-rodada {
-        height: 44px;
-        font-size: 0.8rem !important;
-    }
 }
