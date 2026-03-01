@@ -9,6 +9,73 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { background-color: #f8f9fa; font-family: Arial, sans-serif; padding-bottom: 30px; }
+        .top-buttons {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: #343a40;
+            padding: 15px 0;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .top-buttons .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .buttons-row {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+        }
+        .btn-nav {
+            background-color: white;
+            color: #343a40;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            flex: 1;
+            max-width: 200px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-nav:hover {
+            background-color: #f0f0f0;
+            color: #000;
+        }
+        .btn-nav i {
+            font-size: 1.2rem;
+        }
+        .update-info {
+            color: white;
+            font-size: 1.1rem;
+            text-align: center;
+            width: 100%;
+            background-color: rgba(255,255,255,0.15);
+            padding: 8px 15px;
+            border-radius: 30px;
+            margin-top: 5px;
+        }
+        .update-info .rodada-destaque {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ffc107;
+            margin-right: 5px;
+        }
+        .update-info .data-info {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
         .header-card { background: #343a40; color: white; border-radius: 15px; padding: 15px; margin: 20px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
         .header-card h1 { font-size: 1.8rem; margin-bottom: 5px; }
         .header-card h2 { font-size: 1.2rem; opacity: 0.9; }
@@ -43,21 +110,46 @@
             .time-mandante, .time-visitante { white-space: normal; word-break: break-word; }
             .escudo-mini { width: 16px; height: 16px; }
             .header-card h1 { font-size: 1.5rem; }
+            .btn-nav { padding: 8px 16px; font-size: 14px; max-width: 150px; }
+            .update-info { font-size: 1rem; }
+            .update-info .rodada-destaque { font-size: 1.2rem; }
         }
         @media (max-width: 576px) {
             .table { font-size: 0.65rem; }
             .table thead th { font-size: 0.6rem; padding: 4px 1px; }
             .table tbody td { padding: 4px 1px; }
+            .buttons-row { gap: 10px; }
+            .btn-nav { padding: 6px 12px; font-size: 13px; max-width: 130px; }
+            .update-info { font-size: 0.9rem; }
+            .update-info .rodada-destaque { font-size: 1.1rem; }
         }
     </style>
 </head>
 <body>
+    <!-- Botões fixos no topo -->
+    <div class="top-buttons">
+        <div class="container">
+            <div class="buttons-row">
+                <a href="index.html" class="btn-nav">
+                    <i class="bi bi-house-door"></i> Voltar
+                </a>
+                <button onclick="location.reload()" class="btn-nav">
+                    <i class="bi bi-arrow-clockwise"></i> Recarregar
+                </button>
+            </div>
+            <div class="update-info">
+                <span class="rodada-destaque"><i class="bi bi-trophy-fill"></i> Rodada 4</span>
+                <br class="d-sm-none">
+                <span class="data-info"><i class="bi bi-clock"></i> Gerado em: 01/03/2026 15:18</span>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="header-card">
             <h1>⚽ Bolão Brasileirão 2026</h1>
             <h2>Rodada 4</h2>
             <div class="badge-info"><i class="bi bi-calendar"></i> 25/02/2026 00:00 até 26/02/2026 23:59</div>
-            <div class="badge-info mt-2"><i class="bi bi-clock"></i> Gerado em: 01/03/2026 15:01</div>
         </div>
         <div class="participante-card">
             <div class="participante-titulo">
@@ -1099,68 +1191,4 @@
             </div>
             <div class="legenda">
                 <span>PTS: Pontos</span> | <span>PC: Placar Completo</span> | <span>RE: Resultado</span> |
-                <span>SP: Saldo Partida</span> | <span>GV: Gols Vencedor</span> | <span>GP: Gols Perdedor</span> |
-                <span>ER: Errou Palpite</span> | <span>PI: Placar Invertido</span>
-            </div>
-        <div class="grafico-container">
-            <h5 class="text-center"><i class="bi bi-graph-up"></i> Desempenho por Rodada</h5>
-            <canvas id="grafico_2" style="width:100%; max-height:300px;"></canvas>
-        </div>
-        
-        <div class="tabela-pontuacao">
-            <h5 class="text-center"><i class="bi bi-table"></i> Pontuação por Rodada</h5>
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr><th class="text-center">R1</th><th class="text-center">R2</th><th class="text-center">R3</th><th class="text-center">R4</th>       </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td class="text-center pontos-positivos fw-bold">25</td><td class="text-center pontos-positivos fw-bold">48</td><td class="text-center pontos-positivos fw-bold">55</td><td class="text-center pontos-positivos fw-bold">44</td>       </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="text-center mt-2 fw-bold">TOTAL: 172 PONTOS</div>
-        </div>
-        
-        <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const ctx = document.getElementById("grafico_2").getContext("2d");
-            new Chart(ctx, {
-                type: "line",
-                data: {
-                    labels: [1,2,3,4],
-                    datasets: [{
-                        label: "Pontos",
-                        data: [25,48,55,44],
-                        borderColor: "#dc3545",
-                        backgroundColor: "rgba(220, 53, 69, 0.1)",
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.4,
-                        pointBackgroundColor: function(context) {
-                            const value = context.dataset.data[context.dataIndex];
-                            return value >= 0 ? "#dc3545" : "#28a745";
-                        },
-                        pointBorderColor: "#fff",
-                        pointRadius: 3
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    scales: {
-                        y: {
-                            min: 0,
-                            max: 75,
-                            ticks: { stepSize: 25 }
-                        }
-                    }
-                }
-            });
-        });
-        </script></div>
-        <div class="participante-card">
-            <div class="participante-titulo">
-                <i class="bi bi-person-circle"></i> PAULO SILVA
-            </div>
-       
+                <
