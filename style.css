@@ -1,4 +1,4 @@
-/* style.css?v=5.6 */
+/* style.css?v=5.7 */
 
 /* Reset mínimo */
 * {
@@ -470,10 +470,10 @@ input[type="number"] {
 }
 
 /* ==================== */
-/* 📅 SELETOR DE RODADAS - LINHA DUPLA */
+/* 📅 SELETOR DE RODADAS - MESMA ALTURA */
 /* ==================== */
 
-#seletor-rodada {
+.selector-rodada {
     border: 2px solid #0d6efd !important;
     border-radius: 50px !important;
     font-weight: 600 !important;
@@ -488,39 +488,45 @@ input[type="number"] {
     -webkit-appearance: none;
     -moz-appearance: none;
     cursor: pointer;
+    height: 58px; /* Altura fixa para desktop */
 }
 
-#seletor-rodada:hover {
+.selector-rodada:hover {
     background-color: #f8f9ff !important;
     border-color: #0a58ca !important;
     box-shadow: 0 5px 15px rgba(13, 110, 253, 0.2);
 }
 
-#seletor-rodada:focus {
+.selector-rodada:focus {
     border-color: #0a58ca !important;
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
     outline: 0;
 }
 
-#seletor-rodada option {
+.selector-rodada option {
     font-weight: 500;
     color: #212529;
 }
 
-/* Botão "Ir" */
-#btn-carregar-rodada {
+/* Botão "Acessar" - mesma altura do select */
+.btn-acessar-rodada {
     border-radius: 50px !important;
     font-weight: 600 !important;
     transition: all 0.3s ease;
     white-space: nowrap;
+    height: 58px; /* Mesma altura do select */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-width: 2px !important;
 }
 
-#btn-carregar-rodada:hover {
+.btn-acessar-rodada:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(13, 110, 253, 0.3) !important;
 }
 
-#btn-carregar-rodada:active {
+.btn-acessar-rodada:active {
     transform: translateY(0);
 }
 
@@ -535,7 +541,20 @@ input[type="number"] {
     box-shadow: 0 5px 20px rgba(0,0,0,0.1);
 }
 
-/* Ajuste para mobile */
+/* Ajustes para mobile */
+@media (max-width: 768px) {
+    .selector-rodada {
+        height: 52px; /* Altura um pouco menor para tablets */
+        font-size: 1rem !important;
+        background-position: right 0.75rem center;
+    }
+    
+    .btn-acessar-rodada {
+        height: 52px; /* Mesma altura do select */
+        font-size: 0.95rem !important;
+    }
+}
+
 @media (max-width: 576px) {
     .row.g-2 {
         margin-left: -5px;
@@ -547,14 +566,35 @@ input[type="number"] {
         padding-right: 5px;
     }
     
-    #seletor-rodada {
+    .selector-rodada {
+        height: 48px; /* Altura exata para mobile */
         font-size: 0.95rem !important;
-        padding: 0.8rem 0.5rem !important;
+        padding: 0 0.5rem !important;
         background-position: right 0.5rem center;
+        background-size: 14px 14px;
     }
     
-    #btn-carregar-rodada {
+    .btn-acessar-rodada {
+        height: 48px; /* EXATAMENTE a mesma altura do select */
         font-size: 0.9rem !important;
-        padding: 0.7rem 0.3rem !important;
+        padding: 0 0.3rem !important;
+    }
+    
+    .btn-acessar-rodada i {
+        margin-right: 0.25rem !important;
+        font-size: 0.9rem;
+    }
+}
+
+/* Ajuste para telas muito pequenas */
+@media (max-width: 375px) {
+    .selector-rodada {
+        height: 44px;
+        font-size: 0.85rem !important;
+    }
+    
+    .btn-acessar-rodada {
+        height: 44px;
+        font-size: 0.8rem !important;
     }
 }
