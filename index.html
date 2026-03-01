@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     
     <!-- CSS personalizado Versionamento -->
-    <link rel="stylesheet" href="style.css?v=5.4">
+    <link rel="stylesheet" href="style.css?v=5.5">
 </head>
 <body class="d-flex flex-column min-vh-100">
     <!-- Header Fixo -->
@@ -144,30 +144,33 @@
                             </a>
                         </div>
                         
-                        <!-- 📅 SELETOR DE RODADAS COM BOTÃO - MESMO TAMANHO -->
+                        <!-- 📅 SELETOR DE RODADAS - SELECT E BOTÃO NA MESMA LINHA -->
                         <div class="text-center mt-3 mb-4">
                             <div class="card shadow-sm border-0 bg-light">
                                 <div class="card-body py-4">
-                                    <label for="seletor-rodada" class="form-label fw-semibold text-secondary mb-3">
+                                    <label class="form-label fw-semibold text-secondary mb-3 d-block text-center">
                                         <i class="bi bi-calendar-week me-1"></i> Selecione uma rodada:
                                     </label>
                                     
-                                    <!-- SELECT COM MESMO ESTILO DO BOTÃO ACIMA -->
-                                    <select class="form-select mb-3 text-center" id="seletor-rodada" 
-                                            style="border-width: 2px; border-radius: 50px; font-weight: 600; padding: 1rem 0.75rem; height: auto; font-size: 1.25rem; border-color: #0d6efd; color: #0d6efd; background-color: white;">
-                                        <option value="rodada01.html">Rodada 1</option>
-                                        <option value="rodada02.html" selected>Rodada 2</option>
-                                    </select>
+                                    <div class="row g-2">
+                                        <div class="col-7">
+                                            <select class="form-control w-100 text-center" id="seletor-rodada" 
+                                                    style="border-width: 2px; border-radius: 50px; font-weight: 600; padding: 0.9rem 0.75rem; height: auto; font-size: 1.1rem; border-color: #0d6efd; color: #0d6efd; background-color: white;">
+                                                <option value="rodada01.html">Rodada 1</option>
+                                                <option value="rodada02.html" selected>Rodada 2</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-5">
+                                            <button class="btn btn-primary w-100 py-3 shadow-sm" id="btn-carregar-rodada"
+                                                    style="border-width: 2px; border-radius: 50px; font-weight: 600; padding: 0.75rem 0.5rem; font-size: 1rem; height: auto;">
+                                                <i class="bi bi-folder-symlink me-1"></i>
+                                                Ir
+                                            </button>
+                                        </div>
+                                    </div>
                                     
-                                    <button class="btn btn-primary btn-lg w-100 py-3 shadow-sm" id="btn-carregar-rodada"
-                                            style="border-width: 2px; border-radius: 50px; font-weight: 600;">
-                                        <i class="bi bi-folder-symlink me-2"></i>
-                                        Carregar Rodada
-                                        <i class="bi bi-arrow-right ms-2"></i>
-                                    </button>
-                                    
-                                    <p class="text-muted small mt-3 mb-0">
-                                        <i class="bi bi-info-circle"></i> Escolha a rodada e clique no botão para visualizar os detalhes
+                                    <p class="text-muted small mt-3 mb-0 text-center">
+                                        <i class="bi bi-info-circle"></i> Escolha a rodada e clique em "Ir"
                                     </p>
                                 </div>
                             </div>
@@ -359,26 +362,10 @@
                     }
                 });
             }
-            
-            // Ajusta o padding do select para mobile (opcional)
-            const ajustarSelectMobile = function() {
-                if (window.innerWidth <= 576) {
-                    seletorRodada.style.padding = '0.8rem 0.75rem';
-                    seletorRodada.style.fontSize = '1rem';
-                } else {
-                    seletorRodada.style.padding = '1rem 0.75rem';
-                    seletorRodada.style.fontSize = '1.25rem';
-                }
-            };
-            
-            if (seletorRodada) {
-                ajustarSelectMobile();
-                window.addEventListener('resize', ajustarSelectMobile);
-            }
         });
     </script>
     
     <!-- JavaScript personalizado Versionamento -->
-    <script src="app.js?v=5.4"></script>
+    <script src="app.js?v=5.5"></script>
 </body>
 </html>

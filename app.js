@@ -1,4 +1,4 @@
-// app.js?v=5.4
+// app.js?v=5.5
 
 // ====================
 // 🔧 CONFIGURAÇÃO ÚNICA
