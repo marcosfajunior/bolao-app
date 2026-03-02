@@ -4,256 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Bolão Brasileirão 2026 - Classificação Geral</title>
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
-        }
-        .top-buttons {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            background-color: #343a40;
-            padding: 15px 0;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .top-buttons .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-        .buttons-row {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            width: 100%;
-        }
-        .btn-nav {
-            background-color: white;
-            color: #343a40;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            flex: 1;
-            max-width: 200px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .btn-nav:hover {
-            background-color: #f0f0f0;
-            color: #000;
-        }
-        .btn-nav i {
-            font-size: 1.2rem;
-        }
-        .update-info {
-            color: white;
-            font-size: 1.1rem;
-            text-align: center;
-            width: 100%;
-            background-color: rgba(255,255,255,0.15);
-            padding: 8px 15px;
-            border-radius: 30px;
-            margin-top: 5px;
-        }
-        .update-info .rodada-destaque {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: #ffc107;
-            margin-right: 5px;
-        }
-        .update-info .data-info {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-        .header-card {
-            background: #343a40;
-            color: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        .header-card h1 {
-            margin-bottom: 5px;
-        }
-        .header-card h2 {
-            margin-bottom: 5px;
-        }
-        .section-title {
-            background-color: #343a40;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin: 20px 0 15px 0;
-            font-weight: bold;
-            text-align: center;
-        }
-        .section-title i {
-            margin-right: 8px;
-        }
-        .section-title-red {
-            background-color: #dc3545;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin: 20px 0 15px 0;
-            font-weight: bold;
-            text-align: center;
-        }
-        .section-title-red i {
-            margin-right: 8px;
-        }
-        .table-card {
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .table {
-            margin-bottom: 0;
-            font-size: 0.9rem;
-        }
-        .table thead th {
-            background-color: #343a40;
-            color: white;
-            font-weight: 600;
-            font-size: 0.85rem;
-            white-space: nowrap;
-            padding: 10px 5px;
-            border-bottom: none;
-        }
-        .table tbody td {
-            padding: 10px 5px;
-            vertical-align: middle;
-        }
-        .table-striped > tbody > tr:nth-of-type(odd) {
-            background-color: rgba(0,0,0,.02);
-        }
-        .badge-pos {
-            background-color: #6c757d;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: normal;
-        }
-        .badge-pos-1 {
-            background-color: #ffc107;
-            color: #000;
-        }
-        .footer-info {
-            background-color: #e9ecef;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 20px;
-            font-size: 0.85rem;
-            color: #495057;
-            text-align: center;
-        }
+        body { background-color: #f8f9fa; font-family: Arial, sans-serif; }
+        .top-buttons { position: sticky; top: 0; z-index: 1000; background-color: #343a40; padding: 15px 0; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .top-buttons .container { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .buttons-row { display: flex; justify-content: center; gap: 15px; width: 100%; }
+        .btn-nav { background-color: white; color: #343a40; border: none; padding: 10px 20px; border-radius: 6px; font-size: 16px; font-weight: 500; cursor: pointer; transition: background-color 0.2s; flex: 1; max-width: 200px; text-align: center; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-nav:hover { background-color: #f0f0f0; color: #000; }
+        .btn-nav i { font-size: 1.2rem; }
+        .update-info { color: white; font-size: 1.1rem; text-align: center; width: 100%; background-color: rgba(255,255,255,0.15); padding: 8px 15px; border-radius: 30px; margin-top: 5px; }
+        .update-info .rodada-destaque { font-size: 1.4rem; font-weight: bold; color: #ffc107; margin-right: 5px; }
+        .update-info .data-info { font-size: 0.9rem; opacity: 0.9; }
+        .header-card { background: #343a40; color: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
+        .header-card h1 { margin-bottom: 5px; }
+        .header-card h2 { margin-bottom: 5px; }
+        .section-title { background-color: #343a40; color: white; padding: 10px 15px; border-radius: 8px; margin: 20px 0 15px 0; font-weight: bold; text-align: center; }
+        .section-title i { margin-right: 8px; }
+        .table-card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .table { margin-bottom: 0; font-size: 0.9rem; }
+        .table thead th { background-color: #343a40; color: white; font-weight: 600; font-size: 0.85rem; white-space: nowrap; padding: 10px 5px; border-bottom: none; }
+        .table tbody td { padding: 10px 5px; vertical-align: middle; }
+        .table-striped > tbody > tr:nth-of-type(odd) { background-color: rgba(0,0,0,.02); }
+        .badge-pos { background-color: #6c757d; color: white; padding: 3px 8px; border-radius: 20px; font-size: 0.8rem; font-weight: normal; }
+        .badge-pos-1 { background-color: #ffc107; color: #000; }
+        .footer-info { background-color: #e9ecef; border-radius: 10px; padding: 15px; margin-top: 20px; font-size: 0.85rem; color: #495057; text-align: center; }
+        .selector-container { background-color: white; border-radius: 50px; padding: 5px; max-width: 300px; margin: 10px auto 0; }
+        .rodada-selector { border: 2px solid #0d6efd; border-radius: 50px; font-weight: 600; color: #0d6efd; background-color: white; padding: 10px 15px; width: 100%; cursor: pointer; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='%230d6efd' fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 16px 16px; appearance: none; -webkit-appearance: none; -moz-appearance: none; }
+        .rodada-selector:hover { background-color: #f8f9ff; border-color: #0a58ca; }
+        .btn-ir-rodada { border-radius: 50px; font-weight: 600; height: 48px; display: flex; align-items: center; justify-content: center; }
         @media (max-width: 768px) {
-            .table {
-                font-size: 0.8rem;
-            }
-            .table thead th {
-                font-size: 0.75rem;
-                padding: 8px 3px;
-            }
-            .table tbody td {
-                padding: 8px 3px;
-            }
-            .header-card {
-                padding: 15px;
-            }
-            .header-card h1 {
-                font-size: 1.5rem;
-            }
-            .header-card h2 {
-                font-size: 1.2rem;
-            }
-            .btn-nav {
-                padding: 8px 16px;
-                font-size: 14px;
-                max-width: 150px;
-            }
-            .update-info {
-                font-size: 1rem;
-            }
-            .update-info .rodada-destaque {
-                font-size: 1.2rem;
-            }
+            .table { font-size: 0.8rem; }
+            .table thead th { font-size: 0.75rem; padding: 8px 3px; }
+            .table tbody td { padding: 8px 3px; }
+            .header-card { padding: 15px; }
+            .header-card h1 { font-size: 1.5rem; }
+            .header-card h2 { font-size: 1.2rem; }
+            .btn-nav { padding: 8px 16px; font-size: 14px; max-width: 150px; }
+            .update-info { font-size: 1rem; }
+            .update-info .rodada-destaque { font-size: 1.2rem; }
+            .rodada-selector { font-size: 0.95rem; padding: 8px 12px; }
         }
         @media (max-width: 576px) {
-            .table {
-                font-size: 0.7rem;
-            }
-            .table thead th {
-                font-size: 0.65rem;
-                padding: 6px 2px;
-            }
-            .table tbody td {
-                padding: 6px 2px;
-            }
-            .buttons-row {
-                gap: 10px;
-            }
-            .btn-nav {
-                padding: 6px 12px;
-                font-size: 13px;
-                max-width: 130px;
-            }
-            .update-info {
-                font-size: 0.9rem;
-            }
-            .update-info .rodada-destaque {
-                font-size: 1.1rem;
-            }
+            .table { font-size: 0.7rem; }
+            .table thead th { font-size: 0.65rem; padding: 6px 2px; }
+            .table tbody td { padding: 6px 2px; }
+            .buttons-row { gap: 10px; }
+            .btn-nav { padding: 6px 12px; font-size: 13px; max-width: 130px; }
+            .update-info { font-size: 0.9rem; }
+            .update-info .rodada-destaque { font-size: 1.1rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Botões fixos no topo -->
     <div class="top-buttons">
         <div class="container">
             <div class="buttons-row">
-                <a href="index.html" class="btn-nav">
-                    <i class="bi bi-house-door"></i> Voltar
-                </a>
-                <button onclick="location.reload()" class="btn-nav">
-                    <i class="bi bi-arrow-clockwise"></i> Recarregar
-                </button>
+                <a href="index.html" class="btn-nav"><i class="bi bi-house-door"></i> Voltar</a>
+                <button onclick="location.reload()" class="btn-nav"><i class="bi bi-arrow-clockwise"></i> Recarregar</button>
+            </div>
+            <div class="row g-2 mt-2" style="max-width: 400px; margin: 0 auto;">
+                <div class="col-8">
+                    <select class="rodada-selector" id="seletor-rodada" onchange="mudarRodada()">
+                        <option value="?rodada=38" >Rodada 38</option><option value="?rodada=37" >Rodada 37</option><option value="?rodada=36" >Rodada 36</option><option value="?rodada=35" >Rodada 35</option><option value="?rodada=34" >Rodada 34</option><option value="?rodada=33" >Rodada 33</option><option value="?rodada=32" >Rodada 32</option><option value="?rodada=31" >Rodada 31</option><option value="?rodada=30" >Rodada 30</option><option value="?rodada=29" >Rodada 29</option><option value="?rodada=28" >Rodada 28</option><option value="?rodada=27" >Rodada 27</option><option value="?rodada=26" >Rodada 26</option><option value="?rodada=25" >Rodada 25</option><option value="?rodada=24" >Rodada 24</option><option value="?rodada=23" >Rodada 23</option><option value="?rodada=22" >Rodada 22</option><option value="?rodada=21" >Rodada 21</option><option value="?rodada=20" >Rodada 20</option><option value="?rodada=19" >Rodada 19</option><option value="?rodada=18" >Rodada 18</option><option value="?rodada=17" >Rodada 17</option><option value="?rodada=16" >Rodada 16</option><option value="?rodada=15" >Rodada 15</option><option value="?rodada=14" >Rodada 14</option><option value="?rodada=13" >Rodada 13</option><option value="?rodada=12" >Rodada 12</option><option value="?rodada=11" >Rodada 11</option><option value="?rodada=10" >Rodada 10</option><option value="?rodada=9" >Rodada 9</option><option value="?rodada=8" >Rodada 8</option><option value="?rodada=7" >Rodada 7</option><option value="?rodada=6" >Rodada 6</option><option value="?rodada=5" >Rodada 5</option><option value="?rodada=4" >Rodada 4</option><option value="?rodada=3" >Rodada 3</option><option value="?rodada=2" >Rodada 2</option><option value="?rodada=1" >Rodada 1</option>
+                    </select>
+                </div>
+                <div class="col-4">
+                    <button class="btn btn-primary w-100 btn-ir-rodada" onclick="irParaRodada()"><i class="bi bi-folder-symlink me-1"></i> Ir</button>
+                </div>
             </div>
             <div class="update-info">
-                <span class="rodada-destaque"><i class="bi bi-trophy-fill"></i> Rodada 4</span>
+                <span class="rodada-destaque"><i class="bi bi-trophy-fill"></i> Rodada ?</span>
                 <br class="d-sm-none">
-                <span class="data-info"><i class="bi bi-clock"></i> Atualizado em: 26/02/2026 21:26</span>
+                <span class="data-info"><i class="bi bi-clock"></i> Atualizado em: 02/03/2026 11:24</span>
             </div>
         </div>
     </div>
+    
+    <script>
+        function mudarRodada() { var select = document.getElementById("seletor-rodada"); var valor = select.value; window.location.href = valor; }
+        function irParaRodada() { mudarRodada(); }
+    </script>
 
     <div class="container py-3">
-        <!-- PÁGINA 1: CLASSIFICAÇÃO GERAL -->
         <div class="header-card">
             <h1 class="mb-2">⚽ Bolão Brasileirão 2026</h1>
             <h2 class="h4 mb-2">Classificação Geral</h2>
         </div>
-
         <div class="table-card">
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
@@ -373,185 +211,102 @@
             </div>
         </div>
 
-        <!-- PÁGINA 2: DESEMPENHO GERAL -->
         <div class="header-card mt-4">
             <h1 class="mb-2">⚽ Bolão Brasileirão 2026</h1>
-            <h2 class="h4 mb-2">Desempenho Geral</h2>
+            <h2 class="h4 mb-2">Melhor Pontuação</h2>
         </div>
-
-        <!-- Layout responsivo: lado a lado em telas maiores, empilhado em mobile -->
-        <div class="row g-3">
-            <!-- COLUNA 1: MELHOR PONTUAÇÃO DENTRE TODAS RODADAS -->
-            <div class="col-md-6">
-                <div class="table-card h-100">
-                    <h3 class="section-title mb-3">
-                        <i class="bi bi-star-fill"></i> MELHOR PONTUAÇÃO
-                    </h3>
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="text-center" style="width: 15%">POS</th>
-                                    <th style="width: 50%">NOME</th>
-                                    <th class="text-center" style="width: 20%">PTS</th>
-                                    <th class="text-center" style="width: 15%">ROD</th>
-                                </tr>
-                            </thead>
-                            <tbody><tr>
-                                    <td class="text-center"><span class="badge-pos badge-pos-1">1º</span></td>
-                                    <td>LUIZ GUSTAVO</td>
-                                    <td class="text-center fw-bold">124</td>
-                                    <td class="text-center">4</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">2º</span></td>
-                                    <td>JOSÉ CARLOS</td>
-                                    <td class="text-center fw-bold">106</td>
-                                    <td class="text-center">3</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">3º</span></td>
-                                    <td>DANIEL ALMEIDA</td>
-                                    <td class="text-center fw-bold">92</td>
-                                    <td class="text-center">4</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">4º</span></td>
-                                    <td>DANIEL PENA</td>
-                                    <td class="text-center fw-bold">86</td>
-                                    <td class="text-center">1</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">5º</span></td>
-                                    <td>VICTOR HUGO</td>
-                                    <td class="text-center fw-bold">85</td>
-                                    <td class="text-center">3</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">6º</span></td>
-                                    <td>GABRIEL CAMBRAIA</td>
-                                    <td class="text-center fw-bold">83</td>
-                                    <td class="text-center">2</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">6º</span></td>
-                                    <td>MARCOS FERREIRA</td>
-                                    <td class="text-center fw-bold">83</td>
-                                    <td class="text-center">3</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">8º</span></td>
-                                    <td>WESCLEY GALDINO</td>
-                                    <td class="text-center fw-bold">81</td>
-                                    <td class="text-center">3</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">9º</span></td>
-                                    <td>JÚLIO CÉSAR</td>
-                                    <td class="text-center fw-bold">72</td>
-                                    <td class="text-center">3</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">10º</span></td>
-                                    <td>NÉLIO MENIGHIN</td>
-                                    <td class="text-center fw-bold">71</td>
-                                    <td class="text-center">4</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">11º</span></td>
-                                    <td>TIAGO SILVA</td>
-                                    <td class="text-center fw-bold">68</td>
-                                    <td class="text-center">1</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">12º</span></td>
-                                    <td>PAULO SILVA</td>
-                                    <td class="text-center fw-bold">60</td>
-                                    <td class="text-center">4</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">13º</span></td>
-                                    <td>PAULO EDUARDO</td>
-                                    <td class="text-center fw-bold">55</td>
-                                    <td class="text-center">3</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">14º</span></td>
-                                    <td>MARCELO ASSIS</td>
-                                    <td class="text-center fw-bold">50</td>
-                                    <td class="text-center">3</td>
-                                </tr>                       </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- COLUNA 2: CLASSIFICAÇÃO DA RODADA ATUAL -->
-            <div class="col-md-6">
-                <div class="table-card h-100">
-                    <h3 class="section-title-red mb-3">
-                        <i class="bi bi-bar-chart-fill"></i> PONTUAÇÃO RODADA 4
-                    </h3>
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="text-center" style="width: 15%">POS</th>
-                                    <th style="width: 65%">NOME</th>
-                                    <th class="text-center" style="width: 20%">PTS</th>
-                                </tr>
-                            </thead>
-                            <tbody><tr>
-                                    <td class="text-center"><span class="badge-pos badge-pos-1">1º</span></td>
-                                    <td>LUIZ GUSTAVO</td>
-                                    <td class="text-center fw-bold">124</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">2º</span></td>
-                                    <td>DANIEL ALMEIDA</td>
-                                    <td class="text-center fw-bold">92</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">3º</span></td>
-                                    <td>VICTOR HUGO</td>
-                                    <td class="text-center fw-bold">76</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">4º</span></td>
-                                    <td>GABRIEL CAMBRAIA</td>
-                                    <td class="text-center fw-bold">72</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">5º</span></td>
-                                    <td>NÉLIO MENIGHIN</td>
-                                    <td class="text-center fw-bold">71</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">6º</span></td>
-                                    <td>TIAGO SILVA</td>
-                                    <td class="text-center fw-bold">64</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">7º</span></td>
-                                    <td>PAULO SILVA</td>
-                                    <td class="text-center fw-bold">60</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">8º</span></td>
-                                    <td>MARCELO ASSIS</td>
-                                    <td class="text-center fw-bold">48</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">9º</span></td>
-                                    <td>PAULO EDUARDO</td>
-                                    <td class="text-center fw-bold">44</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">10º</span></td>
-                                    <td>WESCLEY GALDINO</td>
-                                    <td class="text-center fw-bold">39</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">11º</span></td>
-                                    <td>DANIEL PENA</td>
-                                    <td class="text-center fw-bold">34</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">12º</span></td>
-                                    <td>JOSÉ CARLOS</td>
-                                    <td class="text-center fw-bold">23</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">13º</span></td>
-                                    <td>MARCOS FERREIRA</td>
-                                    <td class="text-center fw-bold">22</td>
-                                </tr><tr>
-                                    <td class="text-center"><span class="badge-pos ">14º</span></td>
-                                    <td>JÚLIO CÉSAR</td>
-                                    <td class="text-center fw-bold">7</td>
-                                </tr>                       </tbody>
-                        </table>
-                    </div>
-                </div>
+        <div class="table-card">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="width: 15%">POS</th>
+                            <th style="width: 50%">NOME</th>
+                            <th class="text-center" style="width: 20%">PTS</th>
+                            <th class="text-center" style="width: 15%">ROD</th>
+                        </tr>
+                    </thead>
+                    <tbody><tr>
+                        <td class="text-center"><span class="badge-pos badge-pos-1">1º</span></td>
+                        <td>LUIZ GUSTAVO</td>
+                        <td class="text-center fw-bold">124</td>
+                        <td class="text-center">4</td>
+                    </tr><tr>
+                        <td class="text-center"><span class="badge-pos ">2º</span></td>
+                        <td>JOSÉ CARLOS</td>
+                        <td class="text-center fw-bold">106</td>
+                        <td class="text-center">3</td>
+                    </tr><tr>
+                        <td class="text-center"><span class="badge-pos ">3º</span></td>
+                        <td>DANIEL ALMEIDA</td>
+                        <td class="text-center fw-bold">92</td>
+                        <td class="text-center">4</td>
+                    </tr><tr>
+                        <td class="text-center"><span class="badge-pos ">4º</span></td>
+                        <td>DANIEL PENA</td>
+                        <td class="text-center fw-bold">86</td>
+                        <td class="text-center">1</td>
+                    </tr><tr>
+                        <td class="text-center"><span class="badge-pos ">5º</span></td>
+                        <td>VICTOR HUGO</td>
+                        <td class="text-center fw-bold">85</td>
+                        <td class="text-center">3</td>
+                    </tr><tr>
+                        <td class="text-center"><span class="badge-pos ">6º</span></td>
+                        <td>GABRIEL CAMBRAIA</td>
+                        <td class="text-center fw-bold">83</td>
+                        <td class="text-center">2</td>
+                    </tr><tr>
+                        <td class="text-center"><span class="badge-pos ">6º</span></td>
+                        <td>MARCOS FERREIRA</td>
+                        <td class="text-center fw-bold">83</td>
+                        <td class="text-center">3</td>
+                    </tr><tr>
+                        <td class="text-center"><span class="badge-pos ">8º</span></td>
+                        <td>WESCLEY GALDINO</td>
+                        <td class="text-center fw-bold">81</td>
+                        <td class="text-center">3</td>
+                    </tr><tr>
+                        <td class="text-center"><span class="badge-pos ">9º</span></td>
+                        <td>JÚLIO CÉSAR</td>
+                        <td class="text-center fw-bold">72</td>
+                        <td class="text-center">3</td>
+                    </tr><tr>
+                        <td class="text-center"><span class="badge-pos ">10º</span></td>
+                        <td>NÉLIO MENIGHIN</td>
+                        <td class="text-center fw-bold">71</td>
+                        <td class="text-center">4</td>
+                    </tr><tr>
+                        <td class="text-center"><span class="badge-pos ">11º</span></td>
+                        <td>TIAGO SILVA</td>
+                        <td class="text-center fw-bold">68</td>
+                        <td class="text-center">1</td>
+                    </tr><tr>
+                        <td class="text-center"><span class="badge-pos ">12º</span></td>
+                        <td>PAULO SILVA</td>
+                        <td class="text-center fw-bold">60</td>
+                        <td class="text-center">4</td>
+                    </tr><tr>
+                        <td class="text-center"><span class="badge-pos ">13º</span></td>
+                        <td>PAULO EDUARDO</td>
+                        <td class="text-center fw-bold">55</td>
+                        <td class="text-center">3</td>
+                    </tr><tr>
+                        <td class="text-center"><span class="badge-pos ">14º</span></td>
+                        <td>MARCELO ASSIS</td>
+                        <td class="text-center fw-bold">50</td>
+                        <td class="text-center">3</td>
+                    </tr>           </tbody>
+                </table>
             </div>
         </div>
 
-    <!-- Bootstrap JS -->
+        <div class="footer-info">
+            <i class="bi bi-info-circle"></i> Dados atualizados automaticamente pelo sistema Bolão Brasileirão 2026
+            <br>
+            <small>Classificação baseada em: Pontos Totais | Placar Completo | Resultado | Placar Invertido</small>
+        </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
