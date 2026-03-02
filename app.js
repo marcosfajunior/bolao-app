@@ -1,16 +1,16 @@
-// app.js?v=5.8
+// app.js?v=5.9
 
 // ====================
 // 🔧 CONFIGURAÇÃO ÚNICA
 // ====================
 
-const VERSAO_ATUAL = "20260301_0000_R05";
+const VERSAO_ATUAL = "20260302_0000_R04";
 
 const configRodada = {
     nomeBolao: "⚽ Bolão Campeonato Brasileiro 2026",
-    numeroRodada: "RODADA 05",
-    dataInicio: "10/03/2026",
-    dataLimite: "09/03/2026"
+    numeroRodada: "RODADA 04",
+    dataInicio: "25/02/2026",
+    dataLimite: "24/02/2026"
 };
 
 const jogosRodada = [
