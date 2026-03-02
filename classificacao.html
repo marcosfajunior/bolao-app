@@ -15,7 +15,6 @@
         .btn-nav:hover { background-color: #f0f0f0; color: #000; }
         .btn-nav i { font-size: 1.2rem; }
         .update-info { color: white; font-size: 1.1rem; text-align: center; width: 100%; background-color: rgba(255,255,255,0.15); padding: 8px 15px; border-radius: 30px; margin-top: 5px; }
-        .update-info .rodada-destaque { font-size: 1.4rem; font-weight: bold; color: #ffc107; margin-right: 5px; }
         .update-info .data-info { font-size: 0.9rem; opacity: 0.9; }
         .header-card { background: #343a40; color: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
         .header-card h1 { margin-bottom: 5px; }
@@ -30,10 +29,6 @@
         .badge-pos { background-color: #6c757d; color: white; padding: 3px 8px; border-radius: 20px; font-size: 0.8rem; font-weight: normal; }
         .badge-pos-1 { background-color: #ffc107; color: #000; }
         .footer-info { background-color: #e9ecef; border-radius: 10px; padding: 15px; margin-top: 20px; font-size: 0.85rem; color: #495057; text-align: center; }
-        .selector-container { background-color: white; border-radius: 50px; padding: 5px; max-width: 300px; margin: 10px auto 0; }
-        .rodada-selector { border: 2px solid #0d6efd; border-radius: 50px; font-weight: 600; color: #0d6efd; background-color: white; padding: 10px 15px; width: 100%; cursor: pointer; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='%230d6efd' fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 16px 16px; appearance: none; -webkit-appearance: none; -moz-appearance: none; }
-        .rodada-selector:hover { background-color: #f8f9ff; border-color: #0a58ca; }
-        .btn-ir-rodada { border-radius: 50px; font-weight: 600; height: 48px; display: flex; align-items: center; justify-content: center; }
         @media (max-width: 768px) {
             .table { font-size: 0.8rem; }
             .table thead th { font-size: 0.75rem; padding: 8px 3px; }
@@ -43,8 +38,6 @@
             .header-card h2 { font-size: 1.2rem; }
             .btn-nav { padding: 8px 16px; font-size: 14px; max-width: 150px; }
             .update-info { font-size: 1rem; }
-            .update-info .rodada-destaque { font-size: 1.2rem; }
-            .rodada-selector { font-size: 0.95rem; padding: 8px 12px; }
         }
         @media (max-width: 576px) {
             .table { font-size: 0.7rem; }
@@ -53,7 +46,6 @@
             .buttons-row { gap: 10px; }
             .btn-nav { padding: 6px 12px; font-size: 13px; max-width: 130px; }
             .update-info { font-size: 0.9rem; }
-            .update-info .rodada-destaque { font-size: 1.1rem; }
         }
     </style>
 </head>
@@ -64,16 +56,11 @@
                 <a href="index.html" class="btn-nav"><i class="bi bi-house-door"></i> Voltar</a>
                 <button onclick="location.reload()" class="btn-nav"><i class="bi bi-arrow-clockwise"></i> Recarregar</button>
             </div>
-            <div class="update-info">
-                <span class="data-info"><i class="bi bi-clock"></i> Atualizado em: 02/03/2026 11:24</span>
+            <div class="update-info">   
+                <span class="data-info"><i class="bi bi-clock"></i> Atualizado em: 02/03/2026 11:44</span>
             </div>
         </div>
     </div>
-    
-    <script>
-        function mudarRodada() { var select = document.getElementById("seletor-rodada"); var valor = select.value; window.location.href = valor; }
-        function irParaRodada() { mudarRodada(); }
-    </script>
 
     <div class="container py-3">
         <div class="header-card">
@@ -89,7 +76,7 @@
                             <th style="width: 30%">NOME</th>
                             <th class="text-center" style="width: 15%">PTS</th>
                             <th class="text-center" style="width: 15%">PC</th>
-                            <th class="text-center" style="width: 15%">RES</th>
+                            <th class="text-center" style="width: 15%">RE</th>
                             <th class="text-center" style="width: 15%">PI</th>
                         </tr>
                     </thead>
@@ -195,7 +182,7 @@
                 </table>
             </div>
             <div class="small text-muted mt-2 text-center">
-                <i class="bi bi-info-circle"></i> PC: Placar Completo | RES: Resultado | PI: Placar Invertido
+                <i class="bi bi-info-circle"></i> PC: Placar Completo | RE: Resultado | PI: Placar Invertido
             </div>
         </div>
 
@@ -291,9 +278,7 @@
 
         <div class="footer-info">
             <i class="bi bi-info-circle"></i> Dados atualizados pelo sistema Bolão Brasileirão 2026
-        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
