@@ -1,4 +1,4 @@
-// app.js?v=5.11
+// app.js?v=5.12
 
 // ====================
 // 🔧 CONFIGURAÇÃO ÚNICA
@@ -247,6 +247,11 @@ function mostrarToast(mensagem, tipo = 'success') {
 // ====================
 
 function salvarPalpiteAutomatico(jogoId) {
+    // 🚫 Não permite salvar se prazo expirado
+    if (!verificarPrazoValido()) {
+        return;
+    }
+    
     const placarA = document.querySelector(`select[name="placarA-${jogoId}"]`);
     const placarB = document.querySelector(`select[name="placarB-${jogoId}"]`);
     
@@ -888,7 +893,7 @@ function verificarTodosJogosPreenchidos() {
 }
 
 // ====================
-// 🎯 CARREGAR JOGOS (SEM DADOS SALVOS)
+// 🎯 CARREGAR JOGOS (SEM DADOS SALVOS) - COM BLOQUEIO POR PRAZO
 // ====================
 
 function carregarJogos() {
@@ -896,6 +901,8 @@ function carregarJogos() {
     container.innerHTML = '';
     
     document.getElementById('participante-atual').textContent = dadosApp.participante;
+    
+    const prazoValido = verificarPrazoValido();
 
     jogosRodada.forEach(jogo => {
         const card = document.createElement('div');
@@ -910,7 +917,8 @@ function carregarJogos() {
                         <div class="col-5 text-center">
                             <div class="fw-bold mb-2 small">${jogo.timeA}</div>
                             <select class="form-control input-placar" 
-                                    name="placarA-${jogo.id}">
+                                    name="placarA-${jogo.id}"
+                                    ${!prazoValido ? 'disabled' : ''}>
                                 ${gerarOpcoesSelect()}
                             </select>
                         </div>
@@ -920,7 +928,8 @@ function carregarJogos() {
                         <div class="col-5 text-center">
                             <div class="fw-bold mb-2 small">${jogo.timeB}</div>
                             <select class="form-control input-placar" 
-                                    name="placarB-${jogo.id}">
+                                    name="placarB-${jogo.id}"
+                                    ${!prazoValido ? 'disabled' : ''}>
                                 ${gerarOpcoesSelect()}
                             </select>
                         </div>
@@ -931,20 +940,42 @@ function carregarJogos() {
 
         container.appendChild(card);
         
-        // Adicionar eventos aos selects
-        const selectA = card.querySelector(`select[name="placarA-${jogo.id}"]`);
-        const selectB = card.querySelector(`select[name="placarB-${jogo.id}"]`);
-        
-        selectA.addEventListener('change', function() {
-            atualizarDashboardHeader();
-            salvarPalpiteAutomatico(jogo.id);
-        });
-        
-        selectB.addEventListener('change', function() {
-            atualizarDashboardHeader();
-            salvarPalpiteAutomatico(jogo.id);
-        });
+        // Adicionar eventos aos selects apenas se prazo válido
+        if (prazoValido) {
+            const selectA = card.querySelector(`select[name="placarA-${jogo.id}"]`);
+            const selectB = card.querySelector(`select[name="placarB-${jogo.id}"]`);
+            
+            selectA.addEventListener('change', function() {
+                atualizarDashboardHeader();
+                salvarPalpiteAutomatico(jogo.id);
+            });
+            
+            selectB.addEventListener('change', function() {
+                atualizarDashboardHeader();
+                salvarPalpiteAutomatico(jogo.id);
+            });
+        }
     });
+
+    // Se prazo expirado, desabilitar botão e mostrar mensagem
+    if (!prazoValido) {
+        const btnSalvar = document.getElementById('btn-salvar-palpites');
+        if (btnSalvar) {
+            btnSalvar.disabled = true;
+            btnSalvar.classList.add('btn-secondary');
+            btnSalvar.classList.remove('btn-success');
+            btnSalvar.innerHTML = '<i class="bi bi-clock-history"></i> Prazo Expirado - Visualização apenas';
+        }
+        
+        // Adicionar mensagem no topo do card
+        const headerCard = document.querySelector('#tela-palpites .card-header');
+        if (headerCard) {
+            const alerta = document.createElement('div');
+            alerta.className = 'alert alert-warning mt-2 mb-0 py-2 small';
+            alerta.innerHTML = '<i class="bi bi-clock"></i> <strong>Prazo expirado em ' + configRodada.dataLimite + '!</strong> Você está apenas visualizando os palpites.';
+            headerCard.appendChild(alerta);
+        }
+    }
 
     setTimeout(() => {
         atualizarDestaquesJogos();
@@ -952,7 +983,7 @@ function carregarJogos() {
 }
 
 // ====================
-// 🎯 CARREGAR JOGOS COM DADOS SALVOS
+// 🎯 CARREGAR JOGOS COM DADOS SALVOS - COM BLOQUEIO POR PRAZO
 // ====================
 
 function carregarJogosComDadosSalvos() {
@@ -963,6 +994,8 @@ function carregarJogosComDadosSalvos() {
 
     const ultimoPalpite = dadosApp.palpitesSalvos[dadosApp.palpitesSalvos.length - 1];
     const palpitesSalvos = ultimoPalpite.palpites;
+    
+    const prazoValido = verificarPrazoValido();
 
     jogosRodada.forEach(jogo => {
         const palpiteSalvo = palpitesSalvos.find(p => p.jogoId === jogo.id);
@@ -981,7 +1014,8 @@ function carregarJogosComDadosSalvos() {
                         <div class="col-5 text-center">
                             <div class="fw-bold mb-2 small">${jogo.timeA}</div>
                             <select class="form-control input-placar" 
-                                    name="placarA-${jogo.id}">
+                                    name="placarA-${jogo.id}"
+                                    ${!prazoValido ? 'disabled' : ''}>
                                 ${gerarOpcoesSelect(placarA)}
                             </select>
                         </div>
@@ -991,7 +1025,8 @@ function carregarJogosComDadosSalvos() {
                         <div class="col-5 text-center">
                             <div class="fw-bold mb-2 small">${jogo.timeB}</div>
                             <select class="form-control input-placar" 
-                                    name="placarB-${jogo.id}">
+                                    name="placarB-${jogo.id}"
+                                    ${!prazoValido ? 'disabled' : ''}>
                                 ${gerarOpcoesSelect(placarB)}
                             </select>
                         </div>
@@ -1002,31 +1037,60 @@ function carregarJogosComDadosSalvos() {
 
         container.appendChild(card);
         
-        const selectA = card.querySelector(`select[name="placarA-${jogo.id}"]`);
-        const selectB = card.querySelector(`select[name="placarB-${jogo.id}"]`);
-        
-        selectA.addEventListener('change', function() {
-            atualizarDashboardHeader();
-            salvarPalpiteAutomatico(jogo.id);
-        });
-        
-        selectB.addEventListener('change', function() {
-            atualizarDashboardHeader();
-            salvarPalpiteAutomatico(jogo.id);
-        });
+        // Adicionar eventos aos selects apenas se prazo válido
+        if (prazoValido) {
+            const selectA = card.querySelector(`select[name="placarA-${jogo.id}"]`);
+            const selectB = card.querySelector(`select[name="placarB-${jogo.id}"]`);
+            
+            selectA.addEventListener('change', function() {
+                atualizarDashboardHeader();
+                salvarPalpiteAutomatico(jogo.id);
+            });
+            
+            selectB.addEventListener('change', function() {
+                atualizarDashboardHeader();
+                salvarPalpiteAutomatico(jogo.id);
+            });
+        }
     });
 
     const btnSalvar = document.getElementById('btn-salvar-palpites');
     const titulo = document.getElementById('titulo-tela-palpites');
     
-    btnSalvar.classList.remove('d-none');
-    
-    if (dadosApp.dadosEnviados) {
-        titulo.textContent = '👀 Visualizar/Editar Palpites - ' + configRodada.numeroRodada;
-        btnSalvar.innerHTML = '<i class="bi bi-save"></i> Salvar Alterações e Enviar';
+    if (prazoValido) {
+        btnSalvar.classList.remove('d-none');
+        btnSalvar.disabled = false;
+        btnSalvar.classList.remove('btn-secondary');
+        btnSalvar.classList.add('btn-success');
+        
+        if (dadosApp.dadosEnviados) {
+            titulo.textContent = '👀 Visualizar/Editar Palpites - ' + configRodada.numeroRodada;
+            btnSalvar.innerHTML = '<i class="bi bi-save"></i> Salvar Alterações e Enviar';
+        } else {
+            titulo.textContent = '📝 Seus Palpites - ' + configRodada.numeroRodada;
+            btnSalvar.innerHTML = '<i class="bi bi-save"></i> Salvar e Enviar';
+        }
     } else {
-        titulo.textContent = '📝 Seus Palpites - ' + configRodada.numeroRodada;
-        btnSalvar.innerHTML = '<i class="bi bi-save"></i> Salvar e Enviar';
+        // Prazo expirado - modo visualização
+        btnSalvar.disabled = true;
+        btnSalvar.classList.add('btn-secondary');
+        btnSalvar.classList.remove('btn-success');
+        btnSalvar.innerHTML = '<i class="bi bi-clock-history"></i> Prazo Expirado - Visualização apenas';
+        
+        if (dadosApp.dadosEnviados) {
+            titulo.textContent = '👀 Visualizar Palpites (Enviados) - ' + configRodada.numeroRodada;
+        } else {
+            titulo.textContent = '👀 Visualizar Palpites (Rascunho) - ' + configRodada.numeroRodada;
+        }
+        
+        // Adicionar mensagem no topo do card
+        const headerCard = document.querySelector('#tela-palpites .card-header');
+        if (headerCard) {
+            const alerta = document.createElement('div');
+            alerta.className = 'alert alert-warning mt-2 mb-0 py-2 small';
+            alerta.innerHTML = '<i class="bi bi-clock"></i> <strong>Prazo expirado em ' + configRodada.dataLimite + '!</strong> Você está apenas visualizando os palpites.';
+            headerCard.appendChild(alerta);
+        }
     }
 
     atualizarDashboardHeader();
@@ -1037,6 +1101,12 @@ function carregarJogosComDadosSalvos() {
 }
 
 function salvarPalpites() {
+    // 🚫 Não permite salvar se prazo expirado
+    if (!verificarPrazoValido()) {
+        alert('⏰ O prazo para envio dos palpites desta rodada já expirou em ' + configRodada.dataLimite + '.');
+        return;
+    }
+    
     const verificacao = verificarTodosJogosPreenchidos();
     
     if (!verificacao.todosPreenchidos) {
@@ -1586,6 +1656,5 @@ function aplicarAjustesIOS() {
         });
     }
 }
-
 
 aplicarAjustesIOS();

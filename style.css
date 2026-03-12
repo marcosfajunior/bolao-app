@@ -1,4 +1,4 @@
-/* style.css?v=5.11 */
+/* style.css?v=5.12 */
 
 /* Reset mínimo */
 * {
@@ -652,5 +652,4 @@ input[type="number"] {
         body.tela-formulario .conteudo-dinamico { padding-top: calc(170px + env(safe-area-inset-top)); }
     }
     .whatsapp-float { bottom: 10px; }
-
 }
