@@ -1,29 +1,29 @@
-// app.js?v=5.12
+// app.js?v=6.0
 
 // ====================
 // 🔧 CONFIGURAÇÃO ÚNICA
 // ====================
 
-const VERSAO_ATUAL = "20260305_0000_R05";
+const VERSAO_ATUAL = "20260313_0000_R06";
 
 const configRodada = {
     nomeBolao: "⚽ Bolão Campeonato Brasileiro 2026",
-    numeroRodada: "RODADA 05",
-    dataInicio: "10/03/2026",
-    dataLimite: "09/03/2026"
+    numeroRodada: "RODADA 06",
+    dataInicio: "14/03/2026",
+    dataLimite: "14/03/2026 às 17h"
 };
 
 const jogosRodada = [
-    { id: "1", timeA: "Flamengo RJ", timeB: "Cruzeiro MG" },
-    { id: "2", timeA: "Vasco RJ", timeB: "Palmeiras SP" },
-    { id: "3", timeA: "São Paulo SP", timeB: "Chapecoense SC" },
-    { id: "4", timeA: "Corinthians SP", timeB: "Coritiba PR" },
-    { id: "5", timeA: "Mirassol SP", timeB: "Santos SP" },
-    { id: "6", timeA: "Atlético MG", timeB: "Internacional RS" },
-    { id: "7", timeA: "Grêmio RS", timeB: "Bragantino SP" },
-    { id: "8", timeA: "Athletico PR", timeB: "Botafogo RJ" },
-    { id: "9", timeA: "Bahia BA", timeB: "Vitória BA" },
-    { id: "10", timeA: "Remo PA", timeB: "Fluminense RJ" }
+    { id: "1", timeA: "Fluminense RJ", timeB: "Athletico PR" },
+    { id: "2", timeA: "Botafogo RJ", timeB: "Flamengo RJ" },
+    { id: "3", timeA: "Santos SP", timeB: "Corinthians SP" },
+    { id: "4", timeA: "Palmeiras SP", timeB: "Mirassol SP" },
+    { id: "5", timeA: "Bragantino SP", timeB: "São Paulo SP" },
+    { id: "6", timeA: "Cruzeiro MG", timeB: "Vasco RJ" },
+    { id: "7", timeA: "Internacional RS", timeB: "Bahia BA" },
+    { id: "8", timeA: "Coritiba PR", timeB: "Remo PA" },
+    { id: "9", timeA: "Vitória BA", timeB: "Atlético MG" },
+    { id: "10", timeA: "Chapecoense SC", timeB: "Grêmio RS" }
 ];
 
 const CONFIG_GOOGLE_FORMS = {
