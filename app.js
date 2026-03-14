@@ -1,4 +1,4 @@
-// app.js?v=6.1
+// app.js?v=6.2
 
 // ====================
 // 🔧 CONFIGURAÇÃO ÚNICA
@@ -72,7 +72,7 @@ let dadosApp = {
     tentativaForaPrazo: null,
     ultimoErroEnvio: null,
     erroInternet: false,
-    alteracoesPendentes: false // 🆕 Flag para controlar alterações não salvas
+    alteracoesPendentes: false
 };
 
 // ====================
@@ -80,7 +80,6 @@ let dadosApp = {
 // ====================
 
 document.addEventListener('DOMContentLoaded', function() {
-    // iOS fixes
     document.addEventListener('touchmove', function(e) {
         if (e.target.tagName === 'SELECT') {
             e.preventDefault();
@@ -89,10 +88,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     document.addEventListener('touchstart', function() {}, { passive: true });
     
-    // Configurar eventos
     configurarEventos();
     
-    // Carregar dados
     carregarDadosSalvos();
     atualizarInfoRodada();
     verificarEstadoAplicacao();
@@ -106,7 +103,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function configurarEventos() {
-    // Formulário participante
     const formParticipante = document.getElementById('formParticipante');
     if (formParticipante) {
         formParticipante.addEventListener('submit', function(e) {
@@ -115,7 +111,6 @@ function configurarEventos() {
         });
     }
     
-    // Formulário palpites
     const formPalpites = document.getElementById('formPalpites');
     if (formPalpites) {
         formPalpites.addEventListener('submit', function(e) {
@@ -124,7 +119,6 @@ function configurarEventos() {
         });
     }
     
-    // Botão inserir palpites
     const btnInserir = document.getElementById('btn-inserir-palpites');
     if (btnInserir) {
         btnInserir.addEventListener('click', function(e) {
@@ -133,7 +127,6 @@ function configurarEventos() {
         });
     }
     
-    // Botões da tela de conclusão
     const btnEditar = document.getElementById('btn-editar-palpites');
     if (btnEditar) {
         btnEditar.addEventListener('click', function() {
@@ -162,8 +155,12 @@ function configurarEventos() {
         });
     }
     
-    // Botões da tela de envio - NÃO precisa mais do botão fechar
-    // Mas mantemos a estrutura para não quebrar
+    const btnVoltarParticipante = document.getElementById('btn-voltar-participante');
+    if (btnVoltarParticipante) {
+        btnVoltarParticipante.addEventListener('click', function() {
+            mostrarTela('tela-participante');
+        });
+    }
 }
 
 function onSubmitParticipante() {
@@ -182,10 +179,6 @@ function onSubmitParticipante() {
     carregarPalpitesSalvos();
     atualizarDashboardHeader();
 }
-
-// ====================
-// 🆕 TOAST NOTIFICATION
-// ====================
 
 function mostrarToast(mensagem, tipo = 'success') {
     const toastExistente = document.querySelector('.toast-notification');
@@ -223,12 +216,7 @@ function mostrarToast(mensagem, tipo = 'success') {
     }, 3000);
 }
 
-// ====================
-// 🆕 SALVAMENTO AUTOMÁTICO
-// ====================
-
 function salvarPalpiteAutomatico(jogoId) {
-    // 🚫 Não permite salvar se prazo expirado
     if (!verificarPrazoValido()) {
         return;
     }
@@ -270,21 +258,16 @@ function salvarPalpiteAutomatico(jogoId) {
         salvarDados();
         atualizarDestaquesJogos();
         
-        // 🆕 Se já estava enviado, marcar que houve alteração
         if (dadosApp.dadosEnviados) {
             dadosApp.alteracoesPendentes = true;
             salvarDados();
-            atualizarBotoesAcao(); // Atualiza botões na tela de palpites
+            atualizarBotoesAcao();
         }
         
         const jogo = jogosRodada.find(j => j.id === jogoId);
         mostrarToast(`✅ Palpite do Jogo ${jogoId} (${jogo.timeA} x ${jogo.timeB}) salvo!`, 'success');
     }
 }
-
-// ====================
-// 🟢 DESTAQUE DE JOGOS PREENCHIDOS
-// ====================
 
 function atualizarDestaquesJogos() {
     jogosRodada.forEach(jogo => {
@@ -326,14 +309,9 @@ function carregarPalpitesSalvos() {
             mostrarToast(`📋 ${totalPreenchidos} palpites carregados do rascunho`, 'info');
         }
         
-        // Resetar flag de alterações pendentes ao carregar
         dadosApp.alteracoesPendentes = false;
     }
 }
-
-// ====================
-// 🆕 ATUALIZAR BOTÕES DE AÇÃO NA TELA DE PALPITES
-// ====================
 
 function atualizarBotoesAcao() {
     const btnSalvar = document.getElementById('btn-salvar-palpites');
@@ -343,50 +321,59 @@ function atualizarBotoesAcao() {
     
     const prazoValido = verificarPrazoValido();
     
-    if (dadosApp.dadosEnviados && dadosApp.alteracoesPendentes && prazoValido) {
-        // ✅ Já enviado, mas com alterações pendentes - mostrar "Enviar Alterações"
-        btnSalvar.disabled = false;
-        btnSalvar.classList.remove('btn-secondary');
-        btnSalvar.classList.add('btn-success');
-        btnSalvar.innerHTML = '<i class="bi bi-send"></i> Enviar Alterações';
-        btnVoltar.style.display = 'block'; // Mostrar botão voltar
-    } else if (dadosApp.dadosEnviados && !dadosApp.alteracoesPendentes && prazoValido) {
-        // ✅ Já enviado, sem alterações - modo visualização
+    // Sempre mostrar o botão voltar
+    btnVoltar.style.display = 'block';
+    
+    if (!prazoValido) {
         btnSalvar.disabled = true;
         btnSalvar.classList.add('btn-secondary');
         btnSalvar.classList.remove('btn-success');
-        btnSalvar.innerHTML = '<i class="bi bi-check-circle"></i> Palpites Enviados';
-        btnVoltar.style.display = 'block'; // Mostrar botão voltar
-    } else if (!dadosApp.dadosEnviados && prazoValido) {
-        // ✅ Nunca enviado - modo edição normal
+        btnSalvar.innerHTML = '<i class="bi bi-clock-history"></i> Prazo Expirado';
+        return;
+    }
+    
+    if (dadosApp.dadosEnviados) {
+        if (dadosApp.alteracoesPendentes) {
+            // ✅ Já enviado, mas com alterações - mostrar "Enviar Alterações"
+            btnSalvar.disabled = false;
+            btnSalvar.classList.remove('btn-secondary');
+            btnSalvar.classList.add('btn-success');
+            btnSalvar.innerHTML = '<i class="bi bi-send"></i> Enviar Alterações';
+        } else {
+            // ✅ Já enviado, sem alterações - botão desabilitado
+            btnSalvar.disabled = true;
+            btnSalvar.classList.add('btn-secondary');
+            btnSalvar.classList.remove('btn-success');
+            btnSalvar.innerHTML = '<i class="bi bi-check-circle"></i> Palpites Enviados';
+        }
+    } else {
+        // ✅ Nunca enviado - comportamento normal
         const todosPreenchidos = verificarTodosJogosPreenchidos().todosPreenchidos;
-        btnSalvar.disabled = !todosPreenchidos;
-        btnSalvar.classList.remove('btn-secondary');
-        btnSalvar.classList.add('btn-success');
-        btnSalvar.innerHTML = todosPreenchidos ? 
-            '<i class="bi bi-send"></i> Enviar Palpites' : 
-            '<i class="bi bi-pencil"></i> Preencha todos os jogos';
-        btnVoltar.style.display = 'block'; // Mostrar botão voltar
+        
+        if (todosPreenchidos) {
+            btnSalvar.disabled = false;
+            btnSalvar.classList.remove('btn-secondary');
+            btnSalvar.classList.add('btn-success');
+            btnSalvar.innerHTML = '<i class="bi bi-send"></i> Enviar Palpites';
+        } else {
+            btnSalvar.disabled = true;
+            btnSalvar.classList.add('btn-secondary');
+            btnSalvar.classList.remove('btn-success');
+            btnSalvar.innerHTML = '<i class="bi bi-pencil"></i> Preencha todos os jogos';
+        }
     }
 }
-
-// ====================
-// 📊 ESTADO DA APLICAÇÃO
-// ====================
 
 function verificarEstadoAplicacao() {
     const statusRodada = verificarRodadaSalva();
     
-    // Esconder todos
     ocultarTodosAlertas();
     
-    // CASO 1: SEM DADOS SALVOS - Mostra formulário inicial
     if (!dadosApp.participante && dadosApp.palpitesSalvos.length === 0) {
         document.getElementById('formulario-inicial').classList.remove('d-none');
         return;
     }
     
-    // CASO 2: TEM PARTICIPANTE MAS NENHUM PALPITE PREENCHIDO
     if (dadosApp.participante && dadosApp.palpitesSalvos.length === 0) {
         dadosApp.participante = '';
         dadosApp.rodadaSalva = '';
@@ -395,13 +382,11 @@ function verificarEstadoAplicacao() {
         return;
     }
     
-    // CASO 3: RODADA DIFERENTE
     if (statusRodada === 'rodada_diferente') {
         exibirAlertaRodadaDiferente();
         return;
     }
     
-    // CASO 4: MESMA RODADA COM PALPITES SALVOS
     if (statusRodada === 'mesma_rodada') {
         if (dadosApp.dadosEnviados) {
             exibirAlertaEnviado();
@@ -545,10 +530,6 @@ function exibirAlertaErroEnvio() {
     alert.appendChild(divBotoes);
     alert.classList.remove('d-none');
 }
-
-// ====================
-// 📋 ALERTA DE RASCUNHO
-// ====================
 
 function exibirAlertaRascunho() {
     let totalPreenchidos = 0;
@@ -718,10 +699,6 @@ function atualizarBotoesConclusao() {
     }
 }
 
-// ====================
-// 🎯 FUNÇÕES PRINCIPAIS
-// ====================
-
 function formatarDataHora() {
     const agora = new Date();
     const dia = String(agora.getDate()).padStart(2, '0');
@@ -833,10 +810,6 @@ function atualizarInfoRodada() {
     document.getElementById('rodada-tela-envio').textContent = configRodada.numeroRodada;
 }
 
-// ====================
-// 📊 ATUALIZAR BARRA DE PROGRESSO
-// ====================
-
 function atualizarDashboardHeader() {
     const barra = document.getElementById('header-barra-progresso-palpites');
     const textoBarra = document.getElementById('header-texto-barra');
@@ -919,10 +892,6 @@ function verificarTodosJogosPreenchidos() {
     return { todosPreenchidos, jogosNaoPreenchidos };
 }
 
-// ====================
-// 🎯 CARREGAR JOGOS (SEM DADOS SALVOS) - COM BLOQUEIO POR PRAZO
-// ====================
-
 function carregarJogos() {
     const container = document.getElementById('jogos-container');
     container.innerHTML = '';
@@ -967,7 +936,6 @@ function carregarJogos() {
 
         container.appendChild(card);
         
-        // Adicionar eventos aos selects apenas se prazo válido
         if (prazoValido) {
             const selectA = card.querySelector(`select[name="placarA-${jogo.id}"]`);
             const selectB = card.querySelector(`select[name="placarB-${jogo.id}"]`);
@@ -975,18 +943,17 @@ function carregarJogos() {
             selectA.addEventListener('change', function() {
                 atualizarDashboardHeader();
                 salvarPalpiteAutomatico(jogo.id);
-                atualizarBotoesAcao(); // 🆕 Atualiza botões quando há mudança
+                atualizarBotoesAcao();
             });
             
             selectB.addEventListener('change', function() {
                 atualizarDashboardHeader();
                 salvarPalpiteAutomatico(jogo.id);
-                atualizarBotoesAcao(); // 🆕 Atualiza botões quando há mudança
+                atualizarBotoesAcao();
             });
         }
     });
 
-    // Se prazo expirado, desabilitar botão e mostrar mensagem
     if (!prazoValido) {
         const btnSalvar = document.getElementById('btn-salvar-palpites');
         if (btnSalvar) {
@@ -1004,7 +971,6 @@ function carregarJogos() {
             headerCard.appendChild(alerta);
         }
     } else {
-        // 🆕 Atualizar botões de ação conforme estado
         atualizarBotoesAcao();
     }
 
@@ -1012,10 +978,6 @@ function carregarJogos() {
         atualizarDestaquesJogos();
     }, 100);
 }
-
-// ====================
-// 🎯 CARREGAR JOGOS COM DADOS SALVOS - COM BLOQUEIO POR PRAZO
-// ====================
 
 function carregarJogosComDadosSalvos() {
     const container = document.getElementById('jogos-container');
@@ -1068,7 +1030,6 @@ function carregarJogosComDadosSalvos() {
 
         container.appendChild(card);
         
-        // Adicionar eventos aos selects apenas se prazo válido
         if (prazoValido) {
             const selectA = card.querySelector(`select[name="placarA-${jogo.id}"]`);
             const selectB = card.querySelector(`select[name="placarB-${jogo.id}"]`);
@@ -1076,13 +1037,13 @@ function carregarJogosComDadosSalvos() {
             selectA.addEventListener('change', function() {
                 atualizarDashboardHeader();
                 salvarPalpiteAutomatico(jogo.id);
-                atualizarBotoesAcao(); // 🆕 Atualiza botões quando há mudança
+                atualizarBotoesAcao();
             });
             
             selectB.addEventListener('change', function() {
                 atualizarDashboardHeader();
                 salvarPalpiteAutomatico(jogo.id);
-                atualizarBotoesAcao(); // 🆕 Atualiza botões quando há mudança
+                atualizarBotoesAcao();
             });
         }
     });
@@ -1098,17 +1059,13 @@ function carregarJogosComDadosSalvos() {
         
         if (dadosApp.dadosEnviados) {
             titulo.textContent = '👀 Visualizar/Editar Palpites - ' + configRodada.numeroRodada;
-            // 🆕 O texto do botão será definido por atualizarBotoesAcao
         } else {
             titulo.textContent = '📝 Seus Palpites - ' + configRodada.numeroRodada;
-            // 🆕 O texto do botão será definido por atualizarBotoesAcao
         }
         
-        // 🆕 Atualizar botões conforme estado
         atualizarBotoesAcao();
         
     } else {
-        // Prazo expirado - modo visualização
         btnSalvar.disabled = true;
         btnSalvar.classList.add('btn-secondary');
         btnSalvar.classList.remove('btn-success');
@@ -1137,7 +1094,6 @@ function carregarJogosComDadosSalvos() {
 }
 
 function salvarPalpites() {
-    // 🚫 Não permite salvar se prazo expirado
     if (!verificarPrazoValido()) {
         alert('⏰ O prazo para envio dos palpites desta rodada já expirou em ' + configRodada.dataLimite + '.');
         return;
@@ -1181,10 +1137,9 @@ function salvarPalpites() {
         palpites: palpites
     };
 
-    // 🆕 Se já estava enviado, manter flag de enviado após salvar alterações
     const estavaEnviado = dadosApp.dadosEnviados;
     
-    dadosApp.dadosEnviados = false; // Temporariamente falso durante envio
+    dadosApp.dadosEnviados = false;
     dadosApp.ultimoErroEnvio = null;
     dadosApp.erroInternet = false;
     
@@ -1196,17 +1151,12 @@ function salvarPalpites() {
     
     salvarDados();
 
-    // 🆕 Ir direto para tela de envio (sem botão fechar)
     mostrarTela('tela-envio-google');
     document.getElementById('resultado-envio').classList.add('d-none');
-    document.getElementById('btn-fechar-envio-internet').classList.add('d-none');
-    document.getElementById('btn-fechar-envio-sucesso').classList.add('d-none');
-    document.getElementById('btn-reiniciar-envio').classList.add('d-none');
     
     if (verificarPrazoValido()) {
-        enviarParaGoogleForms(estavaEnviado); // 🆕 Passar flag de estavaEnviado
+        enviarParaGoogleForms(estavaEnviado);
     } else {
-        // Se prazo expirou durante o processo, mostrar mensagem
         document.getElementById('resultado-envio').classList.remove('d-none');
         const resultadoDiv = document.getElementById('resultado-envio');
         resultadoDiv.innerHTML = `
@@ -1218,7 +1168,6 @@ function salvarPalpites() {
                 </p>
             </div>
         `;
-        // Após 2 segundos, vai para tela de conclusão
         setTimeout(() => {
             irParaConclusaoComSucesso();
         }, 2000);
@@ -1227,7 +1176,6 @@ function salvarPalpites() {
     atualizarDashboardHeader();
 }
 
-// 🆕 Função enviarParaGoogleForms modificada - sem botão fechar
 async function enviarParaGoogleForms(estavaEnviado = false) {
     if (dadosApp.palpitesSalvos.length === 0) {
         alert('Nenhum palpite para enviar.');
@@ -1244,7 +1192,6 @@ async function enviarParaGoogleForms(estavaEnviado = false) {
                     Seus palpites foram salvos, mas não podem ser enviados.
                 </p>
             </div>`;
-        // Após 2 segundos, vai para tela de conclusão
         setTimeout(() => {
             irParaConclusaoComSucesso();
         }, 2000);
@@ -1261,7 +1208,6 @@ async function enviarParaGoogleForms(estavaEnviado = false) {
                     Conecte-se à internet e tente novamente.
                 </p>
             </div>`;
-        // Após 2 segundos, vai para tela de conclusão com erro
         setTimeout(() => {
             irParaConclusaoComErroInternet();
         }, 2000);
@@ -1319,13 +1265,12 @@ async function enviarParaGoogleForms(estavaEnviado = false) {
 
         if (enviados === totalJogos) {
             dadosApp.dadosEnviados = true;
-            dadosApp.alteracoesPendentes = false; // 🆕 Resetar flag de alterações
+            dadosApp.alteracoesPendentes = false;
             dadosApp.erroInternet = false;
             dadosApp.ultimoErroEnvio = null;
             
             salvarDados();
             
-            // ✅ Ir direto para tela de conclusão com mensagem de sucesso
             irParaConclusaoComSucesso();
             
         } else {
@@ -1341,7 +1286,6 @@ async function enviarParaGoogleForms(estavaEnviado = false) {
             
             salvarDados();
             
-            // ✅ Ir para tela de conclusão com erro
             irParaConclusaoComErroInternet();
         }
         
@@ -1376,14 +1320,10 @@ async function enviarParaGoogleForms(estavaEnviado = false) {
             };
             
             salvarDados();
-            irParaConclusaoComSucesso(); // Mesmo com erro, vai para conclusão
+            irParaConclusaoComSucesso();
         }
     }
 }
-
-// ====================
-// 🎯 FUNÇÕES DE NAVEGAÇÃO
-// ====================
 
 function voltarInicio() {
     dadosApp.participante = '';
@@ -1540,10 +1480,6 @@ function iniciarEnvioGoogleForms() {
     document.getElementById('resultado-envio').classList.add('d-none');
     enviarParaGoogleForms(false);
 }
-
-// ====================
-// 📤 COMPARTILHAR CSV (mantido igual)
-// ====================
 
 async function compartilharCSV() {
     if (dadosApp.palpitesSalvos.length === 0) {
