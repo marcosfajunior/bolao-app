@@ -1065,10 +1065,10 @@ function carregarJogosComDadosSalvos() {
         
         if (dadosApp.dadosEnviados) {
             titulo.textContent = '👀 Visualizar/Editar Palpites - ' + configRodada.numeroRodada;
-            btnSalvar.innerHTML = '<i class="bi bi-save"></i> Salvar Alterações e Enviar';
+            btnSalvar.innerHTML = '<i class="bi bi-save"></i> Enviar Alterações';
         } else {
             titulo.textContent = '📝 Seus Palpites - ' + configRodada.numeroRodada;
-            btnSalvar.innerHTML = '<i class="bi bi-save"></i> Salvar e Enviar';
+            btnSalvar.innerHTML = '<i class="bi bi-save"></i> Enviar Papites';
         }
     } else {
         // Prazo expirado - modo visualização
