@@ -4,28 +4,28 @@
 // 🔧 CONFIGURAÇÃO ÚNICA
 // ====================
 
-const VERSAO_ATUAL = "20260317_2000_R08";
+const VERSAO_ATUAL = "20260317_2000_R07";
 
 const configRodada = {
     nomeBolao: "⚽ Bolão Campeonato Brasileiro 2026",
-    numeroRodada: "RODADA 08",
-    dataInicio: "20/03/2026",
-    dataLimite: "19/03/2026"
+    numeroRodada: "RODADA 07",
+    dataInicio: "18/03/2026",
+    dataLimite: "17/03/2026"
 };
 
+// 🔧 CONFIGURAÇÃO DOS JOGOS DA RODADA 7 (EDITAR AQUI)
 const jogosRodada = [
-    { id: "1", timeA: "Flamengo RJ", timeB: "Corinthians SP" },
+    { id: "1", timeA: "Flamengo RJ", timeB: "Remo PA" },
     { id: "2", timeA: "Vasco RJ", timeB: "Fluminense RJ" },
-    { id: "3", timeA: "Santos SP", timeB: "Palmeiras SP" },
-    { id: "4", timeA: "São Paulo SP", timeB: "Bragantino SP" },
-    { id: "5", timeA: "Internacional RS", timeB: "Grêmio RS" },
-    { id: "6", timeA: "Athletico PR", timeB: "Coritiba PR" },
-    { id: "7", timeA: "Cruzeiro MG", timeB: "Atlético MG" },
-    { id: "8", timeA: "Bahia BA", timeB: "Vitória BA" },
-    { id: "9", timeA: "Botafogo RJ", timeB: "Remo PA" },
-    { id: "10", timeA: "Chapecoense SC", timeB: "Mirassol SP" }
+    { id: "3", timeA: "Santos SP", timeB: "Internacional RS" },
+    { id: "4", timeA: "Palmeiras SP", timeB: "Botafogo RJ" },
+    { id: "5", timeA: "Mirassol SP", timeB: "Coritiba PR" },
+    { id: "6", timeA: "Atlético MG", timeB: "São Paulo SP" },
+    { id: "7", timeA: "Grêmio RS", timeB: "Vitória BA" },
+    { id: "8", timeA: "Athletico PR", timeB: "Cruzeiro MG" },
+    { id: "9", timeA: "Bahia BA", timeB: "Bragantino SP" },
+    { id: "10", timeA: "Chapecoense SC", timeB: "Corinthians SP" }
 ];
-
 const CONFIG_GOOGLE_FORMS = {
     url: 'https://docs.google.com/forms/d/1haBOnuTc65ZE9wcM9N64b7-hgVauhE0JptwIk1eUDWQ/formResponse',
     entryIds: [
