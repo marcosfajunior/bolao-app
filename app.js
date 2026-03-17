@@ -4,7 +4,7 @@
 // 🔧 CONFIGURAÇÃO ÚNICA
 // ====================
 
-const VERSAO_ATUAL = "20260317_1000_R08";
+const VERSAO_ATUAL = "20260317_2000_R08";
 
 const configRodada = {
     nomeBolao: "⚽ Bolão Campeonato Brasileiro 2026",
