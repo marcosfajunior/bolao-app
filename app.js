@@ -4,26 +4,26 @@
 // 🔧 CONFIGURAÇÃO ÚNICA
 // ====================
 
-const VERSAO_ATUAL = "20260316_2200_R07";
+const VERSAO_ATUAL = "20260317_1000_R08";
 
 const configRodada = {
     nomeBolao: "⚽ Bolão Campeonato Brasileiro 2026",
-    numeroRodada: "RODADA 07",
-    dataInicio: "18/03/2026",
-    dataLimite: "17/03/2026"
+    numeroRodada: "RODADA 08",
+    dataInicio: "20/03/2026",
+    dataLimite: "19/03/2026"
 };
 
 const jogosRodada = [
-    { id: "1", timeA: "Flamengo RJ", timeB: "Remo PA" },
+    { id: "1", timeA: "Flamengo RJ", timeB: "Corinthians SP" },
     { id: "2", timeA: "Vasco RJ", timeB: "Fluminense RJ" },
-    { id: "3", timeA: "Santos SP", timeB: "Internacional RS" },
-    { id: "4", timeA: "Palmeiras SP", timeB: "Botafogo RJ" },
-    { id: "5", timeA: "Mirassol SP", timeB: "Coritiba PR" },
-    { id: "6", timeA: "Atlético MG", timeB: "São Paulo SP" },
-    { id: "7", timeA: "Grêmio RS", timeB: "Vitória BA" },
-    { id: "8", timeA: "Athletico PR", timeB: "Cruzeiro MG" },
-    { id: "9", timeA: "Bahia BA", timeB: "Bragantino SP" },
-    { id: "10", timeA: "Chapecoense SC", timeB: "Corinthians SP" }
+    { id: "3", timeA: "Santos SP", timeB: "Palmeiras SP" },
+    { id: "4", timeA: "São Paulo SP", timeB: "Bragantino SP" },
+    { id: "5", timeA: "Internacional RS", timeB: "Grêmio RS" },
+    { id: "6", timeA: "Athletico PR", timeB: "Coritiba PR" },
+    { id: "7", timeA: "Cruzeiro MG", timeB: "Atlético MG" },
+    { id: "8", timeA: "Bahia BA", timeB: "Vitória BA" },
+    { id: "9", timeA: "Botafogo RJ", timeB: "Remo PA" },
+    { id: "10", timeA: "Chapecoense SC", timeB: "Mirassol SP" }
 ];
 
 const CONFIG_GOOGLE_FORMS = {
@@ -315,7 +315,7 @@ function carregarPalpitesSalvos() {
 }
 
 // ====================
-// 🟢 FUNÇÃO PRINCIPAL DE CONTROLE DOS BOTÕES
+// 🟢 FUNÇÃO ATUALIZADA: Botão sempre ativo com texto dinâmico
 // ====================
 
 function atualizarBotoesAcao() {
@@ -334,47 +334,28 @@ function atualizarBotoesAcao() {
         return;
     }
     
-    // CASO 1: Palpites já enviados
+    // 🔥 NOVO: Botão sempre visível e ativo
+    btnSalvar.style.display = 'block';
+    btnSalvar.disabled = false;
+    btnSalvar.classList.remove('btn-secondary');
+    btnSalvar.classList.add('btn-success');
+    
+    // Voltar sempre visível também
+    btnVoltar.style.display = 'block';
+    btnVoltar.innerHTML = '<i class="bi bi-arrow-left"></i> Voltar';
+    
+    // Altera o texto do botão baseado no estado
     if (dadosApp.dadosEnviados) {
-        if (dadosApp.alteracoesPendentes) {
-            // Com alterações pendentes - mostrar botão de atualização
-            btnSalvar.style.display = 'block';
-            btnSalvar.disabled = false;
-            btnSalvar.classList.remove('btn-secondary');
-            btnSalvar.classList.add('btn-success');
-            btnSalvar.innerHTML = '<i class="bi bi-send"></i> Enviar Atualização';
-            
-            btnVoltar.style.display = 'none'; // Esconde voltar enquanto edita
-        } else {
-            // Sem alterações - mostrar apenas botão voltar
-            btnSalvar.style.display = 'none';
-            btnVoltar.style.display = 'block';
-            btnVoltar.innerHTML = '<i class="bi bi-arrow-left"></i> Voltar';
-        }
-        return;
-    }
-    
-    // CASO 2: Nunca enviado
-    const todosPreenchidos = verificarTodosJogosPreenchidos().todosPreenchidos;
-    
-    if (todosPreenchidos) {
-        btnSalvar.style.display = 'block';
-        btnSalvar.disabled = false;
-        btnSalvar.classList.remove('btn-secondary');
-        btnSalvar.classList.add('btn-success');
-        btnSalvar.innerHTML = '<i class="bi bi-send"></i> Enviar Palpites';
-        
-        btnVoltar.style.display = 'block';
-        btnVoltar.innerHTML = '<i class="bi bi-arrow-left"></i> Voltar';
+        // Já enviado - texto "Reenviar Palpites"
+        btnSalvar.innerHTML = '<i class="bi bi-arrow-clockwise"></i> Reenviar Palpites';
     } else {
-        btnSalvar.style.display = 'block';
-        btnSalvar.disabled = true;
-        btnSalvar.classList.add('btn-secondary');
-        btnSalvar.classList.remove('btn-success');
-        btnSalvar.innerHTML = '<i class="bi bi-pencil"></i> Preencha todos os jogos';
-        
-        btnVoltar.style.display = 'block';
-        btnVoltar.innerHTML = '<i class="bi bi-arrow-left"></i> Voltar';
+        // Nunca enviado - verifica se está completo
+        const todosPreenchidos = verificarTodosJogosPreenchidos().todosPreenchidos;
+        if (todosPreenchidos) {
+            btnSalvar.innerHTML = '<i class="bi bi-send"></i> Enviar Palpites';
+        } else {
+            btnSalvar.innerHTML = '<i class="bi bi-pencil"></i> Preencha todos os jogos';
+        }
     }
 }
 
@@ -1108,6 +1089,10 @@ function carregarJogosComDadosSalvos() {
     }, 100);
 }
 
+// ====================
+// 🔥 FUNÇÃO ATUALIZADA: salvarPalpites com confirmação para reenvio
+// ====================
+
 function salvarPalpites() {
     if (!verificarPrazoValido()) {
         alert('⏰ O prazo para envio dos palpites desta rodada já expirou em ' + configRodada.dataLimite + '.');
@@ -1124,6 +1109,14 @@ function salvarPalpites() {
         mensagem += '\nÉ obrigatório preencher todos os jogos.';
         alert(mensagem);
         return;
+    }
+
+    // 🔥 NOVO: Se já enviado, perguntar antes de reenviar
+    if (dadosApp.dadosEnviados) {
+        const confirmar = confirm('⚠️ Estes palpites já foram enviados anteriormente.\n\nDeseja realmente reenviar?');
+        if (!confirmar) {
+            return; // Cancela o envio
+        }
     }
 
     const palpites = [];
