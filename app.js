@@ -315,7 +315,7 @@ function carregarPalpitesSalvos() {
 }
 
 // ====================
-// 🟢 FUNÇÃO ATUALIZADA: Botão sempre ativo com texto dinâmico
+// 🟢 FUNÇÃO CORRIGIDA: Botão sempre visível
 // ====================
 
 function atualizarBotoesAcao() {
@@ -334,13 +334,13 @@ function atualizarBotoesAcao() {
         return;
     }
     
-    // 🔥 NOVO: Botão sempre visível e ativo
+    // 🔥 CORRIGIDO: Botão de enviar SEMPRE visível
     btnSalvar.style.display = 'block';
     btnSalvar.disabled = false;
     btnSalvar.classList.remove('btn-secondary');
     btnSalvar.classList.add('btn-success');
     
-    // Voltar sempre visível também
+    // Botão voltar também visível
     btnVoltar.style.display = 'block';
     btnVoltar.innerHTML = '<i class="bi bi-arrow-left"></i> Voltar';
     
