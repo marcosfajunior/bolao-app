@@ -326,7 +326,7 @@ function atualizarBotoesAcao() {
     
     const prazoValido = verificarPrazoValido();
     
-    // Se prazo expirado - modo apenas visualização
+    // Se prazo expirado - modo apenas visualização (some o botão enviar)
     if (!prazoValido) {
         btnSalvar.style.display = 'none';
         btnVoltar.style.display = 'block';
@@ -334,13 +334,13 @@ function atualizarBotoesAcao() {
         return;
     }
     
-    // 🔥 CORRIGIDO: Botão de enviar SEMPRE visível
+    // 🔥 GARANTIA: Botão de enviar SEMPRE visível quando prazo válido
     btnSalvar.style.display = 'block';
     btnSalvar.disabled = false;
     btnSalvar.classList.remove('btn-secondary');
     btnSalvar.classList.add('btn-success');
     
-    // Botão voltar também visível
+    // Botão voltar também SEMPRE visível
     btnVoltar.style.display = 'block';
     btnVoltar.innerHTML = '<i class="bi bi-arrow-left"></i> Voltar';
     
