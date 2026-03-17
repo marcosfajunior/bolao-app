@@ -1,4 +1,4 @@
-// app.js?v=7.0
+// app.js?v=7.1
 
 // ====================
 // 🔧 CONFIGURAÇÃO ÚNICA
@@ -155,6 +155,7 @@ function configurarEventos() {
         });
     }
     
+    // 🆕 Botão voltar da tela de palpites
     const btnVoltarParticipante = document.getElementById('btn-voltar-participante');
     if (btnVoltarParticipante) {
         btnVoltarParticipante.addEventListener('click', function() {
@@ -258,11 +259,14 @@ function salvarPalpiteAutomatico(jogoId) {
         salvarDados();
         atualizarDestaquesJogos();
         
+        // 🟢 Se já estava enviado, marca alterações pendentes
         if (dadosApp.dadosEnviados) {
             dadosApp.alteracoesPendentes = true;
             salvarDados();
-            atualizarBotoesAcao();
         }
+        
+        // 🟢 Sempre atualizar botões após salvar
+        atualizarBotoesAcao();
         
         const jogo = jogosRodada.find(j => j.id === jogoId);
         mostrarToast(`✅ Palpite do Jogo ${jogoId} (${jogo.timeA} x ${jogo.timeB}) salvo!`, 'success');
@@ -309,10 +313,12 @@ function carregarPalpitesSalvos() {
             mostrarToast(`📋 ${totalPreenchidos} palpites carregados do rascunho`, 'info');
         }
         
+        // Resetar flag de alterações ao carregar
         dadosApp.alteracoesPendentes = false;
     }
 }
 
+// 🟢 FUNÇÃO CORRIGIDA: atualizarBotoesAcao
 function atualizarBotoesAcao() {
     const btnSalvar = document.getElementById('btn-salvar-palpites');
     const btnVoltar = document.getElementById('btn-voltar-participante');
@@ -332,35 +338,37 @@ function atualizarBotoesAcao() {
         return;
     }
     
+    // ✅ CASO 1: Já enviado
     if (dadosApp.dadosEnviados) {
         if (dadosApp.alteracoesPendentes) {
-            // ✅ Já enviado, mas com alterações - mostrar "Enviar Alterações"
+            // Com alterações - habilitar botão de atualização
             btnSalvar.disabled = false;
             btnSalvar.classList.remove('btn-secondary');
             btnSalvar.classList.add('btn-success');
-            btnSalvar.innerHTML = '<i class="bi bi-send"></i> Enviar Alterações';
+            btnSalvar.innerHTML = '<i class="bi bi-send"></i> Enviar Atualização';
         } else {
-            // ✅ Já enviado, sem alterações - botão desabilitado
+            // Sem alterações - botão desabilitado
             btnSalvar.disabled = true;
             btnSalvar.classList.add('btn-secondary');
             btnSalvar.classList.remove('btn-success');
             btnSalvar.innerHTML = '<i class="bi bi-check-circle"></i> Palpites Enviados';
         }
+        return;
+    }
+    
+    // ✅ CASO 2: Nunca enviado
+    const todosPreenchidos = verificarTodosJogosPreenchidos().todosPreenchidos;
+    
+    if (todosPreenchidos) {
+        btnSalvar.disabled = false;
+        btnSalvar.classList.remove('btn-secondary');
+        btnSalvar.classList.add('btn-success');
+        btnSalvar.innerHTML = '<i class="bi bi-send"></i> Enviar Palpites';
     } else {
-        // ✅ Nunca enviado - comportamento normal
-        const todosPreenchidos = verificarTodosJogosPreenchidos().todosPreenchidos;
-        
-        if (todosPreenchidos) {
-            btnSalvar.disabled = false;
-            btnSalvar.classList.remove('btn-secondary');
-            btnSalvar.classList.add('btn-success');
-            btnSalvar.innerHTML = '<i class="bi bi-send"></i> Enviar Palpites';
-        } else {
-            btnSalvar.disabled = true;
-            btnSalvar.classList.add('btn-secondary');
-            btnSalvar.classList.remove('btn-success');
-            btnSalvar.innerHTML = '<i class="bi bi-pencil"></i> Preencha todos os jogos';
-        }
+        btnSalvar.disabled = true;
+        btnSalvar.classList.add('btn-secondary');
+        btnSalvar.classList.remove('btn-success');
+        btnSalvar.innerHTML = '<i class="bi bi-pencil"></i> Preencha todos os jogos';
     }
 }
 
@@ -971,7 +979,10 @@ function carregarJogos() {
             headerCard.appendChild(alerta);
         }
     } else {
-        atualizarBotoesAcao();
+        // 🟢 Atualizar botões após carregar
+        setTimeout(() => {
+            atualizarBotoesAcao();
+        }, 100);
     }
 
     setTimeout(() => {
@@ -1063,7 +1074,10 @@ function carregarJogosComDadosSalvos() {
             titulo.textContent = '📝 Seus Palpites - ' + configRodada.numeroRodada;
         }
         
-        atualizarBotoesAcao();
+        // 🟢 Atualizar botões após carregar
+        setTimeout(() => {
+            atualizarBotoesAcao();
+        }, 100);
         
     } else {
         btnSalvar.disabled = true;
