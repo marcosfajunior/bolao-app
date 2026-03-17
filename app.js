@@ -155,7 +155,6 @@ function configurarEventos() {
         });
     }
     
-    // 🆕 Botão voltar da tela de palpites
     const btnVoltarParticipante = document.getElementById('btn-voltar-participante');
     if (btnVoltarParticipante) {
         btnVoltarParticipante.addEventListener('click', function() {
@@ -259,13 +258,11 @@ function salvarPalpiteAutomatico(jogoId) {
         salvarDados();
         atualizarDestaquesJogos();
         
-        // 🟢 Se já estava enviado, marca alterações pendentes
         if (dadosApp.dadosEnviados) {
             dadosApp.alteracoesPendentes = true;
             salvarDados();
         }
         
-        // 🟢 Sempre atualizar botões após salvar
         atualizarBotoesAcao();
         
         const jogo = jogosRodada.find(j => j.id === jogoId);
@@ -313,12 +310,14 @@ function carregarPalpitesSalvos() {
             mostrarToast(`📋 ${totalPreenchidos} palpites carregados do rascunho`, 'info');
         }
         
-        // Resetar flag de alterações ao carregar
         dadosApp.alteracoesPendentes = false;
     }
 }
 
-// 🟢 FUNÇÃO CORRIGIDA: atualizarBotoesAcao
+// ====================
+// 🟢 FUNÇÃO PRINCIPAL DE CONTROLE DOS BOTÕES
+// ====================
+
 function atualizarBotoesAcao() {
     const btnSalvar = document.getElementById('btn-salvar-palpites');
     const btnVoltar = document.getElementById('btn-voltar-participante');
@@ -327,48 +326,55 @@ function atualizarBotoesAcao() {
     
     const prazoValido = verificarPrazoValido();
     
-    // Sempre mostrar o botão voltar
-    btnVoltar.style.display = 'block';
-    
+    // Se prazo expirado - modo apenas visualização
     if (!prazoValido) {
-        btnSalvar.disabled = true;
-        btnSalvar.classList.add('btn-secondary');
-        btnSalvar.classList.remove('btn-success');
-        btnSalvar.innerHTML = '<i class="bi bi-clock-history"></i> Prazo Expirado';
+        btnSalvar.style.display = 'none';
+        btnVoltar.style.display = 'block';
+        btnVoltar.innerHTML = '<i class="bi bi-arrow-left"></i> Voltar';
         return;
     }
     
-    // ✅ CASO 1: Já enviado
+    // CASO 1: Palpites já enviados
     if (dadosApp.dadosEnviados) {
         if (dadosApp.alteracoesPendentes) {
-            // Com alterações - habilitar botão de atualização
+            // Com alterações pendentes - mostrar botão de atualização
+            btnSalvar.style.display = 'block';
             btnSalvar.disabled = false;
             btnSalvar.classList.remove('btn-secondary');
             btnSalvar.classList.add('btn-success');
             btnSalvar.innerHTML = '<i class="bi bi-send"></i> Enviar Atualização';
+            
+            btnVoltar.style.display = 'none'; // Esconde voltar enquanto edita
         } else {
-            // Sem alterações - botão desabilitado
-            btnSalvar.disabled = true;
-            btnSalvar.classList.add('btn-secondary');
-            btnSalvar.classList.remove('btn-success');
-            btnSalvar.innerHTML = '<i class="bi bi-check-circle"></i> Palpites Enviados';
+            // Sem alterações - mostrar apenas botão voltar
+            btnSalvar.style.display = 'none';
+            btnVoltar.style.display = 'block';
+            btnVoltar.innerHTML = '<i class="bi bi-arrow-left"></i> Voltar';
         }
         return;
     }
     
-    // ✅ CASO 2: Nunca enviado
+    // CASO 2: Nunca enviado
     const todosPreenchidos = verificarTodosJogosPreenchidos().todosPreenchidos;
     
     if (todosPreenchidos) {
+        btnSalvar.style.display = 'block';
         btnSalvar.disabled = false;
         btnSalvar.classList.remove('btn-secondary');
         btnSalvar.classList.add('btn-success');
         btnSalvar.innerHTML = '<i class="bi bi-send"></i> Enviar Palpites';
+        
+        btnVoltar.style.display = 'block';
+        btnVoltar.innerHTML = '<i class="bi bi-arrow-left"></i> Voltar';
     } else {
+        btnSalvar.style.display = 'block';
         btnSalvar.disabled = true;
         btnSalvar.classList.add('btn-secondary');
         btnSalvar.classList.remove('btn-success');
         btnSalvar.innerHTML = '<i class="bi bi-pencil"></i> Preencha todos os jogos';
+        
+        btnVoltar.style.display = 'block';
+        btnVoltar.innerHTML = '<i class="bi bi-arrow-left"></i> Voltar';
     }
 }
 
@@ -979,7 +985,6 @@ function carregarJogos() {
             headerCard.appendChild(alerta);
         }
     } else {
-        // 🟢 Atualizar botões após carregar
         setTimeout(() => {
             atualizarBotoesAcao();
         }, 100);
@@ -1064,9 +1069,6 @@ function carregarJogosComDadosSalvos() {
     
     if (prazoValido) {
         btnSalvar.classList.remove('d-none');
-        btnSalvar.disabled = false;
-        btnSalvar.classList.remove('btn-secondary');
-        btnSalvar.classList.add('btn-success');
         
         if (dadosApp.dadosEnviados) {
             titulo.textContent = '👀 Visualizar/Editar Palpites - ' + configRodada.numeroRodada;
@@ -1074,7 +1076,6 @@ function carregarJogosComDadosSalvos() {
             titulo.textContent = '📝 Seus Palpites - ' + configRodada.numeroRodada;
         }
         
-        // 🟢 Atualizar botões após carregar
         setTimeout(() => {
             atualizarBotoesAcao();
         }, 100);
