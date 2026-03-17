@@ -13,7 +13,6 @@ const configRodada = {
     dataLimite: "17/03/2026"
 };
 
-// 🔧 CONFIGURAÇÃO DOS JOGOS DA RODADA 7 (EDITAR AQUI)
 const jogosRodada = [
     { id: "1", timeA: "Flamengo RJ", timeB: "Remo PA" },
     { id: "2", timeA: "Vasco RJ", timeB: "Fluminense RJ" },
