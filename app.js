@@ -1,10 +1,10 @@
-// app.js?v=7.4
+// app.js?v=7.5
 
 // ====================
 // 🔧 CONFIGURAÇÃO ÚNICA
 // ====================
 
-const VERSAO_ATUAL = "20260317_2000_R07";
+const VERSAO_ATUAL = "20260317_2200_R07";
 
 const configRodada = {
     nomeBolao: "⚽ Bolão Campeonato Brasileiro 2026",
@@ -13,6 +13,7 @@ const configRodada = {
     dataLimite: "17/03/2026"
 };
 
+// 🔧 CONFIGURAÇÃO DOS JOGOS DA RODADA 7 (EDITAR AQUI)
 const jogosRodada = [
     { id: "1", timeA: "Flamengo RJ", timeB: "Remo PA" },
     { id: "2", timeA: "Vasco RJ", timeB: "Fluminense RJ" },
@@ -25,6 +26,7 @@ const jogosRodada = [
     { id: "9", timeA: "Bahia BA", timeB: "Bragantino SP" },
     { id: "10", timeA: "Chapecoense SC", timeB: "Corinthians SP" }
 ];
+
 const CONFIG_GOOGLE_FORMS = {
     url: 'https://docs.google.com/forms/d/1haBOnuTc65ZE9wcM9N64b7-hgVauhE0JptwIk1eUDWQ/formResponse',
     entryIds: [
@@ -263,9 +265,7 @@ function salvarPalpiteAutomatico(jogoId) {
         }
         
         atualizarBotoesAcao();
-        
-        const jogo = jogosRodada.find(j => j.id === jogoId);
-        mostrarToast(`✅ Palpite do Jogo ${jogoId} (${jogo.timeA} x ${jogo.timeB}) salvo!`, 'success');
+
     }
 }
 
