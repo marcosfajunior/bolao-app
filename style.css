@@ -1,4 +1,4 @@
-/* style.css?v=8.1 */
+/* style.css?v=8.2 */
 
 /* Reset mínimo */
 * {
@@ -655,47 +655,72 @@ input[type="number"] {
 }
 
 /* ==================== */
-/* 🚨 ALERTA DE ENVIO - EFEITO PULSO */
+/* 🚨 ALERTA DE ENVIO - VERMELHO COM PULSO FORTE */
 /* ==================== */
 
-.pulse-icon {
-    animation: pulse-icon 1.5s ease-in-out infinite;
+.pulse-icon-strong {
+    animation: pulse-icon-strong 0.8s ease-in-out infinite;
 }
 
-@keyframes pulse-icon {
+@keyframes pulse-icon-strong {
     0% {
         opacity: 1;
         transform: scale(1);
+        text-shadow: 0 0 0px rgba(220, 53, 69, 0);
     }
     50% {
-        opacity: 0.7;
-        transform: scale(1.1);
+        opacity: 1;
+        transform: scale(1.2);
+        text-shadow: 0 0 8px rgba(220, 53, 69, 0.8);
     }
     100% {
         opacity: 1;
         transform: scale(1);
+        text-shadow: 0 0 0px rgba(220, 53, 69, 0);
     }
 }
 
 #alerta-nao-fechar {
     border-radius: 12px;
     transition: all 0.3s ease;
-    animation: alert-pulse 2s ease-in-out infinite;
+    animation: alert-pulse-strong 1s ease-in-out infinite;
+    border: 1px solid #dc3545 !important;
+    background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%) !important;
 }
 
-@keyframes alert-pulse {
+@keyframes alert-pulse-strong {
     0% {
-        box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4);
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+        transform: scale(1);
     }
-    70% {
-        box-shadow: 0 0 0 8px rgba(255, 193, 7, 0);
+    50% {
+        box-shadow: 0 0 0 12px rgba(220, 53, 69, 0.3);
+        transform: scale(1.02);
     }
     100% {
-        box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+        transform: scale(1);
     }
 }
 
-/* Versão alternativa sem pulse (se preferir mais discreto) */
+/* Efeito de brilho no texto */
+#alerta-nao-fechar .text-danger {
+    animation: text-glow 1.2s ease-in-out infinite;
+}
+
+@keyframes text-glow {
+    0% {
+        text-shadow: 0 0 0px rgba(220, 53, 69, 0);
+    }
+    50% {
+        text-shadow: 0 0 3px rgba(220, 53, 69, 0.5);
+    }
+    100% {
+        text-shadow: 0 0 0px rgba(220, 53, 69, 0);
+    }
+}
+
+/* Versão alternativa sem pulse (se preferir) */
 #alerta-nao-fechar.no-pulse {
     animation: none;
 }
@@ -705,9 +730,22 @@ input[type="number"] {
     #alerta-nao-fechar .d-flex {
         flex-direction: column;
         text-align: center;
+        gap: 8px !important;
     }
     
-    .pulse-icon {
-        font-size: 1.5rem !important;
+    .pulse-icon-strong {
+        font-size: 1.8rem !important;
+    }
+    
+    @keyframes alert-pulse-strong {
+        0% {
+            box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+        }
+        50% {
+            box-shadow: 0 0 0 8px rgba(220, 53, 69, 0.3);
+        }
+        100% {
+            box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+        }
     }
 }

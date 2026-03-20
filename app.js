@@ -1,4 +1,4 @@
-// app.js?v=8.1
+// app.js?v=8.2
 
 // ====================
 // 🔧 CONFIGURAÇÃO ÚNICA
