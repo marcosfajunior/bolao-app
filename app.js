@@ -1,10 +1,10 @@
-// app.js?v=8.0
+// app.js?v=8.1
 
 // ====================
 // 🔧 CONFIGURAÇÃO ÚNICA
 // ====================
 
-const VERSAO_ATUAL = "20260319_0000_R08";
+const VERSAO_ATUAL = "20260320_0000_R08";
 
 const configRodada = {
     nomeBolao: "⚽ Bolão Campeonato Brasileiro 2026",

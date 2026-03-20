@@ -1,4 +1,4 @@
-/* style.css?v=8.0 */
+/* style.css?v=8.1 */
 
 /* Reset mínimo */
 * {
@@ -652,4 +652,62 @@ input[type="number"] {
         body.tela-formulario .conteudo-dinamico { padding-top: calc(170px + env(safe-area-inset-top)); }
     }
     .whatsapp-float { bottom: 10px; }
+}
+
+/* ==================== */
+/* 🚨 ALERTA DE ENVIO - EFEITO PULSO */
+/* ==================== */
+
+.pulse-icon {
+    animation: pulse-icon 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-icon {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.1);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+#alerta-nao-fechar {
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    animation: alert-pulse 2s ease-in-out infinite;
+}
+
+@keyframes alert-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 8px rgba(255, 193, 7, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
+    }
+}
+
+/* Versão alternativa sem pulse (se preferir mais discreto) */
+#alerta-nao-fechar.no-pulse {
+    animation: none;
+}
+
+/* Ajuste para mobile */
+@media (max-width: 576px) {
+    #alerta-nao-fechar .d-flex {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .pulse-icon {
+        font-size: 1.5rem !important;
+    }
 }
